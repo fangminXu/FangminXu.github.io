@@ -163,6 +163,664 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avater.jpg">
+      <meta itemprop="name" content="kiro-xu">
+      <meta itemprop="description" content="Be who you want to be">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kiro的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89/" class="post-title-link" itemprop="url">算法导论学习笔记（五）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-28 17:01:39 / 修改时间：17:05:47" itemprop="dateCreated datePublished" datetime="2021-02-28T17:01:39+08:00">2021-02-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="二叉查找树"><a href="#二叉查找树" class="headerlink" title="二叉查找树"></a>二叉查找树</h1><p>二叉查找树中关键字的存储方式总是满足以下的二叉查找树性质：</p>
+<ul>
+<li>设x为二叉查找树中的一个结点。如果y是x的左子树中的一个结点，则<img src="https://cdn.nlark.com/yuque/__latex/0b68d2ce7eb0d3141ee4aa4bcc2270b7.svg" alt="img">。如果y是x的右子树中的结点，则<img src="https://cdn.nlark.com/yuque/__latex/5c14372f94ace8cd2d27a35597d66303.svg" alt="img">。</li>
+</ul>
+<p>根据二叉树的性质，可以用一个递归算法按排列顺序输出树中的所有关键字，即中序遍历算法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public void inOrderTreeWalk(TreeNode x)&#123;</span><br><span class="line">    if(x！&#x3D;null)&#123;</span><br><span class="line">        inOrderTreeWalk(x.left);</span><br><span class="line">        System.out.println(x);</span><br><span class="line">        inOrderTreeWalk(x.right);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>定理</strong> ：如果x是一棵包含n个结点的子树的根，则调用InOrderTreeWalk(x)过程的时间为Θ(n)。</p>
+<h2 id="查询二叉查找树"><a href="#查询二叉查找树" class="headerlink" title="查询二叉查找树"></a>查询二叉查找树</h2><p><strong>查找一个给定的关键字</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public TreeNode treeSearch(TreeNode x, int k)&#123;</span><br><span class="line">    if(x&#x3D;&#x3D;null || x.val&#x3D;&#x3D;k)&#123;</span><br><span class="line">        return x;</span><br><span class="line">    &#125;</span><br><span class="line">    if(k&lt;x.val)</span><br><span class="line">        return treeSearch(x.left,k);</span><br><span class="line">    else</span><br><span class="line">        return treeSearch(x.right.k);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>也可以用非递归算法（While循环）来实现，在大多数计算机上，非递归版本运行的要更快一些。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public iterativeTreeSearch(TreeNode x, int k)&#123;</span><br><span class="line">    while(x!&#x3D;null &amp;&amp; k!&#x3D;x.val)&#123;</span><br><span class="line">        if(k&lt;x.val)</span><br><span class="line">            x &#x3D; x.left;</span><br><span class="line">        else</span><br><span class="line">            x &#x3D; x.right;</span><br><span class="line">    &#125;</span><br><span class="line">    return x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>最大关键字元素和最小关键字元素</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public TreeNode treeMinimun(TreeNode x)&#123;</span><br><span class="line">    while(x.left!&#x3D;null)&#123;</span><br><span class="line">        x &#x3D; x.left;</span><br><span class="line">    &#125;</span><br><span class="line">    return x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最大关键字类似。对高度为h的树，这两个过程的运行时间都是O(h)。</p>
+<p><strong>前趋和后继</strong> </p>
+<p>给定一个二叉查找树中的结点，有时候要求找出在中序遍历顺序下它的后继，如果所有的关键字均不相同，则某一个结点x的后继即具有大于key[x]中的关键字中的最小值的那个结点。</p>
+<p>若s的右子树为空，则从x向上查找，直到遇到某个是其父节点的左儿子的结点为止。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">TREE-SUCCESSOR(x)</span><br><span class="line">if right[x]!&#x3D;null&#123;</span><br><span class="line">    then return treeMinimum(x.right);</span><br><span class="line">y &#x3D; p[x]</span><br><span class="line">whilr y!&#x3D;null and x &#x3D; right[y]</span><br><span class="line">    do x &#x3D; y</span><br><span class="line">     y &#x3D; p[y]</span><br><span class="line">return y</span><br></pre></td></tr></table></figure>
+
+<h2 id="删除和插入"><a href="#删除和插入" class="headerlink" title="删除和插入"></a>删除和插入</h2><p><strong>插入</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public void treeInsert(TreeNode x, int z)&#123;</span><br><span class="line">    TreeNode pre &#x3D; null;</span><br><span class="line">    TreeNode cur &#x3D; x;</span><br><span class="line">    while(cur!&#x3D;null)&#123;</span><br><span class="line">        pre &#x3D; cur;</span><br><span class="line">        if(z&lt;x.val)</span><br><span class="line">            cur &#x3D; cur.left;</span><br><span class="line">        else</span><br><span class="line">            cur &#x3D; cur.right;</span><br><span class="line">    &#125;</span><br><span class="line">    if(pre&#x3D;&#x3D;null)</span><br><span class="line">        x &#x3D; new TreeNode(z);</span><br><span class="line">    else if(z&lt;pre.val)</span><br><span class="line">        pre.left &#x3D; new TreeNode(z);</span><br><span class="line">    else</span><br><span class="line">        pre.right &#x3D; new TreeNode(x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>和其他查找树上的原始操作一样，过程TreeInsert的运行时间也为O(h).</p>
+<p><strong>删除</strong> </p>
+<p>给定结点z从二叉查找树中删除的过程以指向z的指针为参数，并考虑三种情况：1）如果z没有子女，则修改其父节点p[z]，使NIL为其子女；如果结点z只有一个子女，则通过在其子节点与父节点间建立一条链来删除z。最后，如果结点z有两个子女，先删除z的后继y（没有左儿子），再用y的内容来替代z的内容。 <strong>以下代码并不完善</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public void treeDelete(TreeNode z)&#123;</span><br><span class="line">    if(z.left&#x3D;&#x3D;null &amp;&amp; z.right&#x3D;&#x3D;null)&#123;</span><br><span class="line">        &#x2F;&#x2F;没有孩子</span><br><span class="line">        p[z].next &#x3D; null; &#x2F;&#x2F;其父节点连接null</span><br><span class="line">    &#125;else if(z.right!&#x3D;null &amp;&amp; z.left!&#x3D;null)&#123;</span><br><span class="line">        x &#x3D; treeMinimum(z.right);</span><br><span class="line">        z.val &#x3D; x.val;</span><br><span class="line">        treeDelete(x);</span><br><span class="line">    &#125;else if(z.right !&#x3D;null)&#123;</span><br><span class="line">        p[z].next &#x3D; z.right;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        p[z].next &#x3D; z.left;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>定理</strong> 对高度为h的二叉查找树，动态集合操作INSERT和DELETE的运行时间为O(h)。</p>
+<p><strong>The Relation to QuickSort:</strong><br>BST Sort &amp; QuickSort make same comparisons but in a different order.</p>
+<h2 id="随机构造的二叉树"><a href="#随机构造的二叉树" class="headerlink" title="随机构造的二叉树"></a>随机构造的二叉树</h2><p><strong>步骤</strong> ：</p>
+<ul>
+<li>Randomly permite A</li>
+<li>BST Sort(A)</li>
+</ul>
+<p>Time(BST) = Time(Randomized-QuickSort)</p>
+<p><strong>定理</strong> </p>
+<p><strong>一棵在n个关键字上随机构造的二叉查找树的期望高度为O(lgn)。</strong></p>
+<h1 id="Balanced-Search-Tree"><a href="#Balanced-Search-Tree" class="headerlink" title="Balanced Search Tree"></a>Balanced Search Tree</h1><p>search tree data structure maintaining dynamic set of n elements using a tree of height order <strong>lgn</strong> .</p>
+<p><strong>Examples</strong> </p>
+<ul>
+<li>AVL Tree</li>
+<li>2-3 Tree</li>
+<li>2-3-4 Tree</li>
+<li>B Tree</li>
+<li>Red-Black Trees</li>
+<li>Skip lists</li>
+<li>Treaps</li>
+</ul>
+<h2 id="Red-Black-Tree"><a href="#Red-Black-Tree" class="headerlink" title="Red-Black Tree"></a>Red-Black Tree</h2><p>BST data structure with <strong>extra color</strong> field for each node satisfying.</p>
+<p><strong>Red-Black properties</strong> </p>
+<ol>
+<li>Every Node is either red or black</li>
+<li>the root and the leaves(nil’s) are black</li>
+<li><strong>Every red node has black parent</strong> </li>
+<li>All simple paths from a node x to a descended leaf of x have <strong>same number of black nodes</strong> . which means have the <strong>same black-height(x)</strong> </li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607175972577-de09ec02-a0d2-410e-a2f1-62141f0803d1.png" alt="image.png"></p>
+<p><strong>定理</strong> ： <strong>Red-Black tree with n keys has height h &lt;= 2lg(n+1)</strong> </p>
+<p>证明：《算法导论》上有归纳法的详细证明</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607178361377-faade872-4db3-4b0b-a925-376377132939.png" alt="image.png"></p>
+<ul>
+<li>Merge red nodes into their black parents.</li>
+<li>This process produce a tree in which each node  has 2,3 or 4 children</li>
+<li>the 2-3-4 tree has uniform depth h’ of leaves</li>
+<li>We have <img src="https://cdn.nlark.com/yuque/__latex/71ea6a1b4e5c283c27e3e1688fab7e72.svg" alt="img">, since at most half the leaves on any path are red</li>
+<li>The number of leaves in each tree is n+1<img src="https://cdn.nlark.com/yuque/__latex/5475dbf1000faf21127c46a2734b1fbb.svg" alt="img"></li>
+</ul>
+<p><strong>Corollary</strong> . The queries <em>Search, Min, Max, Successor, and Predecessor</em> all run in <strong>O(lgn)</strong> time on a red-black tree with <strong>n</strong> nodes.</p>
+<p><strong>Modifying operations</strong> </p>
+<p>The operations Insert and Delete cause modifications to the red-black tree:</p>
+<ul>
+<li>the operation itself,</li>
+<li>color changes,</li>
+<li>restucturing the links of the tree via <strong>rotations</strong> </li>
+</ul>
+<h3 id="Rotations"><a href="#Rotations" class="headerlink" title="Rotations"></a>Rotations</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607179845880-0cf3fbb7-2ecd-49bb-b12e-e68921943f67.png" alt="image.png"></p>
+<p>A rotation can be performed in <strong>O(1)</strong> time.</p>
+<h3 id="Insertion-into-a-red-black-tree"><a href="#Insertion-into-a-red-black-tree" class="headerlink" title="Insertion into a red-black tree"></a>Insertion into a red-black tree</h3><p><strong>IDEA</strong> : Insert x in tree. Color x red. Only red-black property 3 might be violated. Move the violation up the tree by recoloring until it can be fixed with rotations and recolored.</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607180036211-4ca11487-0a92-4ed1-a342-7fd9c30b758a.png" alt="image.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">RB-INSERT(T,x)</span><br><span class="line">    Tree-INSERT(T,x)</span><br><span class="line">  color[x]&#x3D;red</span><br><span class="line">  while x!&#x3D;root[T] and color[p[x]]&#x3D;RED</span><br><span class="line">    do if p[x]&#x3D;left[p[p[x]]]</span><br><span class="line">        then y&#x3D;right[p[p[x]]]</span><br><span class="line">        if color[y]&#x3D;RED</span><br><span class="line">        then &lt;Case 1&gt;</span><br><span class="line">        else if x&#x3D;right[p[x]]</span><br><span class="line">            then &lt;case 2&gt;</span><br><span class="line">        &lt;Case 3&gt;</span><br><span class="line">      else&lt;&quot;Then&quot; clause with &quot;left&quot; and &quot;right&quot; swapped&gt;</span><br><span class="line">  color[root[T]]&#x3D;black</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607180316709-9a8490be-003f-4126-9577-3584a8dd3087.png" alt="image.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607180326781-f9a4a4df-9930-42ac-9307-0759fd873cb2.png" alt="image.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607180388203-0f9bc8c6-8492-4876-8dee-5883a177c84e.png" alt="image.png"></p>
+<p><strong>Analysis</strong> </p>
+<ul>
+<li>Go up the tree performing Case 1, with only recolors node.</li>
+<li>If Case 2 or Case 3 occurs, perform 1 or 2 rotations, and terminate.</li>
+</ul>
+<p><strong>Running Time</strong> </p>
+<p><strong>O(lgn)</strong> with <strong>O(1)</strong> rotations.</p>
+<p>RB-Delete: same asymptotic running time and number of rotations as RB-Insert(See textbook).</p>
+<h1 id="扩充的数据结构、动态有序统计和区间树"><a href="#扩充的数据结构、动态有序统计和区间树" class="headerlink" title="扩充的数据结构、动态有序统计和区间树"></a>扩充的数据结构、动态有序统计和区间树</h1><p>augmentation data structures 数据结构的扩充</p>
+<h2 id="Dynamic-order-statistics"><a href="#Dynamic-order-statistics" class="headerlink" title="Dynamic order statistics"></a>Dynamic order statistics</h2><p>新增的两个操作：</p>
+<ul>
+<li>OS-Select(i): returns i-th smallest item in dynamic set</li>
+<li>OS-Rank(i): returns rank of x in sorted order.</li>
+</ul>
+<p><strong>IDEA</strong> : <strong>Keep subtree size in node of r-b trees</strong></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607327491484-617b49bf-cd80-4ba2-8ad9-bad2f661a185.png" alt="image.png"></p>
+<p><strong>size[x] = size[left[x]]+size[right[x]]+1</strong> </p>
+<h3 id="OS-Select-i"><a href="#OS-Select-i" class="headerlink" title="OS-Select(i)"></a>OS-Select(i)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">OS-Select(x,i) &#x2F;&#x2F;i-th smallest in subtree rooted at x</span><br><span class="line">    r &#x3D; x.left.size + 1; &#x2F;&#x2F;rank of x</span><br><span class="line">  if i&#x3D;&#x3D;r</span><br><span class="line">    return x</span><br><span class="line">  else if i&lt;r</span><br><span class="line">    return OS-Select(x.left,i)</span><br><span class="line">  else</span><br><span class="line">    return OS-Select(x.right,i-r)</span><br></pre></td></tr></table></figure>
+
+<h3 id="OS-Rank-i"><a href="#OS-Rank-i" class="headerlink" title="OS-Rank(i)"></a>OS-Rank(i)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">OS-RANK(T,x)</span><br><span class="line">    r &#x3D; x.left.size + 1</span><br><span class="line">  y &#x3D; x</span><br><span class="line">  while y!&#x3D;T.root</span><br><span class="line">    if y&#x3D;&#x3D;y.p.right</span><br><span class="line">        r &#x3D; r + y.p.left.size + 1</span><br><span class="line">    y &#x3D; y.p</span><br><span class="line">    return r</span><br></pre></td></tr></table></figure>
+
+<p><strong>Analysis</strong> T(n)=<strong>O(lgn)</strong></p>
+<p>Q: Why not keep the ranks in nodes instead of subtree sizes?</p>
+<p>A: It’s hard to maintain when t-b tree is motified.</p>
+<p><strong>Mutifying operations: Insert and Delete</strong> </p>
+<p><strong>Stratege</strong> : Update subtree sizes when inserting or deleting.</p>
+<p>EX:</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607327990012-11baa4a2-5670-402e-8f69-69029764e4f3.png" alt="image.png"></p>
+<p><strong>but also need to handle rebalancing</strong> </p>
+<ul>
+<li>r-b color changes: no effect to size</li>
+<li>rotation: look at children and fix up in O(1) time</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607328155405-cda58171-a018-4a0d-b12b-7da039806060.png" alt="image.png"></p>
+<p>So,  <strong>RB-Insert and RB-Delete still run in O(lgn) time</strong> </p>
+<h3 id="Data-structrue-augmentation"><a href="#Data-structrue-augmentation" class="headerlink" title="Data-structrue augmentation"></a>Data-structrue augmentation</h3><p><strong>Methodology</strong> : (e.g. order-statistics trees)</p>
+<ol>
+<li>Choose an underlying data structrue.(red-black trees)</li>
+<li>Determine additional information to be stored in the data structure.(subtree size)</li>
+<li>Verify that this information can be maintained for modifying operations.(RBINSERT, RB-DELETE — don’t forget rotations)</li>
+<li>Develop new dynamic-set operations that use the informations.(OS-Select and OS-Rank)</li>
+</ol>
+<p><strong>These steps are guidelines, not rigid rules</strong> </p>
+<h2 id="Example-Interval-trees-区间树"><a href="#Example-Interval-trees-区间树" class="headerlink" title="Example: Interval trees 区间树"></a>Example: Interval trees 区间树</h2><p><strong>IDEA</strong> ：maintain a set of intervals. e.g. time intervals</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607329725240-770943dd-5a03-45f2-955f-b7ce8e9627fc.png" alt="image.png"></p>
+<p><strong>Query</strong> : For a given query interval i, find an interval in the set that overlaps i.</p>
+<h3 id="Methodology"><a href="#Methodology" class="headerlink" title="Methodology"></a><strong>Methodology</strong></h3><ol>
+<li>Choose an underlying data structure.</li>
+</ol>
+<p>(Red-Black Tree key on <strong>low(left) endpoint</strong> )</p>
+<ol>
+<li>Determine additional information to be stored in the data structure.</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607329913708-467fd2f4-8e79-4fa7-9bc9-2e3da3176d14.png" alt="image.png"></p>
+<ol>
+<li>Modifying operations:<br><strong>Insert: fix m’s on way down</strong> .</li>
+</ol>
+<p>​    Rotations——Fixup = <strong>O(1)</strong>  time per rotation:</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607330009760-b6920705-4e40-40ce-a980-a15b3a0fc014.png" alt="image.png"></p>
+<p>So, <strong>Total Insert Time = O(lgn)</strong>  Delete similar</p>
+<ol>
+<li>Develop new dynamic-set operations that use the information.</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">INTERVAL-SEARCH(T,i)</span><br><span class="line">    x &#x3D; T.root</span><br><span class="line">  while x!&#x3D;nil and (low[i]&gt;high[int[x]] or high[i]&lt;low[int[x]]) &#x2F;&#x2F; i does not overlaps x</span><br><span class="line">    if x.left!&#x3D;nil and x.left.m &gt;&#x3D; low[i]</span><br><span class="line">        x&#x3D;x.left</span><br><span class="line">    else x &#x3D; x.right</span><br><span class="line">  return x</span><br></pre></td></tr></table></figure>
+
+<p><strong>List all overlaps: O(klgn)</strong> <strong>Output sensitive</strong> </p>
+<p><strong>Correctness</strong> </p>
+<p>Theorem. Let L be the set of intervals in the left subtree of node x, and let R be the set of intervals in x’s right subtree.</p>
+<p><strong>If the search goes right, then</strong> </p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/4367610265a8d75d48ee1815aa026566.svg" alt="img"></p>
+<p><strong>If the search goes left, then</strong> </p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/3a302c645f324058b030290ff28bf071.svg" alt="img"></p>
+<p><strong>证明略</strong> </p>
+<h2 id="补充1：2-3数"><a href="#补充1：2-3数" class="headerlink" title="补充1：2-3数"></a>补充1：2-3数</h2><p><strong>2–3树</strong>是一种<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%A0%91_(%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84)">树型数据结构</a>，内部节点（存在子节点的节点）要么有2个孩子和1个数据元素，要么有3个孩子和2个数据元素，叶子节点没有孩子，并且有1个或2个数据元素。</p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>如果一个内部节点拥有一个数据元素、两个子节点，则此节点为<strong>2节点</strong>。</p>
+<p>如果一个内部节点拥有两个数据元素、三个子节点，则此节点为<strong>3节点</strong>。</p>
+<p>当且仅当以下叙述中有一条成立时，<em>T</em>为2–3树：</p>
+<ul>
+<li><em>T</em>为空。即<em>T</em>不包含任何节点。</li>
+<li>为拥有数据元素<em>a</em>的2节点。若<em>T</em>的左孩子为<em>L</em>、右孩子为<em>R</em>，则：<em>L</em>和<em>R</em>是等高的非空2–3树；<em>a</em>大于<em>L</em>中的所有数据元素；且<em>a</em>小于等于<em>R</em>中的所有数据元素。</li>
+<li><em>T</em>为拥有数据元素<em>a</em>和<em>b</em>的3节点，其中<em>a</em> &lt; <em>b</em>。若<em>T</em>的左孩子为<em>L</em>、中孩子为<em>M</em>、右孩子为<em>R</em>，则：<em>L</em>、<em>M</em>、和<em>R</em>是等高的非空2–3树；<em>a</em>大于<em>L</em>中的所有数据元素，并且小于等于<em>M</em>中的所有数据元素；<em>b</em>大于<em>M</em>中的所有数据元素，并且小于等于<em>R</em>中的所有数据元素。</li>
+</ul>
+<h3 id="2-3树的查找"><a href="#2-3树的查找" class="headerlink" title="2-3树的查找"></a>2-3树的查找</h3><p>与普通二叉搜索树相似。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607408159789-043b9fd7-732e-474f-922d-17767f22ac6f.png" alt="image.png"></p>
+<h3 id="2-3树的插入"><a href="#2-3树的插入" class="headerlink" title="2-3树的插入"></a>2-3树的插入</h3><p>前面我们知道，2-3查找树分为<strong>2结点</strong>和<strong>3结点</strong>，so，插入就分为了2结点插入和3结点插入。</p>
+<p><strong>2-结点插入:</strong> 向2-结点插入一个新的结点和向而插入插入一个结点很类似，但是我们并不是将结点“吊”在结点的末尾，因为这样就没办法保持树的平衡。我们可以将2-结点替换成3-结点即可，将其中的键插入这个3-结点即可。（相当于缓存了这个结点）</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607408378995-5aa5404b-52dc-4638-a459-63aceefc5898.png" alt="image.png"></p>
+<p><strong>3-结点插入：</strong> 3结点插入比较麻烦，它分为3种情况：</p>
+<ol>
+<li>向一棵只含有3-结点的树插入新键。</li>
+</ol>
+<p>​    假如2-3树只有一个3-结点，那么当我们插入一个新的结点的时候，我们先假设结点变成了4-结点，然后使得中间的结点为根结点，左边的结点为其左结点，右边的结点为其右结点，然后构成一棵2-3树，<strong>树的高度加1</strong>。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607408488175-b4dacd99-b514-41e1-813c-ce85e1aa6323.png" alt="image"></p>
+<ol>
+<li>向父结点为2-结点的3-结点中插入新键。</li>
+</ol>
+<p>和上面的情况类似，我们将新的节点插入3-结点使之成为4-结点，然后将结点中的中间结点”升“到其父节点（2-结点）中的合适的位置，使其父节点成为一个3-节点，然后将左右节点分别挂在这个3-结点的恰当位置，<strong>树的高度不发生改变。</strong></p>
+<p>**<br>**<img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607408543768-2c76d858-f678-4653-a4be-d6a5a5373020.png" alt="image"></p>
+<ol>
+<li>向父节点为3-结点的3-结点中插入新键。</li>
+</ol>
+<p>​    这种情况有点类似递归：当我们的结点为3-结点的时候，我们插入新的结点会将中间的元素”升“父节点，然后父节点为4-结点，右将中间的结点”升“到其父结点的父结点，……如此进行递归操作，直到遇到的结点不再是3-结点。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607408606615-da5cf49b-6e5b-4c5c-949f-4fc29d535e97.png" alt="image"></p>
+<p><strong>树的高度</strong> ：<img src="https://cdn.nlark.com/yuque/__latex/03a539bfcefdaf30db1bf6a92c136a69.svg" alt="img"></p>
+<h2 id="补充2-B树"><a href="#补充2-B树" class="headerlink" title="补充2-B树"></a>补充2-B树</h2><p>B树是为磁盘或其他直接存取辅助存储设备而设计的一种平衡查找树。与红黑树类似，但在降低磁盘I/O操作次数方面要更好一些。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%9B%9B%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avater.jpg">
+      <meta itemprop="name" content="kiro-xu">
+      <meta itemprop="description" content="Be who you want to be">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kiro的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%9B%9B%EF%BC%89/" class="post-title-link" itemprop="url">算法导论学习笔记（四）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-28 17:00:27 / 修改时间：17:01:10" itemprop="dateCreated datePublished" datetime="2021-02-28T17:00:27+08:00">2021-02-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="散列表"><a href="#散列表" class="headerlink" title="散列表"></a>散列表</h1><p>散列表是普通数组概念的推广，因为可以对数组进行直接寻址，故可以在O(1)的时间内访问数组的任意元素。</p>
+<h2 id="直接寻址法"><a href="#直接寻址法" class="headerlink" title="直接寻址法"></a>直接寻址法</h2><p>当关键字的全域U比较小时，直接寻址是一种简单而有效的技术。假设某应用要用到一个动态集合，其中每个元素都有一个取自全域U={0,1,…,m-1}的关键字，此处m是一个很大的数。另，假设没有两个元素具有相同的关键字。</p>
+<p>为表示动态集合，我们用一个数组（或称直接寻址表）T[0,…,m-1]，其中每个位置（或称槽）对应全域U中的一个关键字。对SEARCH、INSERT、DELETE等操作均只需O(1).</p>
+<h2 id="散列表-1"><a href="#散列表-1" class="headerlink" title="散列表"></a>散列表</h2><p>直接寻址技术存在一个明显的问题：如果域U很大，在一台典型计算机的可用内从容量限制下，要在机器中存储大小为|U|的一张表T就优点不切实际，甚至不可能。还有，实际要存储的关键字集合K相对于U来说可能很小，因而分配给T 的大部分空间都要浪费掉。</p>
+<p>在直接寻址方式下， <strong>具有关键字k的元素被存放在槽k中</strong> 。在散列方式下， <strong>该元素处于h(k)中</strong> 。即利用散列函数h，根据关键字k计算出槽的位置。 <strong>函数h将关键字域U映射到散列表T[0,…,m-1]的槽位上</strong> 。</p>
+<p>这样做有一个小问题： <strong>两个关键字可能映射到同一个槽位上</strong> ，我们称之为 <strong>碰撞</strong> 。</p>
+<h3 id="通过链接法来解决碰撞"><a href="#通过链接法来解决碰撞" class="headerlink" title="通过链接法来解决碰撞"></a>通过链接法来解决碰撞</h3><p>在链接法中，把散列到同一槽的所有元素都放在一个链表中。槽j中有一个指针，它指向由所有散列到j的元素构成的链表的头。</p>
+<p>采用链接法后散列表的性能怎么样呢？特别的，要查找一个具有给定关键字的元素需要多长时间？</p>
+<p>给定一个能存放n个元素的、具有m个空槽位的散列表T，定义T的装载因子(Load factor)<img src="https://cdn.nlark.com/yuque/__latex/f50c6d3557faf32740b6b49917e5b0f1.svg" alt="img">，即一个链表中平均存储的元素数。</p>
+<p>Worst-Case：所有的n个关键字都散列到同一个槽内，<strong>Θ(n)</strong>.</p>
+<p>若假定任何元素散列到m个槽中的每一个可能性是相同的，且与其他元素已被散列到什么位置上是无关的，即 <strong>简单一致性假设</strong> </p>
+<p><strong>则在简单一致性假设下，对于用链接技术解决碰撞的散列表，平均情况下一次成功或不成功的查找需要</strong> <img src="https://cdn.nlark.com/yuque/__latex/a0a8d5c552af1b569cf03e4f7e0c5d77.svg" alt="img"></p>
+<h2 id="散列函数"><a href="#散列函数" class="headerlink" title="散列函数"></a>散列函数</h2><p>在这一节里，讨论一些有关如何设计出好的散列函数的问题。</p>
+<h3 id="除法散列法"><a href="#除法散列法" class="headerlink" title="除法散列法"></a>除法散列法</h3><p>通过取k除以m的余数，来将关键字k映射到m个槽的某一个去。即，散列函数为 <strong>h(k) = k mod m</strong> </p>
+<p>当应用除法散列时，应 <strong>注意m的选择</strong> 。可以选作m的值常常是 <strong>与2的整数幂不太接近的质数</strong> </p>
+<h3 id="乘法散列法"><a href="#乘法散列法" class="headerlink" title="乘法散列法"></a>乘法散列法</h3><p>构造散列函数的乘法方法包含两个步骤：首先，用关键字k乘上常数A（0&lt;A&lt;1），并抽出kA的小数部分。然后用m乘以这个值，再取结果的底。总之，散列函数为</p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/7126e1116411a1c9095b27e8906f8ddd.svg" alt="img"></p>
+<h3 id="全域散列"><a href="#全域散列" class="headerlink" title="全域散列"></a>全域散列</h3><p>如果让某个和你作对的人来选择要散列的关键字，那么他会选择全部散列到同一个槽中的n个关键字，使得平均检索时间为<strong>Θ(n)**。任何一个特定的散列函数都可能出现这种最坏情况形态：唯一有效的改进方法是 **随机地选择散列函数</strong> ，使之独立于要存储地关键字，这种方法称之为 <strong>全域散列</strong> 。</p>
+<h3 id="开放寻址法"><a href="#开放寻址法" class="headerlink" title="开放寻址法"></a>开放寻址法</h3><p>开放寻址法（openning addressing）中，所有的元素都存放在散列表里。亦即，每个表项或包含动态集合的一个元素，或包含nil。当查找一个元素时，要检查所有的表项，直到找到所需元素，或最终发现该元素不在表中。</p>
+<p><strong>线性勘查</strong> </p>
+<p>当冲突发生时，使用某些探测技术在散列表中形成一个探测序列，沿此序列逐个单元查找，直到找到给定的关键字、或者碰到一个开放地 址（即该地址单元为空、空桶）为止。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1606997448519-ae4bc0eb-c36c-4874-a603-ac2a9bb86dd6.png" alt="image.png"></p>
+<p><strong>双重散列</strong> </p>
+<p>双重散列是用于开放寻址的最好方法之一，因为它所产生的排列具有随机选择的排列的许多特性。它采用如下形式的散列函数：</p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/602cda7c22ffc6dd4c89cc272f40b65b.svg" alt="img"></p>
+<h3 id="对开放寻址散列的分析"><a href="#对开放寻址散列的分析" class="headerlink" title="对开放寻址散列的分析"></a>对开放寻址散列的分析</h3><p><strong>Assumption</strong> : <strong>一致散列法</strong> ：在这种理想的方法中，用于插入或查找每一个关键字k的探索序列为&lt;0,1,…,m-1&gt;的任一中排列的可能性是相同的。</p>
+<p>则在该假设下： <strong>给定一个装载因子a=n/m&lt;1的开放寻址散列表，在一次不成功的查找中，期望的勘察天数至多为1/(1-a)</strong> </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avater.jpg">
+      <meta itemprop="name" content="kiro-xu">
+      <meta itemprop="description" content="Be who you want to be">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kiro的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89/" class="post-title-link" itemprop="url">算法导论学习笔记（三）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-28 16:58:21 / 修改时间：16:59:43" itemprop="dateCreated datePublished" datetime="2021-02-28T16:58:21+08:00">2021-02-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h1><h2 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h2><p>在排序算法中使用的是最大堆，最小堆通常在构造优先序列时使用。</p>
+<h3 id="保持堆的性质"><a href="#保持堆的性质" class="headerlink" title="保持堆的性质"></a>保持堆的性质</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">MAX-HEAPIFY(A,i)</span><br><span class="line">l&#x3D;left(i);</span><br><span class="line">r&#x3D;right(i);</span><br><span class="line">if l&lt;&#x3D;heap-size[A] and A[l]&gt;A[i]</span><br><span class="line">    then largest &#x3D; l</span><br><span class="line">else largest &#x3D; i;</span><br><span class="line">    if r&lt;&#x3D;heap-size[A] and A[r]&gt;A[largest]</span><br><span class="line">        then largest &#x3D; r</span><br><span class="line">if(largest!&#x3D;r)</span><br><span class="line">    then exchange A[i],A[largest]</span><br><span class="line">    Max-Heapify(A,largest)</span><br></pre></td></tr></table></figure>
+
+<h3 id="建堆"><a href="#建堆" class="headerlink" title="建堆"></a>建堆</h3><p>可以自底而上地用MAX-HEAPIFY来将一个数组A[1…n]变成最大堆。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">BUILD-MAX-HEAP(A)</span><br><span class="line">heap-size[A] &#x3D; length[A]</span><br><span class="line">for i &#x3D; length(A)&#x2F;2 向上取整 downto 1</span><br><span class="line">    do MAX-HEAPIFY(A,i)</span><br></pre></td></tr></table></figure>
+
+<h3 id="堆排序算法"><a href="#堆排序算法" class="headerlink" title="堆排序算法"></a>堆排序算法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">HEAPSORT(A)</span><br><span class="line">BUILD-MAX-HEAP(A)</span><br><span class="line">for i&#x3D;length(A) down to 2</span><br><span class="line">    do swap(A,l,i)</span><br><span class="line">  heap-size[A] &#x3D; heap-size[A]-1</span><br><span class="line">  MAX-HEAPIFY(A,l)</span><br></pre></td></tr></table></figure>
+
+<h2 id="线性时间排序"><a href="#线性时间排序" class="headerlink" title="线性时间排序"></a>线性时间排序</h2><p><strong>How Fast can we sort?</strong> depends on model of what you can do with the elements!</p>
+<p>目前学习的插入排序、归并排序、快速排序以及堆排序都是基于 <strong>比较排序</strong> 的算法。</p>
+<h3 id="排序算法的下界"><a href="#排序算法的下界" class="headerlink" title="排序算法的下界"></a>排序算法的下界</h3><p>比较排序可以被抽象地视为决策树。一棵决策树是一棵满二叉树，表示某排序算法作用于给定输入所作的所有比较，而控制结构、数据移动等都被忽略了。</p>
+<p>Comparision Sorting: only use comparisons to determine the relative order of elements. </p>
+<p>Runing time(#Comparisons)=length of path</p>
+<p>Worst-case running time = height of tree</p>
+<p><strong>Lower bound on decision-tree sorting:</strong> </p>
+<p><strong>Any decision-tree sorting n elements has the height</strong>  <img src="https://cdn.nlark.com/yuque/__latex/3320c7a3017e0a921a83c91bfeba4ea3.svg" alt="img"></p>
+<h3 id="计数排序"><a href="#计数排序" class="headerlink" title="计数排序"></a>计数排序</h3><p><strong>基本思想</strong> 对每一个输入元素x，确定出小于x的元素个数。</p>
+<p><strong>前提</strong> n个输入元素中的每一个都是0到k之间的整数。</p>
+<p>在计数排序算法的代码中，我们假定输入是n个数的数组A，存放排序结果的B，以及提供临时存储区的C（0…k）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public void countingSort(int[] A, int[] B, k)&#123;</span><br><span class="line">    &#x2F;&#x2F;初始化</span><br><span class="line">    int n &#x3D; A.length;</span><br><span class="line">    int[] C &#x3D; new int[k];</span><br><span class="line">    for(int i&#x3D;0; i&lt;n; i++)&#123;</span><br><span class="line">        C[A[i]] &#x3D; C[A[i]]+1;</span><br><span class="line">    &#125;</span><br><span class="line">    for(int i&#x3D;1; i&lt;k; i++)&#123;</span><br><span class="line">        C[i] &#x3D; C[i-1]+C[i];</span><br><span class="line">    &#125;</span><br><span class="line">    for(int i&#x3D;n-1; i&gt;&#x3D;0; i--)&#123;</span><br><span class="line">        B[C[A[i]]] &#x3D; A[i];</span><br><span class="line">        C[A[i]] &#x3D; C[A[i]]-1;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>T(n) = Θ(n+k)</strong> </p>
+<h3 id="基数排序（Hallerith-1890）"><a href="#基数排序（Hallerith-1890）" class="headerlink" title="基数排序（Hallerith 1890）"></a>基数排序（Hallerith 1890）</h3><p>从低位向高位依次排序， <strong>要求按位排序要稳定</strong> </p>
+<p>定理：给定n个d位数，每一个数位可以取k种可能的值，基数排序算法能以**Θ(d(n+k))**的时间正确地对这些数排序</p>
+<h3 id="桶排序"><a href="#桶排序" class="headerlink" title="桶排序"></a>桶排序</h3><p>当 <strong>桶排序</strong> 的输入符合均匀分布时，既可以实现线性时间运行。与计数排序类似，桶排序也对输入作了某种假设，因而运行很快：计数排序假设 <strong>输入是一个由小范围内的整数构成</strong> ，而桶排序则假设 <strong>输入有一个随机过程产生</strong> ，该过程将元素均匀地分布在区间[0,1]上。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">public static void bucketSort(int[] arr)&#123;</span><br><span class="line">    int max &#x3D; Integer.MIN_VALUE;</span><br><span class="line">    int min &#x3D; Integer.MAX_VALUE;</span><br><span class="line">    for(int i &#x3D; 0; i &lt; arr.length; i++)&#123;</span><br><span class="line">        max &#x3D; Math.max(max, arr[i]);</span><br><span class="line">        min &#x3D; Math.min(min, arr[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;桶数</span><br><span class="line">    int bucketNum &#x3D; (max - min) &#x2F; arr.length + 1;</span><br><span class="line">    ArrayList&lt;ArrayList&lt;Integer&gt;&gt; bucketArr &#x3D; new ArrayList&lt;&gt;(bucketNum);</span><br><span class="line">    for(int i &#x3D; 0; i &lt; bucketNum; i++)&#123;</span><br><span class="line">        bucketArr.add(new ArrayList&lt;Integer&gt;());</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;将每个元素放入桶</span><br><span class="line">    for(int i &#x3D; 0; i &lt; arr.length; i++)&#123;</span><br><span class="line">        int num &#x3D; (arr[i] - min) &#x2F; (arr.length);</span><br><span class="line">        bucketArr.get(num).add(arr[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;对每个桶进行排序</span><br><span class="line">    for(int i &#x3D; 0; i &lt; bucketArr.size(); i++)&#123;</span><br><span class="line">        Collections.sort(bucketArr.get(i));</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(bucketArr.toString());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="中位数和顺序统计学"><a href="#中位数和顺序统计学" class="headerlink" title="中位数和顺序统计学"></a>中位数和顺序统计学</h1><p>本章讨论从一个由n个不同数值构成的集合中选择其第i个顺序统计值的问题。为方便起见，假设集合中的数互异。</p>
+<p>Input：一个包含n个（不同的）数的集合A和一个数i，<img src="https://cdn.nlark.com/yuque/__latex/9c5935072f94d570ccfcb75043b3f859.svg" alt="img">.</p>
+<p>Output：<img src="https://cdn.nlark.com/yuque/__latex/ae04b7455d654ee119e014c9b0e805db.svg" alt="img"></p>
+<p>该选择问题可以在<strong>O(nlgn)**时间内解决，因为可以用</strong>堆排序或合并排序**对输入数据进行排序，然后在输出数组中标出第i个元素即可。但还有其他更快的解法。</p>
+<h3 id="最大值和最小值"><a href="#最大值和最小值" class="headerlink" title="最大值和最小值"></a>最大值和最小值</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public int Minmum(A)&#123;</span><br><span class="line">    int min &#x3D; A[0];</span><br><span class="line">    for(int i : A)&#123;</span><br><span class="line">        if(min&gt;i)</span><br><span class="line">            min &#x3D; i</span><br><span class="line">    &#125;</span><br><span class="line">    return min; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="以期望线性时间做选择"><a href="#以期望线性时间做选择" class="headerlink" title="以期望线性时间做选择"></a>以期望线性时间做选择</h3><p>介绍一种用来解决选择问题的分治算法，即RANDOMIZED-SELECT算法，以 <strong>快速排序算法</strong> 为模型。与快速排序不同的是，RANDOMIZED-SELECT <strong>只处理划分的一边</strong> 。这一差异使得快速排序的期望运行时间是 <strong>Θ(nlgn)</strong> ,而RANDOMIZED-SELECT的期望时间是 <strong>Θ(n)</strong> 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">RANDOMIZED-SELECT(A,p,r,i)</span><br><span class="line">if(p&#x3D;&#x3D;r)</span><br><span class="line">    then return A[p]</span><br><span class="line">q &#x3D; RANDOMIZED-PARTITION(A,p,r);</span><br><span class="line">k &#x3D; q-p+1</span><br><span class="line">if i&#x3D;k</span><br><span class="line">    then return A[q]</span><br><span class="line">else if i&lt;k</span><br><span class="line">    then return RANDOMIZED-SELECT(A,p,q-1,i);</span><br><span class="line">else</span><br><span class="line">    then return RANDOMIZED-SELECT(A,q+1,r,i-k)</span><br></pre></td></tr></table></figure>
+
+<p><strong>在平均情况下，任何顺序统计量（特别是中位数）都可以在线性时间内得到</strong> ，证明略。</p>
+<h3 id="最坏情况线性时间的选择"><a href="#最坏情况线性时间的选择" class="headerlink" title="最坏情况线性时间的选择"></a>最坏情况线性时间的选择</h3><p>现在来看一个最坏情况运行时间为O(n)的选择算法SELECT。该算法的基本思想是要 <strong>保证对数组的划分上是个好的划分</strong> 。算法通过执行下列步骤来确定一个有n&gt;1个元素的输入数组中的第i小的元素：</p>
+<ul>
+<li>将输入数组的n个元素划分为n/5组，每组5个元素，且至多只有一个组由剩下的n mod 5个元素构成。</li>
+<li>寻找n/5个组中每一组的中位数，首先对每组中的元素（至多5个）进行插入排序，然后从排序过的序列中选出中位数。</li>
+<li>对第2步中找出的n/5个中位数，递归调用SELECT以找出中位数x</li>
+<li>利用修改过的PARTITION过程，按中位数的中位数x对输入数组进行划分。让k比划分低区的元素数目多1，所以x是第k小的元素。</li>
+<li>如果i==k，则返回x，否则，如果，i&lt;k，在低区递归调用SELECT，i&gt;k，在高区递归调用SELECT。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avater.jpg">
+      <meta itemprop="name" content="kiro-xu">
+      <meta itemprop="description" content="Be who you want to be">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kiro的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89/" class="post-title-link" itemprop="url">算法导论学习笔记（二）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-28 16:56:35 / 修改时间：16:57:51" itemprop="dateCreated datePublished" datetime="2021-02-28T16:56:35+08:00">2021-02-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="分治法"><a href="#分治法" class="headerlink" title="分治法"></a>分治法</h1><p><strong>分治模式</strong> </p>
+<p><strong>分解（Divide）</strong>：将原问题分解成一系列子问题；</p>
+<p><strong>解决（Conquer）</strong>：递归地解各子问题。若子问题足够小，则直接求解；</p>
+<p><strong>合并（Combine）</strong>：将子问题的结果合并成原问题的解。</p>
+<p>Ex.Merge Sort, Binary Search</p>
+<h2 id="一些举例"><a href="#一些举例" class="headerlink" title="一些举例"></a>一些举例</h2><h3 id="powering-the-number"><a href="#powering-the-number" class="headerlink" title="powering the number"></a>powering the number</h3><p>given a number x, and integer <img src="https://cdn.nlark.com/yuque/__latex/c36c48c557a498703465d5431d607e60.svg" alt="img">, compute x^n</p>
+<p>Native algorithm: <strong>Θ(n)</strong></p>
+<p>Divide and conquer:</p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/49636e9e784d9d86cba24daa372ba700.svg" alt="img">  <strong>T(n)=**</strong>Θ(lgn)**</p>
+<h3 id="Fibonacci-numbers"><a href="#Fibonacci-numbers" class="headerlink" title="Fibonacci numbers"></a>Fibonacci numbers</h3><p><img src="https://cdn.nlark.com/yuque/__latex/7be51ef698b6e78a7be66f6145259127.svg" alt="img"></p>
+<p>Native recursive algorithm: Time <img src="https://cdn.nlark.com/yuque/__latex/0b5be7ae172ade05832c0c10cea793ac.svg" alt="img"></p>
+<p>recursive squaring: 转化为矩阵：<img src="https://cdn.nlark.com/yuque/__latex/da906dce963bedafb27275c2c507589f.svg" alt="img"></p>
+<h3 id="Matrix-Multiplition"><a href="#Matrix-Multiplition" class="headerlink" title="Matrix Multiplition"></a>Matrix Multiplition</h3><p>Input: A=[a_ij], B=[b_ij]</p>
+<p>Output: C=[c_ij] = A*B, <img src="https://cdn.nlark.com/yuque/__latex/e0d06d1cd929c98b7ad638619b63b092.svg" alt="img"></p>
+<p>standard algorithm: <strong>Θ(n^3)</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">for i&#x3D;1 to n</span><br><span class="line">    do for j&#x3D;1 to n</span><br><span class="line">    do c_ij &#x3D; 0</span><br><span class="line">    for k&#x3D;1 to n</span><br><span class="line">        c_ij &#x3D; a_ik * b_kj + c_ij</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<p><strong>IDEA</strong>:n<em>n matrix = 2</em>2 blank matrix of n/2 * n/2 sub matrix</p>
+<p>need 8 recursive calls: T(n) = 8T(n/2)+Θ(n^2) = <strong>Θ(n^3)</strong></p>
+<p><strong>Strassen’s algorithm:</strong></p>
+<p><strong>IDEA</strong>:reduce recursive calls to 7 recursive calls</p>
+<h3 id="二叉树遍历及相关特性"><a href="#二叉树遍历及相关特性" class="headerlink" title="二叉树遍历及相关特性"></a>二叉树遍历及相关特性</h3><p><strong>计算二叉树高度</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public int TreeHeight(TreeNode root)&#123;</span><br><span class="line">    if(root&#x3D;&#x3D;null)&#123;</span><br><span class="line">    return -1;</span><br><span class="line">  &#125;</span><br><span class="line">  return Math.max(TreeHight(root.left),TreeHeight(root.right))+1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>二叉树的遍历</strong> </p>
+<p>前序遍历、中序遍历、后序遍历</p>
+<h3 id="大整数乘法"><a href="#大整数乘法" class="headerlink" title="大整数乘法"></a>大整数乘法</h3><p>Native aglorithm recursive: need 4 recursive calls;</p>
+<p>change to <strong>3 recursive calls</strong>;</p>
+<h3 id="最近点对问题"><a href="#最近点对问题" class="headerlink" title="最近点对问题"></a>最近点对问题</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">EfficientClosestPair(P,Q)</span><br><span class="line">if n&lt;&#x3D;3</span><br><span class="line">    return the minimal distance found by bruce-force aglorithm</span><br><span class="line">else</span><br><span class="line">    copy the first (n&#x2F;2)向上取整 points of P to array Pl</span><br><span class="line">  copy the same (n&#x2F;2) points from Q to arrays Ql</span><br><span class="line">  copy the remaining (n&#x2F;2)向下取整 points of P to array Pr</span><br><span class="line">  copy the same (n&#x2F;2)points from Q to array Qr</span><br><span class="line">  dl &#x3D; EfficientClosestPair(Pl,Ql)</span><br><span class="line">  dr &#x3D; EfficientClosestPair(Pr,Qr)</span><br><span class="line">  d &#x3D; min(dl,dr)</span><br><span class="line">  m &#x3D; P[(n&#x2F;2)-1].x</span><br><span class="line">  copy all the points of Q for which |x-m|&lt;d into array S[0...num-1]</span><br><span class="line">  dminsq &#x3D; d^2</span><br><span class="line">  for i&#x3D;0 to num-2 do</span><br><span class="line">    k &#x3D; i+1</span><br><span class="line">    while k&lt;&#x3D;num-1 and (S[k].x)-S[i].x)^2&lt;dminsq</span><br><span class="line">        dminsq &#x3D; min((S[k].x-S[i].x)^2+(S[k].y-S[i].y)^2,dminsq)</span><br><span class="line">      k&#x3D;k+1</span><br><span class="line"> return sqrt(dminsq)</span><br></pre></td></tr></table></figure>
+
+<h1 id="快排和随机化算法"><a href="#快排和随机化算法" class="headerlink" title="快排和随机化算法"></a>快排和随机化算法</h1><h2 id="快速排序算法"><a href="#快速排序算法" class="headerlink" title="快速排序算法"></a>快速排序算法</h2><p>QuickSort: Hoare 1962</p>
+<ul>
+<li>Divide and conquer</li>
+<li>sorts “in place”</li>
+<li>very pratical( with turning)</li>
+</ul>
+<p><strong>step 1</strong>: Divide: Patition array into 2 subarrays around pivot x</p>
+<p><strong>step 2</strong>: Recursively sort 2 subarrays</p>
+<p><strong>step 3</strong>: combine: trivial</p>
+<p><strong>key: linear-time partitioning subroutine</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public int partition(int[] A, int left, int right)&#123;</span><br><span class="line">    pivot &#x3D; A[left];</span><br><span class="line">  i &#x3D; p;</span><br><span class="line">  for(j&#x3D;p+1; j&lt;&#x3D;q; j++)&#123;</span><br><span class="line">    if(A[j]&lt;pivot)&#123;</span><br><span class="line">        i++;</span><br><span class="line">      swap(A,i,j);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  swap(A,left, i+1);</span><br><span class="line">  return i+1;</span><br><span class="line">&#125;</span><br><span class="line">public void QuickSort(int[] A,int left, int right)&#123;</span><br><span class="line">    if(left&gt;right)&#123;</span><br><span class="line">    int p &#x3D; partition(A, left, right);</span><br><span class="line">    QuickSort(A,left,p-1);</span><br><span class="line">    QuickSort(A, p+1, right);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Analysis"><a href="#Analysis" class="headerlink" title="Analysis"></a>Analysis</h3><p><strong>assume:</strong> all numbers distinct</p>
+<p>T(n):</p>
+<p><strong>Worst-Case:</strong> <strong>T(n)=T(n-1)+T(0)+**</strong>Θ(n) =** <strong>Θ(n^2)</strong></p>
+<ul>
+<li>input sorted or reversed sorted</li>
+<li>one side of partition has no elements</li>
+</ul>
+<p><strong>Best-Case analysis( intution only)</strong></p>
+<p>if we can really lucky, partition splits the array n/2, n/2, then T(n)=<strong>Θ(nlgn)</strong></p>
+<p><strong>suppose:</strong> slipts is always 0.1:0.9  <strong>lucky</strong></p>
+<p><strong>soppose</strong>: we alternate lucky, unlucky, lucky…  <strong>lucky</strong></p>
+<h2 id="随机化快速排序算法（Randomized-QuickSort）"><a href="#随机化快速排序算法（Randomized-QuickSort）" class="headerlink" title="随机化快速排序算法（Randomized QuickSort）"></a>随机化快速排序算法（Randomized QuickSort）</h2><ul>
+<li>the running time is independent of input ordering</li>
+<li>no assumption about the input distribution</li>
+<li>no specific input elicit worst-case behavior</li>
+<li>the worst-case is detemined only by a random-number generator</li>
+</ul>
+<p>​    在这种方法中，不是始终采用A[r]作为主元，而是从子数组A[p…r]中随机选择一个元素，即将A[r]与从A[p…r]中随机选出的一个元素交换。<strong>即主元元素是随机选取的。</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">RANDOMIZED-PARTITION(A,p,r)</span><br><span class="line">i&#x3D;random(p,r);</span><br><span class="line">swap(A,i,p);</span><br><span class="line">return partition(A,p,r);</span><br></pre></td></tr></table></figure>
+
+<p>注意：关于时间复杂度证明的部分没看。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avater.jpg">
+      <meta itemprop="name" content="kiro-xu">
+      <meta itemprop="description" content="Be who you want to be">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kiro的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/" class="post-title-link" itemprop="url">算法导论学习笔记（一）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-28 16:50:50 / 修改时间：16:54:16" itemprop="dateCreated datePublished" datetime="2021-02-28T16:50:50+08:00">2021-02-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本块内容为自学麻省理工《算法导论》公开课的学习记录笔记，罗列学习过程中的重点。</p>
+<h1 id="算法入门"><a href="#算法入门" class="headerlink" title="算法入门"></a>算法入门</h1><p>problem sorting:</p>
+<p>Input: n个数&lt;a 1 ,a 2 ,…a n &gt;</p>
+<p>Output: 输入序列的一个排序，为非递减序列</p>
+<h2 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public void InsertionSort(int[] A, int n)&#123;</span><br><span class="line">    for(int j&#x3D;2; j&lt;n; j++)&#123;</span><br><span class="line">    int key &#x3D; A[j];</span><br><span class="line">    int i &#x3D; j-1;</span><br><span class="line">    while(i&gt;&#x3D;0 &amp;&amp; A[i]&gt;key)&#123;</span><br><span class="line">        A[i+1] &#x3D; A[i];</span><br><span class="line">      i &#x3D; i-1;</span><br><span class="line">    &#125;</span><br><span class="line">    A[i+1] &#x3D; key;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Running Time</strong> ：</p>
+<ul>
+<li>Depends on input(e.g. already sorted)</li>
+<li>Depends on input size(6 elements vs 6000000 elements)</li>
+</ul>
+<p><strong>Kind of analysis</strong> :<br>Worst-Case( usually ): T(n) = max time on any input of size n;</p>
+<p>Average-Case( sometimes ): T(n) = expected time over all inputs of size n; <strong>需要概率分析假设</strong></p>
+<p>Best-Case</p>
+<p><strong>What is insertionSort’s use time?</strong> </p>
+<p>Depends on Computer！</p>
+<ul>
+<li>relative speed(on same computer)</li>
+<li>absolute speed(on different computer)</li>
+</ul>
+<p><strong>BIG IDEA!</strong> </p>
+<ul>
+<li>Ignore machine-dependent <strong>constant</strong></li>
+<li>Look at <strong>growth</strong> of the running time as n to 无穷</li>
+</ul>
+<h2 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h2><p><strong>Idea:</strong></p>
+<ul>
+<li>if n=1, DONE</li>
+<li>Recursively sort A[1,…,n/2] and A[n/2+1,…,n]</li>
+<li>merge 2 sorted list</li>
+</ul>
+<h2 id="渐进记号"><a href="#渐进记号" class="headerlink" title="渐进记号"></a>渐进记号</h2><h3 id="Θ（BIG-Theta）"><a href="#Θ（BIG-Theta）" class="headerlink" title="Θ（BIG Theta）"></a>Θ（BIG Theta）</h3><p><img src="https://cdn.nlark.com/yuque/__latex/beb0b2ca4fddc9e24a116e5e4cc81e4d.svg" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1606903610346-b986b556-91a5-41f1-962b-11eb80be1299.png" alt="image.png"></p>
+<h3 id="O（BIG-O）"><a href="#O（BIG-O）" class="headerlink" title="O（BIG O）"></a>O（BIG O）</h3><p><img src="https://cdn.nlark.com/yuque/__latex/6aba44a76360da53f49493b56a7e83e7.svg" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1606903562825-a5b280ed-a522-4955-8681-45189b46d79b.png" alt="image.png"></p>
+<h3 id="Ω-BIG-Ω"><a href="#Ω-BIG-Ω" class="headerlink" title="Ω(BIG Ω)"></a>Ω(BIG Ω)</h3><p><img src="https://cdn.nlark.com/yuque/__latex/6163624eb23f49eed278177d3a37bf3b.svg" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1606903585335-ff6f8dd9-41d3-4580-8fa6-5047c4e837db.png" alt="image.png"></p>
+<h3 id="o-小-oh-and-ω-小-omege"><a href="#o-小-oh-and-ω-小-omege" class="headerlink" title="o(小-oh) and ω(小-omege)"></a>o(小-oh) and ω(小-omege)</h3><h2 id="递归式"><a href="#递归式" class="headerlink" title="递归式"></a>递归式</h2><p>代换法、递归树法、主定理法</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/27/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -441,14 +1099,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">17</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
