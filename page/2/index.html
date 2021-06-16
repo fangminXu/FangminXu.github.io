@@ -163,6 +163,320 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avater.jpg">
+      <meta itemprop="name" content="kiro-xu">
+      <meta itemprop="description" content="Be who you want to be">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kiro的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89/" class="post-title-link" itemprop="url">算法导论学习笔记（七）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-28 17:07:29 / 修改时间：17:09:01" itemprop="dateCreated datePublished" datetime="2021-02-28T17:07:29+08:00">2021-02-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Dynamic-Programming-Longest-Common-Subsequence-动态规划，最长相同子序列"><a href="#Dynamic-Programming-Longest-Common-Subsequence-动态规划，最长相同子序列" class="headerlink" title="Dynamic Programming, Longest Common Subsequence(动态规划，最长相同子序列)"></a>Dynamic Programming, Longest Common Subsequence(动态规划，最长相同子序列)</h1><p>Design technique, like divide-and-conquer.</p>
+<h2 id="Example-Longest-Common-Subsequence-LCS"><a href="#Example-Longest-Common-Subsequence-LCS" class="headerlink" title="Example: Longest Common Subsequence (LCS)"></a>Example: Longest Common Subsequence (LCS)</h2><p>Given two sequences x[1 . . m] and y[1 . . n], find <strong>a</strong>  longest subsequence common to them both.</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607664315488-663bfed8-4c02-4d27-ac67-f084a8a26296.png" alt="image.png"></p>
+<h3 id="Bruce-Force-algorithm"><a href="#Bruce-Force-algorithm" class="headerlink" title="Bruce-Force algorithm"></a>Bruce-Force algorithm</h3><p><strong>Check</strong>  every <strong>subsequence</strong>  of x[1 . . m] to see if it is also a subsequence of y[1 . . n].</p>
+<p><strong>Analysis</strong> </p>
+<ul>
+<li>Checking = O(n) time per subsequence.</li>
+<li>2^m subsequences of x (each bit-vector of length m determines a distinct subsequence of x).</li>
+<li>So, Worst-case running time = O(n2^m) = exponential time. <strong>Slow!</strong> </li>
+</ul>
+<h3 id="Simplification"><a href="#Simplification" class="headerlink" title="Simplification"></a>Simplification</h3><ol>
+<li>Look at the length of a longest-common subsequence.</li>
+<li>Extend the algorithm to find the LCS itself.</li>
+</ol>
+<p><strong>Notation</strong> : Denote the length of a sequence s by |s|.</p>
+<p><strong>Strategy</strong> : Consider <strong>prefixes</strong>  of x and y.</p>
+<p><strong>Define:</strong> c[i, j] = | LCS(x[1 . . i], y[1 . . j])|. 最长子序列长度</p>
+<p>那么可知，c[m,n] = |LCS(x,y)|</p>
+<p><strong>Theorem.</strong> </p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/b1bb05baea482e6d80396d5c32b90f41.svg" alt="img"></p>
+<p><strong>证明略</strong> </p>
+<h3 id="Dynamic-programming-hallmark-1"><a href="#Dynamic-programming-hallmark-1" class="headerlink" title="Dynamic-programming hallmark #1"></a>Dynamic-programming hallmark #1</h3><p>Optimal substructure ：An optimal solution to a problem (instance) contains optimal solutions to subproblems。</p>
+<p>动态规划适用于子问题不是独立的情况，也就是各子问题包含公共的子子问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Recursion algorithm for LCS</span><br><span class="line">    if x[i]&#x3D;y[j]</span><br><span class="line">    then c[i,j]&#x3D;LCS(c[i-1,j-1])+1</span><br><span class="line">  else</span><br><span class="line">    c[i,j] &#x3D; max&#123;LCS(i,j-1),LCS(i-1,j)&#125;;</span><br><span class="line">  return c[i,j]</span><br></pre></td></tr></table></figure>
+
+<p>Worst-case: x[i]!=y[j], 对任意i，j。in which case the algorithm evaluates two subproblems, each with only one parameter decremented.</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607665733966-d9db75bc-ae0d-4999-869a-cb4440a6b969.png" alt="image.png"></p>
+<p><strong>Height = m + n</strong>  ⇒ work potentially exponential。but we’re solving subproblems already solved!</p>
+<h3 id="Dynamic-programming-hallmark-2"><a href="#Dynamic-programming-hallmark-2" class="headerlink" title="Dynamic-programming hallmark #2"></a>Dynamic-programming hallmark #2</h3><p>Overlapping subproblems A recursive solution contains a “small” number of distinct subproblems repeated many times.</p>
+<p>The number of distinct LCS subproblems for two strings of lengths m and n is only mn.</p>
+<p><strong>Memoization algorithm</strong> </p>
+<p>Memoization: After computing a solution to a subproblem, store it in a table. Subsequent calls check the table to avoid redoing work.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Memoization Algorithm</span><br><span class="line">    c[i,j]&#x3D;LCS(x,y,i,j)</span><br><span class="line">  if c[i,j]&#x3D;nil</span><br><span class="line">    then if x[i]&#x3D;y[j]</span><br><span class="line">                then c[i,j] &#x3D; LCS(x,ymi-1,j-1)+1</span><br><span class="line">        else </span><br><span class="line">            c[i,j] &#x3D; max&#123;LCS(i,j-1),LCS(i-1,j)&#125;</span><br><span class="line">   return c[i,j];</span><br></pre></td></tr></table></figure>
+
+<p><strong>Time</strong>  = Θ(mn) = constant work per table entry. </p>
+<p><strong>Space</strong>  = Θ(mn).</p>
+<h3 id="Dynamic-programming-algorithm"><a href="#Dynamic-programming-algorithm" class="headerlink" title="Dynamic-programming algorithm"></a>Dynamic-programming algorithm</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607666136741-e15b79c5-9bdb-4bde-a236-9841b7cea989.png" alt="image.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">LCS-LENGTH(X,Y)</span><br><span class="line">m &#x3D; length[X]</span><br><span class="line">n &#x3D; length[Y]</span><br><span class="line">for i&#x3D;1 to m</span><br><span class="line">    do c[i,0] &#x3D; 0</span><br><span class="line">for j&#x3D;0 to n</span><br><span class="line">    fo c[0,j] &#x3D; 0</span><br><span class="line">for i&#x3D;1 to n</span><br><span class="line">    do for j&#x3D;1 to n</span><br><span class="line">    do if x[i] &#x3D; y[j]</span><br><span class="line">        then c[i,j] &#x3D; c[i-1,j-1]+1</span><br><span class="line">    else if c[i-1,j] &gt;&#x3D; c[i,j-1]</span><br><span class="line">      then c[i,j] &#x3D; c[i-1,j]</span><br><span class="line">      else c[i,j] &#x3D; c[i,j-1]</span><br><span class="line">return c</span><br></pre></td></tr></table></figure>
+
+<p><strong>Time = Θ(mn)</strong> .</p>
+<p>Reconstruct LCS by <strong>tracing backwards</strong> .</p>
+<ul>
+<li><strong>Space = Θ (mn )</strong> .</li>
+</ul>
+<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>分治算法是指将问题划分成一些 <strong>独立</strong> 的子问题，递归求解各子问题，然后合并子问题的解而得到原问题的解。与此不同，动态规划适用于子问题 <strong>不是独立</strong> 的情况，也就是各子问题包含公共的子子问题。在这种情况下，若用分治法则会做许多不必要的工作，即重复地求解公共的子子问题。</p>
+<p>动态规划算法对每个子子问题只求解一次，将其结果保存在一张表种，从而避免每次遇到各子问题时重新计算答案。</p>
+<p>动态规划通常应用于 <strong>最优化问题</strong> 。此类问题可能有很多种可行解。每个解有一个值，而我们希望找出一个具有最优（最大或最小）值的解。称这样的解为该问题的 <strong>一个</strong> 最优解（而不是确定的最优解），因为可能存在多个取最优值的解。</p>
+<p>动态规划算法的设计可以分为以下四步：</p>
+<ol>
+<li>描述最优解的结构i</li>
+<li>递归定义最优解的值</li>
+<li>按自底向上的方式计算最优解的值</li>
+<li>由计算出的结果构造一个最优解</li>
+</ol>
+<h3 id="474-一和零"><a href="#474-一和零" class="headerlink" title="474.一和零"></a>474.一和零</h3><p><strong>题目描述</strong> </p>
+<p>给你一个二进制字符串数组 strs 和两个整数 m 和 n 。</p>
+<p>请你找出并返回 strs 的最大子集的大小，该子集中 最多 有 m 个 0 和 n 个 1 。</p>
+<p>如果 x 的所有元素也是 y 的元素，集合 x 是集合 y 的 子集 。</p>
+<p><strong>示例</strong> </p>
+<p>输入：strs = [“10”, “0001”, “111001”, “1”, “0”], m = 5, n = 3</p>
+<p>输出：4</p>
+<p>解释：最多有 5 个 0 和 3 个 1 的最大子集是 {“10”,”0001”,”1”,”0”} ，因此答案是 4 。</p>
+<p>其他满足题意但较小的子集包括 {“0001”,”1”} 和 {“10”,”1”,”0”} 。{“111001”} 不满足题意，因为它含 4 个 1 ，大于 n 的值 3 。</p>
+<p><strong>思路</strong> </p>
+<p>第一步，要明确两点，[状态]和[选择]。</p>
+<p>状态有三个， [背包对1的容量]、[背包对0的容量]和 [可选择的字符串]；选择就是把字符串[装进背包]或者[不装进背包]。</p>
+<p>第二步，要明确dp数组的定义：</p>
+<p>首先，[状态]有三个，所以需要一个三维的dp数组。dp[i][j][k]的定义如下：若只使用前i个物品，当背包容量为j个0，k个1时，能够容纳的最多字符串数。</p>
+<p>第三步，根据选择，思考状态转移的逻辑：</p>
+<p>注意，这是一个0-1背包问题，每个字符串只有一个选择机会，要么选择装，要么选择不装。</p>
+<p><strong>如果你不能把这第 i 个物品装入背包</strong> （等同于容量不足，装不下去），也就是说你不使用strs[i]这一个字符串，那么当前的字符串数dp[i][j][k]应该等于dp[i - 1][j][k], <strong>继承</strong> 之前的结果。</p>
+<p><strong>如果你可以把这第 i 个物品装入了背包</strong> (此时背包容量是充足的，因此要选择装或者不装)，也就是说你能使用 strs[i] 这个字符串，那么 dp[i][j] 应该等于 Max(dp[i - 1][j][k], dp[i - 1][j - cnt[0]][k - cnt[1]] + 1)。 Max函数里的两个式子，分别是装和不装strs[i的字符串数量。(cnt 是根据strs[i]计算出来的。)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public int findMaxForm(String[] strs, int m, int n) &#123;</span><br><span class="line">        int len &#x3D; strs.length;</span><br><span class="line">        int[][][] dp &#x3D;new int[len+1][m+1][n+1];</span><br><span class="line">        for(int i&#x3D;1; i&lt;&#x3D;len; i++)&#123;</span><br><span class="line">            String s &#x3D; strs[i-1];</span><br><span class="line">            int zeronum &#x3D; countzero(s);</span><br><span class="line">            int onenum &#x3D; s.length()-zeronum;</span><br><span class="line">            for(int j&#x3D;0; j&lt;m+1; j++)&#123;</span><br><span class="line">                for(int k&#x3D;0; k&lt;n+1; k++)&#123;</span><br><span class="line">                    dp[i][j][k]  &#x3D; dp[i-1][j][k];</span><br><span class="line">                    if(j&gt;&#x3D;zeronum &amp;&amp; k&gt;&#x3D;onenum)&#123;</span><br><span class="line">                        dp[i][j][k] &#x3D; Math.max(dp[i-1][j][k],dp[i-1][j-zeronum][k-onenum]+1);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return dp[len][m][n];</span><br><span class="line">    &#125;</span><br><span class="line">    public int countzero(String s)&#123;</span><br><span class="line">        int count &#x3D; 0;</span><br><span class="line">        for(int i&#x3D;0; i&lt;s.length(); i++)&#123;</span><br><span class="line">            if(s.charAt(i)&#x3D;&#x3D;&#39;0&#39;)&#123;</span><br><span class="line">                count++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avater.jpg">
+      <meta itemprop="name" content="kiro-xu">
+      <meta itemprop="description" content="Be who you want to be">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kiro的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89/" class="post-title-link" itemprop="url">算法导论学习笔记（六）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-28 17:06:13 / 修改时间：17:07:06" itemprop="dateCreated datePublished" datetime="2021-02-28T17:06:13+08:00">2021-02-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Skip-Lists-跳跃表（Pugh，1989）"><a href="#Skip-Lists-跳跃表（Pugh，1989）" class="headerlink" title="Skip Lists 跳跃表（Pugh，1989）"></a>Skip Lists 跳跃表（Pugh，1989）</h1><p>a <strong>simple, randomized, efficient</strong> dynamic search structrue</p>
+<p>Maintains a dynamic set of n elements in <strong>O(lgn)</strong> time per operation in expectation an  <strong>with high probability</strong> (w.h.p)”almost always”</p>
+<h2 id="one-linked-list"><a href="#one-linked-list" class="headerlink" title="one linked list"></a>one linked list</h2><p>Start from simplest data structure: <strong>(sort) linked list</strong> </p>
+<ul>
+<li>Searches take <strong>O(n) time in worst case</strong></li>
+<li>How can we speed up searches?</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607435349427-5c0be976-bff3-4230-b4c3-8eafcb35879c.png" alt="image.png"></p>
+<h2 id="Two-linked-lists"><a href="#Two-linked-lists" class="headerlink" title="Two linked lists"></a>Two linked lists</h2><p>Suppose we had two sorted linked lists (on subsets of the elements).</p>
+<ul>
+<li>Each element can appear in one or both lists</li>
+<li>How can we speed up searches?</li>
+</ul>
+<p><strong>IDEA</strong> : 类似客车的快线与慢线</p>
+<ul>
+<li>Express line connects a few of the stations</li>
+<li>Local line connects all stations</li>
+<li>Links between lines at common stations</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607435637348-02714b61-fede-4d6c-8a0b-a887fbca512a.png" alt="image.png"></p>
+<h3 id="Searching-in-two-linked-lists"><a href="#Searching-in-two-linked-lists" class="headerlink" title="Searching in two linked lists"></a>Searching in two linked lists</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SEARCH(x)</span><br><span class="line">    Walk right in top linked list(L1) until going right would go too far</span><br><span class="line">  Walk down to bottom linked list(L2)</span><br><span class="line">  Walk right in L2 until element found(or not)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607435834020-bf9ee095-c95c-40ef-af74-30061278bed0.png" alt="image.png"></p>
+<p><strong>Question</strong> : Which nodes should be in L1?</p>
+<ul>
+<li>In a subway, the “Popular stations”</li>
+<li>Here we care about worst-case performance</li>
+<li><strong>Best approach</strong> : Evenly space the nodes in L1</li>
+<li>But how many nodes should be in L1</li>
+</ul>
+<p><strong>Analysis</strong> </p>
+<p>Search cost is roughly <strong>|L1|+|L2|/|L1|</strong> </p>
+<p>Minimized(up to constant factors) when terms are equal: <img src="https://cdn.nlark.com/yuque/__latex/8b9b4bcee9ff40263ae229e873e98cd7.svg" alt="img">, and Search cost is roughly <img src="https://cdn.nlark.com/yuque/__latex/c1fbe26c9914fdbeb3c992b9b72c91e4.svg" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607436391944-660662f0-f936-404b-9dbd-fed4bc2fdfbe.png" alt="image.png"></p>
+<h2 id="More-linked-lists"><a href="#More-linked-lists" class="headerlink" title="More linked lists"></a>More linked lists</h2><p>What if we had more sorted linked lists?</p>
+<ul>
+<li>2 sorted lists <img src="https://cdn.nlark.com/yuque/__latex/5c178e70690758153ae450d69509e497.svg" alt="img"></li>
+<li>3 sorted lists <img src="https://cdn.nlark.com/yuque/__latex/29ec5a303e64980341f3011343ac63f1.svg" alt="img"></li>
+<li>k sorted lists <img src="https://cdn.nlark.com/yuque/__latex/4b398932c7d4408df795ced985a3b13e.svg" alt="img"></li>
+<li>lgn sorted lists <img src="https://cdn.nlark.com/yuque/__latex/f06c5d0a7973de0894d7a1b3f08a1e28.svg" alt="img"></li>
+</ul>
+<p>lgn sorted linked lists are like a <strong>binary tree</strong> .</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607436699061-2785b69b-65b9-4c9a-b2de-1c163ae1da9d.png" alt="image.png"></p>
+<h3 id="insert-x-and-delete-x"><a href="#insert-x-and-delete-x" class="headerlink" title="insert(x) and delete(x)"></a>insert(x) and delete(x)</h3><p><strong>Skip list data structure</strong>  maintains roughly this structure subject to updates (insert/delete)</p>
+<p>To insert an element x into a skip list:</p>
+<ul>
+<li>SEARCH(x) to see where x fits in bottom list</li>
+<li>Always insert into bottom list</li>
+</ul>
+<p><strong>INVARIANT</strong> : Bottom list contains all elements , insert into some of the lists above…</p>
+<p><strong>QUESTION</strong> : To which other lists should we add x?</p>
+<p><strong>IDEA</strong> : <strong>Flip a (fair) coin</strong> ; if HEADS, promote x to next level up and flip again</p>
+<p>Probability of promotion to next level = 1/2</p>
+<p><strong>Small changes</strong> : Add special −∞ value to every list ⇒ can search with the same algorithm</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607437031127-ae9d874a-aed2-40d0-a9b0-598b994c7b89.png" alt="image.png"></p>
+<h3 id="How-good-are-skip-lists-speed-balance"><a href="#How-good-are-skip-lists-speed-balance" class="headerlink" title="How good are skip lists? (speed/balance)"></a>How good are skip lists? (speed/balance)</h3><p><strong>INTUITIVELY</strong> : Pretty good on average</p>
+<p><strong>CLAIM</strong> : Really, really good, almost always</p>
+<p><strong>THEOREM</strong> : <em>With high probability</em>, every search in an n-element skip list costs <strong>O(lgn)</strong></p>
+<p>证明略</p>
+<p><strong>LEMMA</strong> : <em>With high probability</em>, n-element skip list has <strong>O(lgn)</strong> levels</p>
+<p>证明略</p>
+<p><strong>CLAIM</strong> : Number of coin flips until <strong>c lgn</strong> HEADs = <strong>Θ(lgn)</strong> <em>with high probability</em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;***************************  SkipList.java  *********************&#x2F;</span><br><span class="line"></span><br><span class="line">import java.util.Random;</span><br><span class="line"></span><br><span class="line">public class SkipList&lt;T extends Comparable&lt;? super T&gt;&gt; &#123;</span><br><span class="line">    private int maxLevel;</span><br><span class="line">    private SkipListNode&lt;T&gt;[] root;</span><br><span class="line">    private int[] powers;</span><br><span class="line">    private Random rd &#x3D; new Random();</span><br><span class="line">    SkipList() &#123;</span><br><span class="line">        this(4);</span><br><span class="line">    &#125;</span><br><span class="line">    SkipList(int i) &#123;</span><br><span class="line">        maxLevel &#x3D; i;</span><br><span class="line">        root &#x3D; new SkipListNode[maxLevel];</span><br><span class="line">        powers &#x3D; new int[maxLevel];</span><br><span class="line">        for (int j &#x3D; 0; j &lt; maxLevel; j++)</span><br><span class="line">            root[j] &#x3D; null;</span><br><span class="line">        choosePowers();</span><br><span class="line">    &#125;</span><br><span class="line">    public boolean isEmpty() &#123;</span><br><span class="line">        return root[0] &#x3D;&#x3D; null;</span><br><span class="line">    &#125;</span><br><span class="line">    public void choosePowers() &#123;</span><br><span class="line">        powers[maxLevel-1] &#x3D; (2 &lt;&lt; (maxLevel-1)) - 1;    &#x2F;&#x2F; 2^maxLevel - 1</span><br><span class="line">        for (int i &#x3D; maxLevel - 2, j &#x3D; 0; i &gt;&#x3D; 0; i--, j++)</span><br><span class="line">           powers[i] &#x3D; powers[i+1] - (2 &lt;&lt; j);           &#x2F;&#x2F; 2^(j+1)</span><br><span class="line">    &#125;</span><br><span class="line">    public int chooseLevel() &#123;</span><br><span class="line">        int i, r &#x3D; Math.abs(rd.nextInt()) % powers[maxLevel-1] + 1;</span><br><span class="line">        for (i &#x3D; 1; i &lt; maxLevel; i++)</span><br><span class="line">            if (r &lt; powers[i])</span><br><span class="line">                return i-1; &#x2F;&#x2F; return a level &lt; the highest level;</span><br><span class="line">        return i-1;         &#x2F;&#x2F; return the highest level;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F; make sure (with isEmpty()) that search() is called for a nonempty list;</span><br><span class="line">    public T search(T key) &#123;</span><br><span class="line">        int lvl;</span><br><span class="line">        SkipListNode&lt;T&gt; prev, curr;            &#x2F;&#x2F; find the highest nonnull</span><br><span class="line">        for (lvl &#x3D; maxLevel-1; lvl &gt;&#x3D; 0 &amp;&amp; root[lvl] &#x3D;&#x3D; null; lvl--); &#x2F;&#x2F; level;</span><br><span class="line">        prev &#x3D; curr &#x3D; root[lvl];</span><br><span class="line">        while (true) &#123;</span><br><span class="line">            if (key.equals(curr.key))          &#x2F;&#x2F; success if equal;</span><br><span class="line">                 return curr.key;</span><br><span class="line">            else if (key.compareTo(curr.key) &lt; 0) &#123; &#x2F;&#x2F; if smaller, go down,</span><br><span class="line">                 if (lvl &#x3D;&#x3D; 0)                 &#x2F;&#x2F; if possible</span><br><span class="line">                      return null;</span><br><span class="line">                 else if (curr &#x3D;&#x3D; root[lvl])   &#x2F;&#x2F; by one level</span><br><span class="line">                      curr &#x3D; root[--lvl];      &#x2F;&#x2F; starting from the</span><br><span class="line">                 else curr &#x3D; prev.next[--lvl]; &#x2F;&#x2F; predecessor which</span><br><span class="line">            &#125;                                  &#x2F;&#x2F; can be the root;</span><br><span class="line">            else &#123;                             &#x2F;&#x2F; if greater,</span><br><span class="line">                 prev &#x3D; curr;                  &#x2F;&#x2F; go to the next</span><br><span class="line">                 if (curr.next[lvl] !&#x3D; null)   &#x2F;&#x2F; non-null node</span><br><span class="line">                      curr &#x3D; curr.next[lvl];   &#x2F;&#x2F; on the same level</span><br><span class="line">                 else &#123;                        &#x2F;&#x2F; or to a list on a lower level;</span><br><span class="line">                      for (lvl--; lvl &gt;&#x3D; 0 &amp;&amp; curr.next[lvl] &#x3D;&#x3D; null; lvl--);</span><br><span class="line">                      if (lvl &gt;&#x3D; 0)</span><br><span class="line">                           curr &#x3D; curr.next[lvl];</span><br><span class="line">                      else return null;</span><br><span class="line">                 &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    public void insert(T key) &#123;</span><br><span class="line">        SkipListNode&lt;T&gt;[] curr &#x3D; new SkipListNode[maxLevel];</span><br><span class="line">        SkipListNode&lt;T&gt;[] prev &#x3D; new SkipListNode[maxLevel];</span><br><span class="line">        SkipListNode&lt;T&gt; newNode;</span><br><span class="line">        int lvl, i;</span><br><span class="line">        curr[maxLevel-1] &#x3D; root[maxLevel-1];</span><br><span class="line">        prev[maxLevel-1] &#x3D; null;</span><br><span class="line">        for (lvl &#x3D; maxLevel - 1; lvl &gt;&#x3D; 0; lvl--) &#123;</span><br><span class="line">            while (curr[lvl] !&#x3D; null &amp;&amp; curr[lvl].key.compareTo(key) &lt; 0) &#123;</span><br><span class="line">                prev[lvl] &#x3D; curr[lvl];           &#x2F;&#x2F; go to the next</span><br><span class="line">                curr[lvl] &#x3D; curr[lvl].next[lvl]; &#x2F;&#x2F; if smaller;</span><br><span class="line">            &#125;</span><br><span class="line">            if (curr[lvl] !&#x3D; null &amp;&amp; key.equals(curr[lvl].key)) &#x2F;&#x2F; don&#39;t</span><br><span class="line">                return;                          &#x2F;&#x2F; include duplicates;</span><br><span class="line">            if (lvl &gt; 0)                         &#x2F;&#x2F; go one level down</span><br><span class="line">                if (prev[lvl] &#x3D;&#x3D; null) &#123;         &#x2F;&#x2F; if not the lowest</span><br><span class="line">                      curr[lvl-1] &#x3D; root[lvl-1]; &#x2F;&#x2F; level, using a link</span><br><span class="line">                      prev[lvl-1] &#x3D; null;        &#x2F;&#x2F; either from the root</span><br><span class="line">                &#125;</span><br><span class="line">                else &#123;                           &#x2F;&#x2F; or from the predecessor;</span><br><span class="line">                     curr[lvl-1] &#x3D; prev[lvl].next[lvl-1];</span><br><span class="line">                     prev[lvl-1] &#x3D; prev[lvl];</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        lvl &#x3D; chooseLevel();                &#x2F;&#x2F; generate randomly level</span><br><span class="line">        newNode &#x3D; new SkipListNode&lt;T&gt;(key,lvl+1); &#x2F;&#x2F; for newNode;</span><br><span class="line">        for (i &#x3D; 0; i &lt;&#x3D; lvl; i++) &#123;        &#x2F;&#x2F; initialize next fields of</span><br><span class="line">            newNode.next[i] &#x3D; curr[i];      &#x2F;&#x2F; newNode and reset to newNode</span><br><span class="line">            if (prev[i] &#x3D;&#x3D; null)            &#x2F;&#x2F; either fields of the root</span><br><span class="line">                 root[i] &#x3D; newNode;         &#x2F;&#x2F; or next fields of newNode&#39;s</span><br><span class="line">            else prev[i].next[i] &#x3D; newNode; &#x2F;&#x2F; predecessors;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="平摊分析，表的扩增"><a href="#平摊分析，表的扩增" class="headerlink" title="平摊分析，表的扩增"></a>平摊分析，表的扩增</h1><h3 id="How-large-should-a-hash-table-be"><a href="#How-large-should-a-hash-table-be" class="headerlink" title="How large should a hash table be?"></a>How large should a hash table be?</h3><p><strong>Goal</strong> : Make the table as small as possible, but large enough so that it won’t overflow (or otherwise become inefficient).</p>
+<p><strong>Problem</strong> : What if we don’t know the proper size in advance?</p>
+<p><strong>Solution</strong> : Dynamic tables</p>
+<p><strong>IDEA</strong> : Whenever the table gets too full(overflows), “grow” it.</p>
+<ul>
+<li>Allocate(malloc or new) a large table.</li>
+<li>move the items from the old to new.</li>
+<li>Free the old table.</li>
+</ul>
+<h2 id="The-aggregate-method"><a href="#The-aggregate-method" class="headerlink" title="The aggregate method"></a>The aggregate method</h2><p><strong>Analysis</strong> :</p>
+<p>A sequence of n insertion operations worst-case of 1 insert = O(n)</p>
+<p>let ci = the cost of the i-th insertion = i(if i-1 is an exact power of 2)/ 1(otherwise).</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607510557071-e0c52191-540c-446c-969e-e93707486c9b.png" alt="image.png"></p>
+<p>Cost of n insertions = </p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/0f7d83486dfa3992f4b423e2c46f1b0e.svg" alt="img"></p>
+<p><strong>Thus, the average cost of each dynamic-table operation is O(n)/n= O(1)</strong> </p>
+<p>An <strong>amortized analysis(平摊分析)</strong>  is any strategy for analyzing a sequence of operations to show that the average cost per operation is small, even though a single operation within the sequence might be expensive.</p>
+<p>常见的平摊分析技术：</p>
+<ul>
+<li>the aggregate method(聚集分析)</li>
+<li>the accounting method(记账分析)</li>
+<li>the potential method(势能方法)</li>
+</ul>
+<p>The aggregate method, though simple, lacks the precision of the other two methods. In particular, the accounting and potential methods allow a specific amortized cost to be allocated to each operation.</p>
+<h2 id="The-accounting-method"><a href="#The-accounting-method" class="headerlink" title="The accounting method"></a>The accounting method</h2><ul>
+<li>Charge i th operation a fictitious <strong>amortized cost</strong>  ĉ i, where $1 pays for 1 unit of work (i.e., time).</li>
+<li>This fee is consumed to perform the operation.</li>
+<li>Any amount not immediately consumed is stored in the <strong>bank</strong>  for use by subsequent operations.</li>
+<li>The bank balance must not go negative! We must ensure that:</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/__latex/4b118e6d70c4524d2aa8c44c889a0feb.svg" alt="img"> for all n</p>
+<ul>
+<li>Thus, the total amortized costs provide an upper bound on the total true costs.</li>
+</ul>
+<h3 id="Accounting-analysis-of-dynamic-tables"><a href="#Accounting-analysis-of-dynamic-tables" class="headerlink" title="Accounting analysis of dynamic tables"></a>Accounting analysis of dynamic tables</h3><p>Charge an amortized cost of ĉi = $3 for the i th insertion.</p>
+<ul>
+<li>$1 pays for the immediate insertion.</li>
+<li>$2 is stored for later table doubling.</li>
+</ul>
+<p>When the table doubles, $1 pays to move a recent item, and $1 pays to move an old item.</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607512860027-3bee36d8-33e2-480a-a20f-f57197bc5b06.png" alt="image.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607512870933-cbd8f415-d45b-4155-bdfb-aa27d4141d22.png" alt="image.png"></p>
+<p><strong>Key invariant</strong> : Bank balance never drops below 0. Thus, the sum of the amortized costs provides an upper bound on the sum of the true costs.</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607512957085-eb223056-a840-4f72-b796-0a1f4c9e94a8.png" alt="image.png"></p>
+<h2 id="The-potential-method"><a href="#The-potential-method" class="headerlink" title="The potential method"></a>The potential method</h2><p><strong>IDEA</strong> : View the bank account as the potential energy (à la physics) of the dynamic set.</p>
+<p><strong>Framework</strong> :</p>
+<ul>
+<li>Start with an initial data structure <img src="https://cdn.nlark.com/yuque/__latex/736d64eeb0602d2a2ad1b0ede073c768.svg" alt="img">.</li>
+<li>Operation i transforms <img src="https://cdn.nlark.com/yuque/__latex/b50f141401f087f46e72d2c3056ac42d.svg" alt="img"> to <img src="https://cdn.nlark.com/yuque/__latex/d32893051e4add28fec0f40ed7f0713f.svg" alt="img">.</li>
+<li>The cost of operation <em>i</em> is <img src="https://cdn.nlark.com/yuque/__latex/d9899588b2b28a768a63ade0f3523596.svg" alt="img">.</li>
+<li>Define a potenrial function <img src="https://cdn.nlark.com/yuque/__latex/fc9a659d8326f608a5a441906c27ebc4.svg" alt="img">, such that <img src="https://cdn.nlark.com/yuque/__latex/380f13e6a33e6a642edf3b6d3b153b72.svg" alt="img"> and <img src="https://cdn.nlark.com/yuque/__latex/981d786c81fd5e6732e15e169fe49d96.svg" alt="img"> for all i.</li>
+<li>The amortized cost <img src="https://cdn.nlark.com/yuque/__latex/99a663da937f5d7d41ce0f2e75f80065.svg" alt="img"> with respect to Φ is defined to be <img src="https://cdn.nlark.com/yuque/__latex/ac7ede85dacafad1dba3b81bd006caa9.svg" alt="img">. 其中，<img src="https://cdn.nlark.com/yuque/__latex/1cd3c9a3bf58afcb14b46cef9582d75a.svg" alt="img"></li>
+<li>if ∆Φi &gt; 0, then ĉi &gt; ci. Operation i stores work in the data structure for later use; If ∆Φi &lt; 0, then ĉi &lt; ci. The data structure delivers up stored work to help pay for operation i.</li>
+</ul>
+<p>The total amortized cost of n operations is:</p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/7c0b9890c61e98513055d27d89a8c9e6.svg" alt="img"></p>
+<p><strong>例子略</strong> </p>
+<h2 id="Conclusions"><a href="#Conclusions" class="headerlink" title="Conclusions"></a>Conclusions</h2><ul>
+<li>Amortized costs can provide a clean abstraction of data-structure performance.</li>
+<li>Any of the analysis methods can be used when an amortized analysis is called for, but each method has some situations where it is arguably the simplest or most precise.</li>
+<li>Different schemes may work for assigning amortized costs in the accounting method, or potentials in the potential method, sometimes yielding radically different bounds.</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1099,7 +1413,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-count">19</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
