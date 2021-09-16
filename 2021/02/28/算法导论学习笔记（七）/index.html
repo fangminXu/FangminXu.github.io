@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Dynamic Programming, Longest Common Subsequence(动态规划，最长相同子序列)Design technique, like divide-and-conquer. Example: Longest Common Subsequence (LCS)Given two sequences x[1 . . m] and y[1 . . n], find a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法导论学习笔记（七）">
+<meta property="og:url" content="http://example.com/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89/index.html">
+<meta property="og:site_name" content="kiro的博客">
+<meta property="og:description" content="Dynamic Programming, Longest Common Subsequence(动态规划，最长相同子序列)Design technique, like divide-and-conquer. Example: Longest Common Subsequence (LCS)Given two sequences x[1 . . m] and y[1 . . n], find a">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607664315488-663bfed8-4c02-4d27-ac67-f084a8a26296.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/b1bb05baea482e6d80396d5c32b90f41.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607665733966-d9db75bc-ae0d-4999-869a-cb4440a6b969.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607666136741-e15b79c5-9bdb-4bde-a236-9841b7cea989.png">
+<meta property="article:published_time" content="2021-02-28T09:07:29.000Z">
+<meta property="article:modified_time" content="2021-02-28T09:09:01.427Z">
+<meta property="article:author" content="kiro-xu">
+<meta property="article:tag" content="算法导论">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607664315488-663bfed8-4c02-4d27-ac67-f084a8a26296.png">
+
+<link rel="canonical" href="http://example.com/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>算法导论学习笔记（七） | kiro的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">kiro的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">学习记录</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avater.jpg">
+      <meta itemprop="name" content="kiro-xu">
+      <meta itemprop="description" content="Be who you want to be">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kiro的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          算法导论学习笔记（七）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-28 17:07:29 / 修改时间：17:09:01" itemprop="dateCreated datePublished" datetime="2021-02-28T17:07:29+08:00">2021-02-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Dynamic-Programming-Longest-Common-Subsequence-动态规划，最长相同子序列"><a href="#Dynamic-Programming-Longest-Common-Subsequence-动态规划，最长相同子序列" class="headerlink" title="Dynamic Programming, Longest Common Subsequence(动态规划，最长相同子序列)"></a>Dynamic Programming, Longest Common Subsequence(动态规划，最长相同子序列)</h1><p>Design technique, like divide-and-conquer.</p>
+<h2 id="Example-Longest-Common-Subsequence-LCS"><a href="#Example-Longest-Common-Subsequence-LCS" class="headerlink" title="Example: Longest Common Subsequence (LCS)"></a>Example: Longest Common Subsequence (LCS)</h2><p>Given two sequences x[1 . . m] and y[1 . . n], find <strong>a</strong>  longest subsequence common to them both.</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607664315488-663bfed8-4c02-4d27-ac67-f084a8a26296.png" alt="image.png"></p>
+<h3 id="Bruce-Force-algorithm"><a href="#Bruce-Force-algorithm" class="headerlink" title="Bruce-Force algorithm"></a>Bruce-Force algorithm</h3><p><strong>Check</strong>  every <strong>subsequence</strong>  of x[1 . . m] to see if it is also a subsequence of y[1 . . n].</p>
+<p><strong>Analysis</strong> </p>
+<ul>
+<li>Checking = O(n) time per subsequence.</li>
+<li>2^m subsequences of x (each bit-vector of length m determines a distinct subsequence of x).</li>
+<li>So, Worst-case running time = O(n2^m) = exponential time. <strong>Slow!</strong> </li>
+</ul>
+<h3 id="Simplification"><a href="#Simplification" class="headerlink" title="Simplification"></a>Simplification</h3><ol>
+<li>Look at the length of a longest-common subsequence.</li>
+<li>Extend the algorithm to find the LCS itself.</li>
+</ol>
+<p><strong>Notation</strong> : Denote the length of a sequence s by |s|.</p>
+<p><strong>Strategy</strong> : Consider <strong>prefixes</strong>  of x and y.</p>
+<p><strong>Define:</strong> c[i, j] = | LCS(x[1 . . i], y[1 . . j])|. 最长子序列长度</p>
+<p>那么可知，c[m,n] = |LCS(x,y)|</p>
+<p><strong>Theorem.</strong> </p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/b1bb05baea482e6d80396d5c32b90f41.svg" alt="img"></p>
+<p><strong>证明略</strong> </p>
+<h3 id="Dynamic-programming-hallmark-1"><a href="#Dynamic-programming-hallmark-1" class="headerlink" title="Dynamic-programming hallmark #1"></a>Dynamic-programming hallmark #1</h3><p>Optimal substructure ：An optimal solution to a problem (instance) contains optimal solutions to subproblems。</p>
+<p>动态规划适用于子问题不是独立的情况，也就是各子问题包含公共的子子问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Recursion algorithm for LCS</span><br><span class="line">    if x[i]&#x3D;y[j]</span><br><span class="line">    then c[i,j]&#x3D;LCS(c[i-1,j-1])+1</span><br><span class="line">  else</span><br><span class="line">    c[i,j] &#x3D; max&#123;LCS(i,j-1),LCS(i-1,j)&#125;;</span><br><span class="line">  return c[i,j]</span><br></pre></td></tr></table></figure>
+
+<p>Worst-case: x[i]!=y[j], 对任意i，j。in which case the algorithm evaluates two subproblems, each with only one parameter decremented.</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607665733966-d9db75bc-ae0d-4999-869a-cb4440a6b969.png" alt="image.png"></p>
+<p><strong>Height = m + n</strong>  ⇒ work potentially exponential。but we’re solving subproblems already solved!</p>
+<h3 id="Dynamic-programming-hallmark-2"><a href="#Dynamic-programming-hallmark-2" class="headerlink" title="Dynamic-programming hallmark #2"></a>Dynamic-programming hallmark #2</h3><p>Overlapping subproblems A recursive solution contains a “small” number of distinct subproblems repeated many times.</p>
+<p>The number of distinct LCS subproblems for two strings of lengths m and n is only mn.</p>
+<p><strong>Memoization algorithm</strong> </p>
+<p>Memoization: After computing a solution to a subproblem, store it in a table. Subsequent calls check the table to avoid redoing work.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Memoization Algorithm</span><br><span class="line">    c[i,j]&#x3D;LCS(x,y,i,j)</span><br><span class="line">  if c[i,j]&#x3D;nil</span><br><span class="line">    then if x[i]&#x3D;y[j]</span><br><span class="line">                then c[i,j] &#x3D; LCS(x,ymi-1,j-1)+1</span><br><span class="line">        else </span><br><span class="line">            c[i,j] &#x3D; max&#123;LCS(i,j-1),LCS(i-1,j)&#125;</span><br><span class="line">   return c[i,j];</span><br></pre></td></tr></table></figure>
+
+<p><strong>Time</strong>  = Θ(mn) = constant work per table entry. </p>
+<p><strong>Space</strong>  = Θ(mn).</p>
+<h3 id="Dynamic-programming-algorithm"><a href="#Dynamic-programming-algorithm" class="headerlink" title="Dynamic-programming algorithm"></a>Dynamic-programming algorithm</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607666136741-e15b79c5-9bdb-4bde-a236-9841b7cea989.png" alt="image.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">LCS-LENGTH(X,Y)</span><br><span class="line">m &#x3D; length[X]</span><br><span class="line">n &#x3D; length[Y]</span><br><span class="line">for i&#x3D;1 to m</span><br><span class="line">    do c[i,0] &#x3D; 0</span><br><span class="line">for j&#x3D;0 to n</span><br><span class="line">    fo c[0,j] &#x3D; 0</span><br><span class="line">for i&#x3D;1 to n</span><br><span class="line">    do for j&#x3D;1 to n</span><br><span class="line">    do if x[i] &#x3D; y[j]</span><br><span class="line">        then c[i,j] &#x3D; c[i-1,j-1]+1</span><br><span class="line">    else if c[i-1,j] &gt;&#x3D; c[i,j-1]</span><br><span class="line">      then c[i,j] &#x3D; c[i-1,j]</span><br><span class="line">      else c[i,j] &#x3D; c[i,j-1]</span><br><span class="line">return c</span><br></pre></td></tr></table></figure>
+
+<p><strong>Time = Θ(mn)</strong> .</p>
+<p>Reconstruct LCS by <strong>tracing backwards</strong> .</p>
+<ul>
+<li><strong>Space = Θ (mn )</strong> .</li>
+</ul>
+<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>分治算法是指将问题划分成一些 <strong>独立</strong> 的子问题，递归求解各子问题，然后合并子问题的解而得到原问题的解。与此不同，动态规划适用于子问题 <strong>不是独立</strong> 的情况，也就是各子问题包含公共的子子问题。在这种情况下，若用分治法则会做许多不必要的工作，即重复地求解公共的子子问题。</p>
+<p>动态规划算法对每个子子问题只求解一次，将其结果保存在一张表种，从而避免每次遇到各子问题时重新计算答案。</p>
+<p>动态规划通常应用于 <strong>最优化问题</strong> 。此类问题可能有很多种可行解。每个解有一个值，而我们希望找出一个具有最优（最大或最小）值的解。称这样的解为该问题的 <strong>一个</strong> 最优解（而不是确定的最优解），因为可能存在多个取最优值的解。</p>
+<p>动态规划算法的设计可以分为以下四步：</p>
+<ol>
+<li>描述最优解的结构i</li>
+<li>递归定义最优解的值</li>
+<li>按自底向上的方式计算最优解的值</li>
+<li>由计算出的结果构造一个最优解</li>
+</ol>
+<h3 id="474-一和零"><a href="#474-一和零" class="headerlink" title="474.一和零"></a>474.一和零</h3><p><strong>题目描述</strong> </p>
+<p>给你一个二进制字符串数组 strs 和两个整数 m 和 n 。</p>
+<p>请你找出并返回 strs 的最大子集的大小，该子集中 最多 有 m 个 0 和 n 个 1 。</p>
+<p>如果 x 的所有元素也是 y 的元素，集合 x 是集合 y 的 子集 。</p>
+<p><strong>示例</strong> </p>
+<p>输入：strs = [“10”, “0001”, “111001”, “1”, “0”], m = 5, n = 3</p>
+<p>输出：4</p>
+<p>解释：最多有 5 个 0 和 3 个 1 的最大子集是 {“10”,”0001”,”1”,”0”} ，因此答案是 4 。</p>
+<p>其他满足题意但较小的子集包括 {“0001”,”1”} 和 {“10”,”1”,”0”} 。{“111001”} 不满足题意，因为它含 4 个 1 ，大于 n 的值 3 。</p>
+<p><strong>思路</strong> </p>
+<p>第一步，要明确两点，[状态]和[选择]。</p>
+<p>状态有三个， [背包对1的容量]、[背包对0的容量]和 [可选择的字符串]；选择就是把字符串[装进背包]或者[不装进背包]。</p>
+<p>第二步，要明确dp数组的定义：</p>
+<p>首先，[状态]有三个，所以需要一个三维的dp数组。dp[i][j][k]的定义如下：若只使用前i个物品，当背包容量为j个0，k个1时，能够容纳的最多字符串数。</p>
+<p>第三步，根据选择，思考状态转移的逻辑：</p>
+<p>注意，这是一个0-1背包问题，每个字符串只有一个选择机会，要么选择装，要么选择不装。</p>
+<p><strong>如果你不能把这第 i 个物品装入背包</strong> （等同于容量不足，装不下去），也就是说你不使用strs[i]这一个字符串，那么当前的字符串数dp[i][j][k]应该等于dp[i - 1][j][k], <strong>继承</strong> 之前的结果。</p>
+<p><strong>如果你可以把这第 i 个物品装入了背包</strong> (此时背包容量是充足的，因此要选择装或者不装)，也就是说你能使用 strs[i] 这个字符串，那么 dp[i][j] 应该等于 Max(dp[i - 1][j][k], dp[i - 1][j - cnt[0]][k - cnt[1]] + 1)。 Max函数里的两个式子，分别是装和不装strs[i的字符串数量。(cnt 是根据strs[i]计算出来的。)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public int findMaxForm(String[] strs, int m, int n) &#123;</span><br><span class="line">        int len &#x3D; strs.length;</span><br><span class="line">        int[][][] dp &#x3D;new int[len+1][m+1][n+1];</span><br><span class="line">        for(int i&#x3D;1; i&lt;&#x3D;len; i++)&#123;</span><br><span class="line">            String s &#x3D; strs[i-1];</span><br><span class="line">            int zeronum &#x3D; countzero(s);</span><br><span class="line">            int onenum &#x3D; s.length()-zeronum;</span><br><span class="line">            for(int j&#x3D;0; j&lt;m+1; j++)&#123;</span><br><span class="line">                for(int k&#x3D;0; k&lt;n+1; k++)&#123;</span><br><span class="line">                    dp[i][j][k]  &#x3D; dp[i-1][j][k];</span><br><span class="line">                    if(j&gt;&#x3D;zeronum &amp;&amp; k&gt;&#x3D;onenum)&#123;</span><br><span class="line">                        dp[i][j][k] &#x3D; Math.max(dp[i-1][j][k],dp[i-1][j-zeronum][k-onenum]+1);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return dp[len][m][n];</span><br><span class="line">    &#125;</span><br><span class="line">    public int countzero(String s)&#123;</span><br><span class="line">        int count &#x3D; 0;</span><br><span class="line">        for(int i&#x3D;0; i&lt;s.length(); i++)&#123;</span><br><span class="line">            if(s.charAt(i)&#x3D;&#x3D;&#39;0&#39;)&#123;</span><br><span class="line">                count++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA/" rel="tag"># 算法导论</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89/" rel="prev" title="算法导论学习笔记（六）">
+      <i class="fa fa-chevron-left"></i> 算法导论学习笔记（六）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AB%EF%BC%89/" rel="next" title="算法导论学习笔记（八）">
+      算法导论学习笔记（八） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Dynamic-Programming-Longest-Common-Subsequence-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%EF%BC%8C%E6%9C%80%E9%95%BF%E7%9B%B8%E5%90%8C%E5%AD%90%E5%BA%8F%E5%88%97"><span class="nav-number">1.</span> <span class="nav-text">Dynamic Programming, Longest Common Subsequence(动态规划，最长相同子序列)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-Longest-Common-Subsequence-LCS"><span class="nav-number">1.1.</span> <span class="nav-text">Example: Longest Common Subsequence (LCS)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Bruce-Force-algorithm"><span class="nav-number">1.1.1.</span> <span class="nav-text">Bruce-Force algorithm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Simplification"><span class="nav-number">1.1.2.</span> <span class="nav-text">Simplification</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dynamic-programming-hallmark-1"><span class="nav-number">1.1.3.</span> <span class="nav-text">Dynamic-programming hallmark #1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dynamic-programming-hallmark-2"><span class="nav-number">1.1.4.</span> <span class="nav-text">Dynamic-programming hallmark #2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dynamic-programming-algorithm"><span class="nav-number">1.1.5.</span> <span class="nav-text">Dynamic-programming algorithm</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A5%E5%85%85"><span class="nav-number">1.2.</span> <span class="nav-text">补充</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#474-%E4%B8%80%E5%92%8C%E9%9B%B6"><span class="nav-number">1.2.1.</span> <span class="nav-text">474.一和零</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="kiro-xu"
+      src="/images/avater.jpg">
+  <p class="site-author-name" itemprop="name">kiro-xu</p>
+  <div class="site-description" itemprop="description">Be who you want to be</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021-2 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kiro-xu</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

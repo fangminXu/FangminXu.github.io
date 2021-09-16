@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Skip Lists 跳跃表（Pugh，1989）a simple, randomized, efficient dynamic search structrue Maintains a dynamic set of n elements in O(lgn) time per operation in expectation an  with high probability (w.h.p)”al">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法导论学习笔记（六）">
+<meta property="og:url" content="http://example.com/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89/index.html">
+<meta property="og:site_name" content="kiro的博客">
+<meta property="og:description" content="Skip Lists 跳跃表（Pugh，1989）a simple, randomized, efficient dynamic search structrue Maintains a dynamic set of n elements in O(lgn) time per operation in expectation an  with high probability (w.h.p)”al">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607435349427-5c0be976-bff3-4230-b4c3-8eafcb35879c.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607435637348-02714b61-fede-4d6c-8a0b-a887fbca512a.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607435834020-bf9ee095-c95c-40ef-af74-30061278bed0.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/8b9b4bcee9ff40263ae229e873e98cd7.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/c1fbe26c9914fdbeb3c992b9b72c91e4.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607436391944-660662f0-f936-404b-9dbd-fed4bc2fdfbe.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/5c178e70690758153ae450d69509e497.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/29ec5a303e64980341f3011343ac63f1.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/4b398932c7d4408df795ced985a3b13e.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/f06c5d0a7973de0894d7a1b3f08a1e28.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607436699061-2785b69b-65b9-4c9a-b2de-1c163ae1da9d.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607437031127-ae9d874a-aed2-40d0-a9b0-598b994c7b89.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607510557071-e0c52191-540c-446c-969e-e93707486c9b.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/0f7d83486dfa3992f4b423e2c46f1b0e.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/4b118e6d70c4524d2aa8c44c889a0feb.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607512860027-3bee36d8-33e2-480a-a20f-f57197bc5b06.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607512870933-cbd8f415-d45b-4155-bdfb-aa27d4141d22.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607512957085-eb223056-a840-4f72-b796-0a1f4c9e94a8.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/736d64eeb0602d2a2ad1b0ede073c768.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/b50f141401f087f46e72d2c3056ac42d.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/d32893051e4add28fec0f40ed7f0713f.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/d9899588b2b28a768a63ade0f3523596.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/fc9a659d8326f608a5a441906c27ebc4.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/380f13e6a33e6a642edf3b6d3b153b72.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/981d786c81fd5e6732e15e169fe49d96.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/99a663da937f5d7d41ce0f2e75f80065.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/ac7ede85dacafad1dba3b81bd006caa9.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/1cd3c9a3bf58afcb14b46cef9582d75a.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/7c0b9890c61e98513055d27d89a8c9e6.svg">
+<meta property="article:published_time" content="2021-02-28T09:06:13.000Z">
+<meta property="article:modified_time" content="2021-02-28T09:07:06.913Z">
+<meta property="article:author" content="kiro-xu">
+<meta property="article:tag" content="算法导论">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607435349427-5c0be976-bff3-4230-b4c3-8eafcb35879c.png">
+
+<link rel="canonical" href="http://example.com/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>算法导论学习笔记（六） | kiro的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">kiro的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">学习记录</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avater.jpg">
+      <meta itemprop="name" content="kiro-xu">
+      <meta itemprop="description" content="Be who you want to be">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kiro的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          算法导论学习笔记（六）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-28 17:06:13 / 修改时间：17:07:06" itemprop="dateCreated datePublished" datetime="2021-02-28T17:06:13+08:00">2021-02-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Skip-Lists-跳跃表（Pugh，1989）"><a href="#Skip-Lists-跳跃表（Pugh，1989）" class="headerlink" title="Skip Lists 跳跃表（Pugh，1989）"></a>Skip Lists 跳跃表（Pugh，1989）</h1><p>a <strong>simple, randomized, efficient</strong> dynamic search structrue</p>
+<p>Maintains a dynamic set of n elements in <strong>O(lgn)</strong> time per operation in expectation an  <strong>with high probability</strong> (w.h.p)”almost always”</p>
+<h2 id="one-linked-list"><a href="#one-linked-list" class="headerlink" title="one linked list"></a>one linked list</h2><p>Start from simplest data structure: <strong>(sort) linked list</strong> </p>
+<ul>
+<li>Searches take <strong>O(n) time in worst case</strong></li>
+<li>How can we speed up searches?</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607435349427-5c0be976-bff3-4230-b4c3-8eafcb35879c.png" alt="image.png"></p>
+<h2 id="Two-linked-lists"><a href="#Two-linked-lists" class="headerlink" title="Two linked lists"></a>Two linked lists</h2><p>Suppose we had two sorted linked lists (on subsets of the elements).</p>
+<ul>
+<li>Each element can appear in one or both lists</li>
+<li>How can we speed up searches?</li>
+</ul>
+<p><strong>IDEA</strong> : 类似客车的快线与慢线</p>
+<ul>
+<li>Express line connects a few of the stations</li>
+<li>Local line connects all stations</li>
+<li>Links between lines at common stations</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607435637348-02714b61-fede-4d6c-8a0b-a887fbca512a.png" alt="image.png"></p>
+<h3 id="Searching-in-two-linked-lists"><a href="#Searching-in-two-linked-lists" class="headerlink" title="Searching in two linked lists"></a>Searching in two linked lists</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SEARCH(x)</span><br><span class="line">    Walk right in top linked list(L1) until going right would go too far</span><br><span class="line">  Walk down to bottom linked list(L2)</span><br><span class="line">  Walk right in L2 until element found(or not)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607435834020-bf9ee095-c95c-40ef-af74-30061278bed0.png" alt="image.png"></p>
+<p><strong>Question</strong> : Which nodes should be in L1?</p>
+<ul>
+<li>In a subway, the “Popular stations”</li>
+<li>Here we care about worst-case performance</li>
+<li><strong>Best approach</strong> : Evenly space the nodes in L1</li>
+<li>But how many nodes should be in L1</li>
+</ul>
+<p><strong>Analysis</strong> </p>
+<p>Search cost is roughly <strong>|L1|+|L2|/|L1|</strong> </p>
+<p>Minimized(up to constant factors) when terms are equal: <img src="https://cdn.nlark.com/yuque/__latex/8b9b4bcee9ff40263ae229e873e98cd7.svg" alt="img">, and Search cost is roughly <img src="https://cdn.nlark.com/yuque/__latex/c1fbe26c9914fdbeb3c992b9b72c91e4.svg" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607436391944-660662f0-f936-404b-9dbd-fed4bc2fdfbe.png" alt="image.png"></p>
+<h2 id="More-linked-lists"><a href="#More-linked-lists" class="headerlink" title="More linked lists"></a>More linked lists</h2><p>What if we had more sorted linked lists?</p>
+<ul>
+<li>2 sorted lists <img src="https://cdn.nlark.com/yuque/__latex/5c178e70690758153ae450d69509e497.svg" alt="img"></li>
+<li>3 sorted lists <img src="https://cdn.nlark.com/yuque/__latex/29ec5a303e64980341f3011343ac63f1.svg" alt="img"></li>
+<li>k sorted lists <img src="https://cdn.nlark.com/yuque/__latex/4b398932c7d4408df795ced985a3b13e.svg" alt="img"></li>
+<li>lgn sorted lists <img src="https://cdn.nlark.com/yuque/__latex/f06c5d0a7973de0894d7a1b3f08a1e28.svg" alt="img"></li>
+</ul>
+<p>lgn sorted linked lists are like a <strong>binary tree</strong> .</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607436699061-2785b69b-65b9-4c9a-b2de-1c163ae1da9d.png" alt="image.png"></p>
+<h3 id="insert-x-and-delete-x"><a href="#insert-x-and-delete-x" class="headerlink" title="insert(x) and delete(x)"></a>insert(x) and delete(x)</h3><p><strong>Skip list data structure</strong>  maintains roughly this structure subject to updates (insert/delete)</p>
+<p>To insert an element x into a skip list:</p>
+<ul>
+<li>SEARCH(x) to see where x fits in bottom list</li>
+<li>Always insert into bottom list</li>
+</ul>
+<p><strong>INVARIANT</strong> : Bottom list contains all elements , insert into some of the lists above…</p>
+<p><strong>QUESTION</strong> : To which other lists should we add x?</p>
+<p><strong>IDEA</strong> : <strong>Flip a (fair) coin</strong> ; if HEADS, promote x to next level up and flip again</p>
+<p>Probability of promotion to next level = 1/2</p>
+<p><strong>Small changes</strong> : Add special −∞ value to every list ⇒ can search with the same algorithm</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607437031127-ae9d874a-aed2-40d0-a9b0-598b994c7b89.png" alt="image.png"></p>
+<h3 id="How-good-are-skip-lists-speed-balance"><a href="#How-good-are-skip-lists-speed-balance" class="headerlink" title="How good are skip lists? (speed/balance)"></a>How good are skip lists? (speed/balance)</h3><p><strong>INTUITIVELY</strong> : Pretty good on average</p>
+<p><strong>CLAIM</strong> : Really, really good, almost always</p>
+<p><strong>THEOREM</strong> : <em>With high probability</em>, every search in an n-element skip list costs <strong>O(lgn)</strong></p>
+<p>证明略</p>
+<p><strong>LEMMA</strong> : <em>With high probability</em>, n-element skip list has <strong>O(lgn)</strong> levels</p>
+<p>证明略</p>
+<p><strong>CLAIM</strong> : Number of coin flips until <strong>c lgn</strong> HEADs = <strong>Θ(lgn)</strong> <em>with high probability</em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;***************************  SkipList.java  *********************&#x2F;</span><br><span class="line"></span><br><span class="line">import java.util.Random;</span><br><span class="line"></span><br><span class="line">public class SkipList&lt;T extends Comparable&lt;? super T&gt;&gt; &#123;</span><br><span class="line">    private int maxLevel;</span><br><span class="line">    private SkipListNode&lt;T&gt;[] root;</span><br><span class="line">    private int[] powers;</span><br><span class="line">    private Random rd &#x3D; new Random();</span><br><span class="line">    SkipList() &#123;</span><br><span class="line">        this(4);</span><br><span class="line">    &#125;</span><br><span class="line">    SkipList(int i) &#123;</span><br><span class="line">        maxLevel &#x3D; i;</span><br><span class="line">        root &#x3D; new SkipListNode[maxLevel];</span><br><span class="line">        powers &#x3D; new int[maxLevel];</span><br><span class="line">        for (int j &#x3D; 0; j &lt; maxLevel; j++)</span><br><span class="line">            root[j] &#x3D; null;</span><br><span class="line">        choosePowers();</span><br><span class="line">    &#125;</span><br><span class="line">    public boolean isEmpty() &#123;</span><br><span class="line">        return root[0] &#x3D;&#x3D; null;</span><br><span class="line">    &#125;</span><br><span class="line">    public void choosePowers() &#123;</span><br><span class="line">        powers[maxLevel-1] &#x3D; (2 &lt;&lt; (maxLevel-1)) - 1;    &#x2F;&#x2F; 2^maxLevel - 1</span><br><span class="line">        for (int i &#x3D; maxLevel - 2, j &#x3D; 0; i &gt;&#x3D; 0; i--, j++)</span><br><span class="line">           powers[i] &#x3D; powers[i+1] - (2 &lt;&lt; j);           &#x2F;&#x2F; 2^(j+1)</span><br><span class="line">    &#125;</span><br><span class="line">    public int chooseLevel() &#123;</span><br><span class="line">        int i, r &#x3D; Math.abs(rd.nextInt()) % powers[maxLevel-1] + 1;</span><br><span class="line">        for (i &#x3D; 1; i &lt; maxLevel; i++)</span><br><span class="line">            if (r &lt; powers[i])</span><br><span class="line">                return i-1; &#x2F;&#x2F; return a level &lt; the highest level;</span><br><span class="line">        return i-1;         &#x2F;&#x2F; return the highest level;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F; make sure (with isEmpty()) that search() is called for a nonempty list;</span><br><span class="line">    public T search(T key) &#123;</span><br><span class="line">        int lvl;</span><br><span class="line">        SkipListNode&lt;T&gt; prev, curr;            &#x2F;&#x2F; find the highest nonnull</span><br><span class="line">        for (lvl &#x3D; maxLevel-1; lvl &gt;&#x3D; 0 &amp;&amp; root[lvl] &#x3D;&#x3D; null; lvl--); &#x2F;&#x2F; level;</span><br><span class="line">        prev &#x3D; curr &#x3D; root[lvl];</span><br><span class="line">        while (true) &#123;</span><br><span class="line">            if (key.equals(curr.key))          &#x2F;&#x2F; success if equal;</span><br><span class="line">                 return curr.key;</span><br><span class="line">            else if (key.compareTo(curr.key) &lt; 0) &#123; &#x2F;&#x2F; if smaller, go down,</span><br><span class="line">                 if (lvl &#x3D;&#x3D; 0)                 &#x2F;&#x2F; if possible</span><br><span class="line">                      return null;</span><br><span class="line">                 else if (curr &#x3D;&#x3D; root[lvl])   &#x2F;&#x2F; by one level</span><br><span class="line">                      curr &#x3D; root[--lvl];      &#x2F;&#x2F; starting from the</span><br><span class="line">                 else curr &#x3D; prev.next[--lvl]; &#x2F;&#x2F; predecessor which</span><br><span class="line">            &#125;                                  &#x2F;&#x2F; can be the root;</span><br><span class="line">            else &#123;                             &#x2F;&#x2F; if greater,</span><br><span class="line">                 prev &#x3D; curr;                  &#x2F;&#x2F; go to the next</span><br><span class="line">                 if (curr.next[lvl] !&#x3D; null)   &#x2F;&#x2F; non-null node</span><br><span class="line">                      curr &#x3D; curr.next[lvl];   &#x2F;&#x2F; on the same level</span><br><span class="line">                 else &#123;                        &#x2F;&#x2F; or to a list on a lower level;</span><br><span class="line">                      for (lvl--; lvl &gt;&#x3D; 0 &amp;&amp; curr.next[lvl] &#x3D;&#x3D; null; lvl--);</span><br><span class="line">                      if (lvl &gt;&#x3D; 0)</span><br><span class="line">                           curr &#x3D; curr.next[lvl];</span><br><span class="line">                      else return null;</span><br><span class="line">                 &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    public void insert(T key) &#123;</span><br><span class="line">        SkipListNode&lt;T&gt;[] curr &#x3D; new SkipListNode[maxLevel];</span><br><span class="line">        SkipListNode&lt;T&gt;[] prev &#x3D; new SkipListNode[maxLevel];</span><br><span class="line">        SkipListNode&lt;T&gt; newNode;</span><br><span class="line">        int lvl, i;</span><br><span class="line">        curr[maxLevel-1] &#x3D; root[maxLevel-1];</span><br><span class="line">        prev[maxLevel-1] &#x3D; null;</span><br><span class="line">        for (lvl &#x3D; maxLevel - 1; lvl &gt;&#x3D; 0; lvl--) &#123;</span><br><span class="line">            while (curr[lvl] !&#x3D; null &amp;&amp; curr[lvl].key.compareTo(key) &lt; 0) &#123;</span><br><span class="line">                prev[lvl] &#x3D; curr[lvl];           &#x2F;&#x2F; go to the next</span><br><span class="line">                curr[lvl] &#x3D; curr[lvl].next[lvl]; &#x2F;&#x2F; if smaller;</span><br><span class="line">            &#125;</span><br><span class="line">            if (curr[lvl] !&#x3D; null &amp;&amp; key.equals(curr[lvl].key)) &#x2F;&#x2F; don&#39;t</span><br><span class="line">                return;                          &#x2F;&#x2F; include duplicates;</span><br><span class="line">            if (lvl &gt; 0)                         &#x2F;&#x2F; go one level down</span><br><span class="line">                if (prev[lvl] &#x3D;&#x3D; null) &#123;         &#x2F;&#x2F; if not the lowest</span><br><span class="line">                      curr[lvl-1] &#x3D; root[lvl-1]; &#x2F;&#x2F; level, using a link</span><br><span class="line">                      prev[lvl-1] &#x3D; null;        &#x2F;&#x2F; either from the root</span><br><span class="line">                &#125;</span><br><span class="line">                else &#123;                           &#x2F;&#x2F; or from the predecessor;</span><br><span class="line">                     curr[lvl-1] &#x3D; prev[lvl].next[lvl-1];</span><br><span class="line">                     prev[lvl-1] &#x3D; prev[lvl];</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        lvl &#x3D; chooseLevel();                &#x2F;&#x2F; generate randomly level</span><br><span class="line">        newNode &#x3D; new SkipListNode&lt;T&gt;(key,lvl+1); &#x2F;&#x2F; for newNode;</span><br><span class="line">        for (i &#x3D; 0; i &lt;&#x3D; lvl; i++) &#123;        &#x2F;&#x2F; initialize next fields of</span><br><span class="line">            newNode.next[i] &#x3D; curr[i];      &#x2F;&#x2F; newNode and reset to newNode</span><br><span class="line">            if (prev[i] &#x3D;&#x3D; null)            &#x2F;&#x2F; either fields of the root</span><br><span class="line">                 root[i] &#x3D; newNode;         &#x2F;&#x2F; or next fields of newNode&#39;s</span><br><span class="line">            else prev[i].next[i] &#x3D; newNode; &#x2F;&#x2F; predecessors;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="平摊分析，表的扩增"><a href="#平摊分析，表的扩增" class="headerlink" title="平摊分析，表的扩增"></a>平摊分析，表的扩增</h1><h3 id="How-large-should-a-hash-table-be"><a href="#How-large-should-a-hash-table-be" class="headerlink" title="How large should a hash table be?"></a>How large should a hash table be?</h3><p><strong>Goal</strong> : Make the table as small as possible, but large enough so that it won’t overflow (or otherwise become inefficient).</p>
+<p><strong>Problem</strong> : What if we don’t know the proper size in advance?</p>
+<p><strong>Solution</strong> : Dynamic tables</p>
+<p><strong>IDEA</strong> : Whenever the table gets too full(overflows), “grow” it.</p>
+<ul>
+<li>Allocate(malloc or new) a large table.</li>
+<li>move the items from the old to new.</li>
+<li>Free the old table.</li>
+</ul>
+<h2 id="The-aggregate-method"><a href="#The-aggregate-method" class="headerlink" title="The aggregate method"></a>The aggregate method</h2><p><strong>Analysis</strong> :</p>
+<p>A sequence of n insertion operations worst-case of 1 insert = O(n)</p>
+<p>let ci = the cost of the i-th insertion = i(if i-1 is an exact power of 2)/ 1(otherwise).</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607510557071-e0c52191-540c-446c-969e-e93707486c9b.png" alt="image.png"></p>
+<p>Cost of n insertions = </p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/0f7d83486dfa3992f4b423e2c46f1b0e.svg" alt="img"></p>
+<p><strong>Thus, the average cost of each dynamic-table operation is O(n)/n= O(1)</strong> </p>
+<p>An <strong>amortized analysis(平摊分析)</strong>  is any strategy for analyzing a sequence of operations to show that the average cost per operation is small, even though a single operation within the sequence might be expensive.</p>
+<p>常见的平摊分析技术：</p>
+<ul>
+<li>the aggregate method(聚集分析)</li>
+<li>the accounting method(记账分析)</li>
+<li>the potential method(势能方法)</li>
+</ul>
+<p>The aggregate method, though simple, lacks the precision of the other two methods. In particular, the accounting and potential methods allow a specific amortized cost to be allocated to each operation.</p>
+<h2 id="The-accounting-method"><a href="#The-accounting-method" class="headerlink" title="The accounting method"></a>The accounting method</h2><ul>
+<li>Charge i th operation a fictitious <strong>amortized cost</strong>  ĉ i, where $1 pays for 1 unit of work (i.e., time).</li>
+<li>This fee is consumed to perform the operation.</li>
+<li>Any amount not immediately consumed is stored in the <strong>bank</strong>  for use by subsequent operations.</li>
+<li>The bank balance must not go negative! We must ensure that:</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/__latex/4b118e6d70c4524d2aa8c44c889a0feb.svg" alt="img"> for all n</p>
+<ul>
+<li>Thus, the total amortized costs provide an upper bound on the total true costs.</li>
+</ul>
+<h3 id="Accounting-analysis-of-dynamic-tables"><a href="#Accounting-analysis-of-dynamic-tables" class="headerlink" title="Accounting analysis of dynamic tables"></a>Accounting analysis of dynamic tables</h3><p>Charge an amortized cost of ĉi = $3 for the i th insertion.</p>
+<ul>
+<li>$1 pays for the immediate insertion.</li>
+<li>$2 is stored for later table doubling.</li>
+</ul>
+<p>When the table doubles, $1 pays to move a recent item, and $1 pays to move an old item.</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607512860027-3bee36d8-33e2-480a-a20f-f57197bc5b06.png" alt="image.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607512870933-cbd8f415-d45b-4155-bdfb-aa27d4141d22.png" alt="image.png"></p>
+<p><strong>Key invariant</strong> : Bank balance never drops below 0. Thus, the sum of the amortized costs provides an upper bound on the sum of the true costs.</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607512957085-eb223056-a840-4f72-b796-0a1f4c9e94a8.png" alt="image.png"></p>
+<h2 id="The-potential-method"><a href="#The-potential-method" class="headerlink" title="The potential method"></a>The potential method</h2><p><strong>IDEA</strong> : View the bank account as the potential energy (à la physics) of the dynamic set.</p>
+<p><strong>Framework</strong> :</p>
+<ul>
+<li>Start with an initial data structure <img src="https://cdn.nlark.com/yuque/__latex/736d64eeb0602d2a2ad1b0ede073c768.svg" alt="img">.</li>
+<li>Operation i transforms <img src="https://cdn.nlark.com/yuque/__latex/b50f141401f087f46e72d2c3056ac42d.svg" alt="img"> to <img src="https://cdn.nlark.com/yuque/__latex/d32893051e4add28fec0f40ed7f0713f.svg" alt="img">.</li>
+<li>The cost of operation <em>i</em> is <img src="https://cdn.nlark.com/yuque/__latex/d9899588b2b28a768a63ade0f3523596.svg" alt="img">.</li>
+<li>Define a potenrial function <img src="https://cdn.nlark.com/yuque/__latex/fc9a659d8326f608a5a441906c27ebc4.svg" alt="img">, such that <img src="https://cdn.nlark.com/yuque/__latex/380f13e6a33e6a642edf3b6d3b153b72.svg" alt="img"> and <img src="https://cdn.nlark.com/yuque/__latex/981d786c81fd5e6732e15e169fe49d96.svg" alt="img"> for all i.</li>
+<li>The amortized cost <img src="https://cdn.nlark.com/yuque/__latex/99a663da937f5d7d41ce0f2e75f80065.svg" alt="img"> with respect to Φ is defined to be <img src="https://cdn.nlark.com/yuque/__latex/ac7ede85dacafad1dba3b81bd006caa9.svg" alt="img">. 其中，<img src="https://cdn.nlark.com/yuque/__latex/1cd3c9a3bf58afcb14b46cef9582d75a.svg" alt="img"></li>
+<li>if ∆Φi &gt; 0, then ĉi &gt; ci. Operation i stores work in the data structure for later use; If ∆Φi &lt; 0, then ĉi &lt; ci. The data structure delivers up stored work to help pay for operation i.</li>
+</ul>
+<p>The total amortized cost of n operations is:</p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/7c0b9890c61e98513055d27d89a8c9e6.svg" alt="img"></p>
+<p><strong>例子略</strong> </p>
+<h2 id="Conclusions"><a href="#Conclusions" class="headerlink" title="Conclusions"></a>Conclusions</h2><ul>
+<li>Amortized costs can provide a clean abstraction of data-structure performance.</li>
+<li>Any of the analysis methods can be used when an amortized analysis is called for, but each method has some situations where it is arguably the simplest or most precise.</li>
+<li>Different schemes may work for assigning amortized costs in the accounting method, or potentials in the potential method, sometimes yielding radically different bounds.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA/" rel="tag"># 算法导论</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89/" rel="prev" title="算法导论学习笔记（五）">
+      <i class="fa fa-chevron-left"></i> 算法导论学习笔记（五）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89/" rel="next" title="算法导论学习笔记（七）">
+      算法导论学习笔记（七） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Skip-Lists-%E8%B7%B3%E8%B7%83%E8%A1%A8%EF%BC%88Pugh%EF%BC%8C1989%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">Skip Lists 跳跃表（Pugh，1989）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#one-linked-list"><span class="nav-number">1.1.</span> <span class="nav-text">one linked list</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Two-linked-lists"><span class="nav-number">1.2.</span> <span class="nav-text">Two linked lists</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Searching-in-two-linked-lists"><span class="nav-number">1.2.1.</span> <span class="nav-text">Searching in two linked lists</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#More-linked-lists"><span class="nav-number">1.3.</span> <span class="nav-text">More linked lists</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#insert-x-and-delete-x"><span class="nav-number">1.3.1.</span> <span class="nav-text">insert(x) and delete(x)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#How-good-are-skip-lists-speed-balance"><span class="nav-number">1.3.2.</span> <span class="nav-text">How good are skip lists? (speed&#x2F;balance)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B9%B3%E6%91%8A%E5%88%86%E6%9E%90%EF%BC%8C%E8%A1%A8%E7%9A%84%E6%89%A9%E5%A2%9E"><span class="nav-number">2.</span> <span class="nav-text">平摊分析，表的扩增</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#How-large-should-a-hash-table-be"><span class="nav-number">2.0.1.</span> <span class="nav-text">How large should a hash table be?</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-aggregate-method"><span class="nav-number">2.1.</span> <span class="nav-text">The aggregate method</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-accounting-method"><span class="nav-number">2.2.</span> <span class="nav-text">The accounting method</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Accounting-analysis-of-dynamic-tables"><span class="nav-number">2.2.1.</span> <span class="nav-text">Accounting analysis of dynamic tables</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-potential-method"><span class="nav-number">2.3.</span> <span class="nav-text">The potential method</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conclusions"><span class="nav-number">2.4.</span> <span class="nav-text">Conclusions</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="kiro-xu"
+      src="/images/avater.jpg">
+  <p class="site-author-name" itemprop="name">kiro-xu</p>
+  <div class="site-description" itemprop="description">Be who you want to be</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021-2 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kiro-xu</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

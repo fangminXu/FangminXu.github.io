@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="分治法分治模式  分解（Divide）：将原问题分解成一系列子问题； 解决（Conquer）：递归地解各子问题。若子问题足够小，则直接求解； 合并（Combine）：将子问题的结果合并成原问题的解。 Ex.Merge Sort, Binary Search 一些举例powering the numbergiven a number x, and integer , compute x^n Nati">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法导论学习笔记（二）">
+<meta property="og:url" content="http://example.com/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89/index.html">
+<meta property="og:site_name" content="kiro的博客">
+<meta property="og:description" content="分治法分治模式  分解（Divide）：将原问题分解成一系列子问题； 解决（Conquer）：递归地解各子问题。若子问题足够小，则直接求解； 合并（Combine）：将子问题的结果合并成原问题的解。 Ex.Merge Sort, Binary Search 一些举例powering the numbergiven a number x, and integer , compute x^n Nati">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/c36c48c557a498703465d5431d607e60.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/49636e9e784d9d86cba24daa372ba700.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/7be51ef698b6e78a7be66f6145259127.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/0b5be7ae172ade05832c0c10cea793ac.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/da906dce963bedafb27275c2c507589f.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/e0d06d1cd929c98b7ad638619b63b092.svg">
+<meta property="article:published_time" content="2021-02-28T08:56:35.000Z">
+<meta property="article:modified_time" content="2021-02-28T08:57:51.554Z">
+<meta property="article:author" content="kiro-xu">
+<meta property="article:tag" content="算法导论">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/__latex/c36c48c557a498703465d5431d607e60.svg">
+
+<link rel="canonical" href="http://example.com/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>算法导论学习笔记（二） | kiro的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">kiro的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">学习记录</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avater.jpg">
+      <meta itemprop="name" content="kiro-xu">
+      <meta itemprop="description" content="Be who you want to be">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kiro的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          算法导论学习笔记（二）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-28 16:56:35 / 修改时间：16:57:51" itemprop="dateCreated datePublished" datetime="2021-02-28T16:56:35+08:00">2021-02-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="分治法"><a href="#分治法" class="headerlink" title="分治法"></a>分治法</h1><p><strong>分治模式</strong> </p>
+<p><strong>分解（Divide）</strong>：将原问题分解成一系列子问题；</p>
+<p><strong>解决（Conquer）</strong>：递归地解各子问题。若子问题足够小，则直接求解；</p>
+<p><strong>合并（Combine）</strong>：将子问题的结果合并成原问题的解。</p>
+<p>Ex.Merge Sort, Binary Search</p>
+<h2 id="一些举例"><a href="#一些举例" class="headerlink" title="一些举例"></a>一些举例</h2><h3 id="powering-the-number"><a href="#powering-the-number" class="headerlink" title="powering the number"></a>powering the number</h3><p>given a number x, and integer <img src="https://cdn.nlark.com/yuque/__latex/c36c48c557a498703465d5431d607e60.svg" alt="img">, compute x^n</p>
+<p>Native algorithm: <strong>Θ(n)</strong></p>
+<p>Divide and conquer:</p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/49636e9e784d9d86cba24daa372ba700.svg" alt="img">  <strong>T(n)=**</strong>Θ(lgn)**</p>
+<h3 id="Fibonacci-numbers"><a href="#Fibonacci-numbers" class="headerlink" title="Fibonacci numbers"></a>Fibonacci numbers</h3><p><img src="https://cdn.nlark.com/yuque/__latex/7be51ef698b6e78a7be66f6145259127.svg" alt="img"></p>
+<p>Native recursive algorithm: Time <img src="https://cdn.nlark.com/yuque/__latex/0b5be7ae172ade05832c0c10cea793ac.svg" alt="img"></p>
+<p>recursive squaring: 转化为矩阵：<img src="https://cdn.nlark.com/yuque/__latex/da906dce963bedafb27275c2c507589f.svg" alt="img"></p>
+<h3 id="Matrix-Multiplition"><a href="#Matrix-Multiplition" class="headerlink" title="Matrix Multiplition"></a>Matrix Multiplition</h3><p>Input: A=[a_ij], B=[b_ij]</p>
+<p>Output: C=[c_ij] = A*B, <img src="https://cdn.nlark.com/yuque/__latex/e0d06d1cd929c98b7ad638619b63b092.svg" alt="img"></p>
+<p>standard algorithm: <strong>Θ(n^3)</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">for i&#x3D;1 to n</span><br><span class="line">    do for j&#x3D;1 to n</span><br><span class="line">    do c_ij &#x3D; 0</span><br><span class="line">    for k&#x3D;1 to n</span><br><span class="line">        c_ij &#x3D; a_ik * b_kj + c_ij</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<p><strong>IDEA</strong>:n<em>n matrix = 2</em>2 blank matrix of n/2 * n/2 sub matrix</p>
+<p>need 8 recursive calls: T(n) = 8T(n/2)+Θ(n^2) = <strong>Θ(n^3)</strong></p>
+<p><strong>Strassen’s algorithm:</strong></p>
+<p><strong>IDEA</strong>:reduce recursive calls to 7 recursive calls</p>
+<h3 id="二叉树遍历及相关特性"><a href="#二叉树遍历及相关特性" class="headerlink" title="二叉树遍历及相关特性"></a>二叉树遍历及相关特性</h3><p><strong>计算二叉树高度</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public int TreeHeight(TreeNode root)&#123;</span><br><span class="line">    if(root&#x3D;&#x3D;null)&#123;</span><br><span class="line">    return -1;</span><br><span class="line">  &#125;</span><br><span class="line">  return Math.max(TreeHight(root.left),TreeHeight(root.right))+1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>二叉树的遍历</strong> </p>
+<p>前序遍历、中序遍历、后序遍历</p>
+<h3 id="大整数乘法"><a href="#大整数乘法" class="headerlink" title="大整数乘法"></a>大整数乘法</h3><p>Native aglorithm recursive: need 4 recursive calls;</p>
+<p>change to <strong>3 recursive calls</strong>;</p>
+<h3 id="最近点对问题"><a href="#最近点对问题" class="headerlink" title="最近点对问题"></a>最近点对问题</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">EfficientClosestPair(P,Q)</span><br><span class="line">if n&lt;&#x3D;3</span><br><span class="line">    return the minimal distance found by bruce-force aglorithm</span><br><span class="line">else</span><br><span class="line">    copy the first (n&#x2F;2)向上取整 points of P to array Pl</span><br><span class="line">  copy the same (n&#x2F;2) points from Q to arrays Ql</span><br><span class="line">  copy the remaining (n&#x2F;2)向下取整 points of P to array Pr</span><br><span class="line">  copy the same (n&#x2F;2)points from Q to array Qr</span><br><span class="line">  dl &#x3D; EfficientClosestPair(Pl,Ql)</span><br><span class="line">  dr &#x3D; EfficientClosestPair(Pr,Qr)</span><br><span class="line">  d &#x3D; min(dl,dr)</span><br><span class="line">  m &#x3D; P[(n&#x2F;2)-1].x</span><br><span class="line">  copy all the points of Q for which |x-m|&lt;d into array S[0...num-1]</span><br><span class="line">  dminsq &#x3D; d^2</span><br><span class="line">  for i&#x3D;0 to num-2 do</span><br><span class="line">    k &#x3D; i+1</span><br><span class="line">    while k&lt;&#x3D;num-1 and (S[k].x)-S[i].x)^2&lt;dminsq</span><br><span class="line">        dminsq &#x3D; min((S[k].x-S[i].x)^2+(S[k].y-S[i].y)^2,dminsq)</span><br><span class="line">      k&#x3D;k+1</span><br><span class="line"> return sqrt(dminsq)</span><br></pre></td></tr></table></figure>
+
+<h1 id="快排和随机化算法"><a href="#快排和随机化算法" class="headerlink" title="快排和随机化算法"></a>快排和随机化算法</h1><h2 id="快速排序算法"><a href="#快速排序算法" class="headerlink" title="快速排序算法"></a>快速排序算法</h2><p>QuickSort: Hoare 1962</p>
+<ul>
+<li>Divide and conquer</li>
+<li>sorts “in place”</li>
+<li>very pratical( with turning)</li>
+</ul>
+<p><strong>step 1</strong>: Divide: Patition array into 2 subarrays around pivot x</p>
+<p><strong>step 2</strong>: Recursively sort 2 subarrays</p>
+<p><strong>step 3</strong>: combine: trivial</p>
+<p><strong>key: linear-time partitioning subroutine</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public int partition(int[] A, int left, int right)&#123;</span><br><span class="line">    pivot &#x3D; A[left];</span><br><span class="line">  i &#x3D; p;</span><br><span class="line">  for(j&#x3D;p+1; j&lt;&#x3D;q; j++)&#123;</span><br><span class="line">    if(A[j]&lt;pivot)&#123;</span><br><span class="line">        i++;</span><br><span class="line">      swap(A,i,j);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  swap(A,left, i+1);</span><br><span class="line">  return i+1;</span><br><span class="line">&#125;</span><br><span class="line">public void QuickSort(int[] A,int left, int right)&#123;</span><br><span class="line">    if(left&gt;right)&#123;</span><br><span class="line">    int p &#x3D; partition(A, left, right);</span><br><span class="line">    QuickSort(A,left,p-1);</span><br><span class="line">    QuickSort(A, p+1, right);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Analysis"><a href="#Analysis" class="headerlink" title="Analysis"></a>Analysis</h3><p><strong>assume:</strong> all numbers distinct</p>
+<p>T(n):</p>
+<p><strong>Worst-Case:</strong> <strong>T(n)=T(n-1)+T(0)+**</strong>Θ(n) =** <strong>Θ(n^2)</strong></p>
+<ul>
+<li>input sorted or reversed sorted</li>
+<li>one side of partition has no elements</li>
+</ul>
+<p><strong>Best-Case analysis( intution only)</strong></p>
+<p>if we can really lucky, partition splits the array n/2, n/2, then T(n)=<strong>Θ(nlgn)</strong></p>
+<p><strong>suppose:</strong> slipts is always 0.1:0.9  <strong>lucky</strong></p>
+<p><strong>soppose</strong>: we alternate lucky, unlucky, lucky…  <strong>lucky</strong></p>
+<h2 id="随机化快速排序算法（Randomized-QuickSort）"><a href="#随机化快速排序算法（Randomized-QuickSort）" class="headerlink" title="随机化快速排序算法（Randomized QuickSort）"></a>随机化快速排序算法（Randomized QuickSort）</h2><ul>
+<li>the running time is independent of input ordering</li>
+<li>no assumption about the input distribution</li>
+<li>no specific input elicit worst-case behavior</li>
+<li>the worst-case is detemined only by a random-number generator</li>
+</ul>
+<p>​    在这种方法中，不是始终采用A[r]作为主元，而是从子数组A[p…r]中随机选择一个元素，即将A[r]与从A[p…r]中随机选出的一个元素交换。<strong>即主元元素是随机选取的。</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">RANDOMIZED-PARTITION(A,p,r)</span><br><span class="line">i&#x3D;random(p,r);</span><br><span class="line">swap(A,i,p);</span><br><span class="line">return partition(A,p,r);</span><br></pre></td></tr></table></figure>
+
+<p>注意：关于时间复杂度证明的部分没看。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA/" rel="tag"># 算法导论</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/" rel="prev" title="算法导论学习笔记（一）">
+      <i class="fa fa-chevron-left"></i> 算法导论学习笔记（一）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89/" rel="next" title="算法导论学习笔记（三）">
+      算法导论学习笔记（三） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E6%B2%BB%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">分治法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E4%B8%BE%E4%BE%8B"><span class="nav-number">1.1.</span> <span class="nav-text">一些举例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#powering-the-number"><span class="nav-number">1.1.1.</span> <span class="nav-text">powering the number</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fibonacci-numbers"><span class="nav-number">1.1.2.</span> <span class="nav-text">Fibonacci numbers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Matrix-Multiplition"><span class="nav-number">1.1.3.</span> <span class="nav-text">Matrix Multiplition</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86%E5%8F%8A%E7%9B%B8%E5%85%B3%E7%89%B9%E6%80%A7"><span class="nav-number">1.1.4.</span> <span class="nav-text">二叉树遍历及相关特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E6%95%B4%E6%95%B0%E4%B9%98%E6%B3%95"><span class="nav-number">1.1.5.</span> <span class="nav-text">大整数乘法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E8%BF%91%E7%82%B9%E5%AF%B9%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.6.</span> <span class="nav-text">最近点对问题</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BF%AB%E6%8E%92%E5%92%8C%E9%9A%8F%E6%9C%BA%E5%8C%96%E7%AE%97%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">快排和随机化算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95"><span class="nav-number">2.1.</span> <span class="nav-text">快速排序算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Analysis"><span class="nav-number">2.1.1.</span> <span class="nav-text">Analysis</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E5%8C%96%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%EF%BC%88Randomized-QuickSort%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">随机化快速排序算法（Randomized QuickSort）</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="kiro-xu"
+      src="/images/avater.jpg">
+  <p class="site-author-name" itemprop="name">kiro-xu</p>
+  <div class="site-description" itemprop="description">Be who you want to be</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021-2 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kiro-xu</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

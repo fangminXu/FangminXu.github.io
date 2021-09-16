@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="NodeJs Node.js是一个事件驱动I&#x2F;O服务端JavaScript环境，基于Google的V8引擎   参考菜鸟教程 事件循环 同步与异步、阻塞与非阻塞的理解 js的异步编程 模块机制1 模块机制2 NPM NPM是随同NodeJS一起安装的包管理工具  使用npm命令安装模块npm安装node.js模块语法格式如下： 1$ npm install &lt;Module Name&gt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NodeJs学习路线">
+<meta property="og:url" content="http://example.com/2021/06/16/NodeJs%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/index.html">
+<meta property="og:site_name" content="kiro的博客">
+<meta property="og:description" content="NodeJs Node.js是一个事件驱动I&#x2F;O服务端JavaScript环境，基于Google的V8引擎   参考菜鸟教程 事件循环 同步与异步、阻塞与非阻塞的理解 js的异步编程 模块机制1 模块机制2 NPM NPM是随同NodeJS一起安装的包管理工具  使用npm命令安装模块npm安装node.js模块语法格式如下： 1$ npm install &lt;Module Name&gt;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/06/04/zqIOpN5U2ZGXFyw.png">
+<meta property="og:image" content="https://i.loli.net/2021/06/10/5xMq4a6Gbv1tYHu.png">
+<meta property="og:image" content="https://i.loli.net/2021/06/10/Bn6JpjMIvcDYs2i.png">
+<meta property="og:image" content="https://i.loli.net/2021/06/10/DpJPWlBziId85Aq.png">
+<meta property="og:image" content="https://www.hualigs.cn/image/60c1d03384402.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/06/11/CPVZKr7Xkl5FQMn.png">
+<meta property="article:published_time" content="2021-06-16T03:23:06.000Z">
+<meta property="article:modified_time" content="2021-06-16T03:25:28.938Z">
+<meta property="article:author" content="kiro-xu">
+<meta property="article:tag" content="Nodejs">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/06/04/zqIOpN5U2ZGXFyw.png">
+
+<link rel="canonical" href="http://example.com/2021/06/16/NodeJs%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>NodeJs学习路线 | kiro的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">kiro的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">学习记录</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/16/NodeJs%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avater.jpg">
+      <meta itemprop="name" content="kiro-xu">
+      <meta itemprop="description" content="Be who you want to be">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kiro的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          NodeJs学习路线
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-06-16 11:23:06 / 修改时间：11:25:28" itemprop="dateCreated datePublished" datetime="2021-06-16T11:23:06+08:00">2021-06-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="NodeJs"><a href="#NodeJs" class="headerlink" title="NodeJs"></a>NodeJs</h2><blockquote>
+<p>Node.js是一个事件驱动I/O服务端JavaScript环境，基于Google的V8引擎</p>
+</blockquote>
+<hr>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="https://www.runoob.com/nodejs/nodejs-module-system.htmlhttps://www.runoob.com/nodejs/nodejs-module-system.html">菜鸟教程</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Liu_yunzhao/article/details/90734257?utm_medium=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-5.control&dist_request_id=1328740.38110.16169863950293667&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-5.control">事件循环</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/historyasamirror/article/details/5778378?utm_medium=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-3.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-3.control">同步与异步、阻塞与非阻塞的理解</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2015/05/async.html">js的异步编程</a></p>
+<p><a target="_blank" rel="noopener" href="https://es6.ruanyifeng.com/#docs/module">模块机制1</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000019856995?utm_source=tag-newest">模块机制2</a></p>
+<h3 id="NPM"><a href="#NPM" class="headerlink" title="NPM"></a>NPM</h3><blockquote>
+<p>NPM是随同NodeJS一起安装的包管理工具</p>
+</blockquote>
+<h4 id="使用npm命令安装模块"><a href="#使用npm命令安装模块" class="headerlink" title="使用npm命令安装模块"></a>使用npm命令安装模块</h4><p>npm安装node.js模块语法格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install &lt;Module Name&gt;</span><br></pre></td></tr></table></figure>
+
+<p>安装好之后，express 包就放在了工程目录下的 node_modules 目录中，因此在代码中只需要通过 <strong>require(‘express’)</strong> 的方式就好，无需指定第三方包路径。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">let express &#x3D; require(&#39;express&#39;);</span><br></pre></td></tr></table></figure>
+
+<p>npm 的包安装分为本地安装（local）、全局安装（global）两种，<code>-g</code>用于区分。</p>
+<h4 id="查看安装信息"><a href="#查看安装信息" class="headerlink" title="查看安装信息"></a>查看安装信息</h4><p>你可以使用以下命令来查看所有全局安装的模块：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm list -g</span><br></pre></td></tr></table></figure>
+
+<p>查看某个模块的版本号：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm list grunt</span><br></pre></td></tr></table></figure>
+
+<h4 id="package-json"><a href="#package-json" class="headerlink" title="package.json"></a>package.json</h4><p>每个模块都有自己的package.json，用于定义包的属性。属性说明：</p>
+<ul>
+<li><strong>name</strong> - 包名。</li>
+<li><strong>version</strong> - 包的版本号。</li>
+<li><strong>description</strong> - 包的描述。</li>
+<li><strong>homepage</strong> - 包的官网 url 。</li>
+<li><strong>author</strong> - 包的作者姓名。</li>
+<li><strong>contributors</strong> - 包的其他贡献者姓名。</li>
+<li><strong>dependencies</strong> - 依赖包列表。如果依赖包没有安装，npm 会自动将依赖包安装在 node_module 目录下。</li>
+<li><strong>repository</strong> - 包代码存放的地方的类型，可以是 git 或 svn，git 可在 Github 上。</li>
+<li><strong>main</strong> - main 字段指定了程序的主入口文件，require(‘moduleName’) 就会加载这个文件。这个字段的默认值是模块根目录下面的 index.js。</li>
+<li><strong>keywords</strong> - 关键字</li>
+</ul>
+<h4 id="卸载模块"><a href="#卸载模块" class="headerlink" title="卸载模块"></a>卸载模块</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm uninstall &lt;Module Name&gt;</span><br></pre></td></tr></table></figure>
+
+<p>卸载后，你可以到 /node_modules/ 目录下查看包是否还存在，或者使用以下命令查看：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm ls</span><br></pre></td></tr></table></figure>
+
+<h4 id="更新模块"><a href="#更新模块" class="headerlink" title="更新模块"></a>更新模块</h4><p>使用以下来搜索模块：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm search &lt;Module Name&gt;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="Node-js回调函数"><a href="#Node-js回调函数" class="headerlink" title="Node.js回调函数"></a>Node.js回调函数</h3><p>Node.js异步编程的直接体现就是回调。回调函数在完成任务后就会被调用，Node 使用了大量的回调函数，Node 所有 API 都支持回调函数。</p>
+<p>对比示例：</p>
+<p>创建一个文件input.txt，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">我的博客地址：www.kiroxu.top</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//阻塞式</span></span><br><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">&quot;fs&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> data = fs.readFileSync(<span class="string">&#x27;input.txt&#x27;</span>);</span><br><span class="line"><span class="built_in">console</span>.log(data.toString());</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&quot;程序执行结束&quot;</span>)</span><br><span class="line"><span class="comment">//代码结果</span></span><br><span class="line">我的博客地址：www.kiroxu.top</span><br><span class="line">程序执行结束</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//非阻塞式</span></span><br><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">&quot;fs&quot;</span>);</span><br><span class="line">fs.readFile(<span class="string">&#x27;input.txt&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(err) <span class="keyword">return</span> <span class="built_in">console</span>.error(err);</span><br><span class="line">	<span class="built_in">console</span>.log(data.toString());</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&quot;程序执行结束&quot;</span>)</span><br><span class="line"><span class="comment">//代码结果</span></span><br><span class="line">程序执行结束</span><br><span class="line">我的博客地址：www.kiroxu.top</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="Node-js-事件循环"><a href="#Node-js-事件循环" class="headerlink" title="Node.js 事件循环"></a>Node.js 事件循环</h3><blockquote>
+<p>Node.js采用事件驱动+异步I/O的方式，实现了一个单线程、高并发的JavaScript运行时环境。</p>
+</blockquote>
+<h4 id="高并发策略"><a href="#高并发策略" class="headerlink" title="高并发策略"></a>高并发策略</h4><p>一般来说，如Java，高并发的解决方案是提供多线程模型，服务器为每个客户端请求分配一个线程，使用同步I/O，并用线程切换来弥补同步I/O调用的时间开销。</p>
+<p>Node.js对I/O进行了异步处理，避开了创建、销毁以及切换线程所需的开销和复杂性。</p>
+<h4 id="事件循环"><a href="#事件循环" class="headerlink" title="事件循环"></a>事件循环</h4><p>Node.js在主线程里维护了一个<strong>事件队列</strong>。</p>
+<ul>
+<li>接到请求放入队列，并继续接收其他请求；</li>
+<li>若主线程空闲（没有请求接入时），开启循环事件队列：若非I/O任务，主线程直接处理，并通过回调函数返回到上层调用；如果是 I/O 任务，就从 <strong>线程池</strong> 中拿出一个线程来处理这个事件，并指定回调函数，然后继续循环队列中的其他事件。</li>
+<li>当线程中的 I/O 任务完成以后，就执行指定的回调函数，并把这个完成的事件放到<strong>事件队列</strong>的尾部，等待事件循环，当主线程再次循环到该事件时，就直接处理并返回给上层调用。</li>
+</ul>
+<p>Node.js被分为了四层，分别为<strong>应用层、V8引擎层、Node API层和LIBUV层</strong>。</p>
+<p><img src="https://i.loli.net/2021/06/04/zqIOpN5U2ZGXFyw.png" alt="image.png"></p>
+<blockquote>
+<p>应用层：JavaScript交互层，常见的就是Node.js模块，如http、fs</p>
+<p>V8引擎层：即利用V8引擎来解析JavaScript语法，进而和下层交互</p>
+<p>NodeAPI层：为上层模块提供系统调用，一般由C语言实现，和操作系统进行交互</p>
+<p>LIBUV层：跨平台的底层封装，实现了 事件循环、文件操作等，是实现Node.js异步的核心</p>
+</blockquote>
+<p><strong>值得注意的是</strong>：</p>
+<p>无论是 Linux 平台还是 Windows 平台，Node.js 内部都是通过 <strong>线程池</strong> 来完成异步 I/O 操作的，而 LIBUV 针对不同平台的差异性实现了统一调用。因此，<strong>Node.js 的单线程仅仅是指 JavaScript 运行在单线程中，而并非 Node.js 是单线程。</strong></p>
+<h4 id="实现简易的事件循环"><a href="#实现简易的事件循环" class="headerlink" title="实现简易的事件循环"></a>实现简易的事件循环</h4><ol>
+<li>定义事件队列</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 定义事件队列</span></span><br><span class="line"><span class="comment"> * 入队：push(); 出队：shift()</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">globalEventQueue: []</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>定义接收请求入口</li>
+</ol>
+<p>每一个请求都会被拦截并进入处理函数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">processHttpRequest: <span class="function"><span class="keyword">function</span>(<span class="params">request, response</span>)</span>&#123;</span><br><span class="line">	<span class="comment">//定义一个事件对象</span></span><br><span class="line">	<span class="keyword">var</span> event = &#123;</span><br><span class="line">		params: request.params, <span class="comment">//传递请求参数</span></span><br><span class="line">		result: <span class="literal">null</span>, <span class="comment">//存放请求结果</span></span><br><span class="line">		callback: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125; <span class="comment">//指定回调函数</span></span><br><span class="line">	&#125;</span><br><span class="line">	globalEventQueue.push(event);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>定义Event Loop</li>
+</ol>
+<p>当主线程处于空闲时就开始循环事件队列，所以我们还要定义一个函数来循环事件队列： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">eventLoop: function()&#123;</span><br><span class="line">	&#x2F;&#x2F;如果队列不为空，就继续循环</span><br><span class="line">	while(this.globalEventQueue.length &gt; 0)&#123;</span><br><span class="line">		var event &#x3D; this.globalEventQueue.shift();</span><br><span class="line">		if(isIOTask(event))&#123;</span><br><span class="line">			&#x2F;&#x2F;如果是IO任务</span><br><span class="line">			var thread &#x3D; getThreadFromThreadPool(); &#x2F;&#x2F;拿出线程处理</span><br><span class="line">			thread.handleIOTask(event);</span><br><span class="line">		&#125;else&#123;</span><br><span class="line">			&#x2F;&#x2F; 非耗时任务处理后，直接返回结果</span><br><span class="line">            var result &#x3D; handleEvent(event);</span><br><span class="line">            &#x2F;&#x2F; 最终通过回调函数返回给V8，再由V8返回给应用程序</span><br><span class="line">            event.callback.call(null,result);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="深入理解Node-js事件循环"><a href="#深入理解Node-js事件循环" class="headerlink" title="深入理解Node.js事件循环"></a>深入理解Node.js事件循环</h3><p>实际上异步任务之间并不相同，因此他们之间也有优先级之分，所以任务队列被分成两种类型：<br>microtask queue 微任务队列，macrotask queue 宏任务队列</p>
+<p><strong>宏任务</strong>：<code>setTimeout</code>、<code>setInterval</code>、<code>Ajax</code>、<code>DOM事件</code>、<code>I/O</code>、<code>script标签中的整体代码</code></p>
+<p><strong>微任务</strong>：<code>new Promise()</code>、<code>new MutaionObserver()</code></p>
+<p>一次事件循环流程：<strong>取出一个宏任务开始-&gt;执行栈执行-&gt;执行栈为空-&gt;微任务队列执行-&gt;微任务队列为空-&gt;完成</strong></p>
+<p>注意：</p>
+<ul>
+<li>宏任务或微任务执行过程产生的<strong>宏任务</strong>，在下一次事件循环执行</li>
+<li>宏任务或微任务执行过程产生的<strong>微任务</strong>，在本次事件循环执行</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line">console.log(&quot;start&quot;);</span><br><span class="line"></span><br><span class="line">    setTimeout(function () &#123;</span><br><span class="line">      console.log(&quot;setTimeout1&quot;);</span><br><span class="line">      new Promise(function (resolve) &#123;</span><br><span class="line">        console.log(&quot;setTimeout1-Promise-start&quot;);</span><br><span class="line">        resolve(&quot;setTimeout1-Promise&quot;);</span><br><span class="line">      &#125;).then(value &#x3D;&gt; &#123;</span><br><span class="line">        console.log(value);</span><br><span class="line">        console.log(&quot;Promise1-then1&quot;);</span><br><span class="line">        return value;</span><br><span class="line">      &#125;).then(value &#x3D;&gt; &#123;</span><br><span class="line">        console.log(value);</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;, 0);</span><br><span class="line"></span><br><span class="line">    new Promise(function (resolve) &#123;</span><br><span class="line"></span><br><span class="line">      console.log(&quot;Promise1-start&quot;);</span><br><span class="line">      resolve(&quot;Promise1-resolve&quot;);</span><br><span class="line">      console.log(&quot;Promise1-end&quot;);</span><br><span class="line"></span><br><span class="line">    &#125;).then(value &#x3D;&gt; &#123;</span><br><span class="line">      console.log(value);</span><br><span class="line">      console.log(&quot;Promise1-then1&quot;);</span><br><span class="line">      return value;</span><br><span class="line">    &#125;).then(value &#x3D;&gt; &#123;</span><br><span class="line">      console.log(value);</span><br><span class="line">      console.log(&quot;Promise1-then2&quot;);</span><br><span class="line"></span><br><span class="line">      Promise.resolve(&quot;Promise2&quot;)</span><br><span class="line">        .then(value1 &#x3D;&gt; &#123;</span><br><span class="line">          console.log(value1);</span><br><span class="line">          console.log(&quot;Promise2-then1&quot;);</span><br><span class="line">          return value1;</span><br><span class="line">        &#125;).then(value1 &#x3D;&gt; &#123;</span><br><span class="line">        console.log(value1);</span><br><span class="line">        console.log(&quot;Promise2-then2&quot;);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    setTimeout(function () &#123;</span><br><span class="line">      console.log(&quot;setTimeout2&quot;)</span><br><span class="line">      new Promise(function (resolve) &#123;</span><br><span class="line">        console.log(&quot;setTimeout2-Promise-start&quot;);</span><br><span class="line">        resolve(&quot;setTimeout2-Promise&quot;);</span><br><span class="line">      &#125;).then(value &#x3D;&gt; &#123;</span><br><span class="line">        console.log(value);</span><br><span class="line">      &#125;).then(value &#x3D;&gt; &#123;</span><br><span class="line">        console.log(value);</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;, 0);</span><br><span class="line">    console.log(&quot;end&quot;);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;执行结果</span><br><span class="line">start</span><br><span class="line">Promise1-start</span><br><span class="line">Promise2-end</span><br><span class="line">end</span><br><span class="line">&#x2F;&#x2F;执行栈为空，执行微任务</span><br><span class="line">promise1-resolve</span><br><span class="line">promise1-then1</span><br><span class="line">promise1-resolve</span><br><span class="line">promise1-then2</span><br><span class="line">Promise2</span><br><span class="line">Promise2-then1</span><br><span class="line">Promise2</span><br><span class="line">Promise2-then2</span><br><span class="line">&#x2F;&#x2F;第一次事件循环结束</span><br><span class="line">setTimeout1</span><br><span class="line">setTimeout1-Promise-start</span><br><span class="line">setTimeout1-Promise</span><br><span class="line">Promise1-then1</span><br><span class="line">setTimeout1-Promise</span><br><span class="line">&#x2F;&#x2F;第二次事件循环结束</span><br><span class="line">setTimeout2</span><br><span class="line">setTimeout2-Promise-start</span><br><span class="line">setTimeout2-Promise</span><br><span class="line">undefined</span><br></pre></td></tr></table></figure>
+
+<h3 id="异步编程"><a href="#异步编程" class="headerlink" title="异步编程"></a>异步编程</h3><h4 id="同步与异步-阻塞与非阻塞"><a href="#同步与异步-阻塞与非阻塞" class="headerlink" title="同步与异步 阻塞与非阻塞"></a>同步与异步 阻塞与非阻塞</h4><blockquote>
+<p>同步与异步关注的是<strong>消息通知机制</strong>，调用者是主动等待还是被动接收</p>
+</blockquote>
+<blockquote>
+<p>阻塞与非阻塞更关注的是<strong>程序在等待调用结果（消息，返回值）时的状态</strong>，挂起or继续执行</p>
+</blockquote>
+<p>以Linux环境下的network IO为例，具体说明：</p>
+<p>IO Model：<code>blocking IO</code>、<code>nonblocking IO</code>、<code>IO multiplexing</code>、<code>signal driven IO</code>、<code>asynchronous IO</code></p>
+<p>需要了解的前置知识：</p>
+<p>对于一个network IO (这里我们以read举例)，它会涉及到两个系统对象，一个是调用这个IO的process (or thread)，另一个就是系统内核(kernel)。当一个read操作发生时，它会经历两个阶段：</p>
+<ol>
+<li>等待数据准备 (Waiting for the data to be ready)</li>
+<li>将数据从内核拷贝到进程中 (Copying the data from the kernel to the process)</li>
+</ol>
+<p><strong>blocking IO</strong></p>
+<p><img src="https://i.loli.net/2021/06/10/5xMq4a6Gbv1tYHu.png" alt="image.png"></p>
+<p>对于blocking IO，两个阶段均被阻塞</p>
+<p><strong>non-blocking IO</strong></p>
+<p><img src="https://i.loli.net/2021/06/10/Bn6JpjMIvcDYs2i.png" alt="image.png"></p>
+<p>用户进程需要不断的主动询问kernel数据是否准备完成，copy data阶段堵塞。</p>
+<p><strong>IO multiplexing</strong></p>
+<p><img src="https://i.loli.net/2021/06/10/DpJPWlBziId85Aq.png" alt="image.png"></p>
+<p>当用户进程调用了select，那么整个进程会被block，而同时，kernel会“监视”所有select负责的socket，当任何一个socket中的数据准备好了，select就会返回。这个时候用户进程再调用read操作，将数据从kernel拷贝到用户进程。</p>
+<p>本质任然是堵塞的，只是可以处理多个IO。</p>
+<p><strong>Asynchronous I/O</strong></p>
+<p><img src="https://www.hualigs.cn/image/60c1d03384402.jpg"></p>
+<p>用户进程发起read操作之后，立刻就可以开始去做其它的事。当这一切都完成之后，kernel会给用户进程发送一个signal，告诉它read操作完成了。</p>
+<h3 id="ES6异步编程的实现"><a href="#ES6异步编程的实现" class="headerlink" title="ES6异步编程的实现"></a>ES6异步编程的实现</h3><h4 id="回调函数"><a href="#回调函数" class="headerlink" title="回调函数"></a>回调函数</h4><p>所谓回调函数，就是把任务的第二段单独写在一个函数里面，等到重新执行这个任务的时候，就直接调用这个函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">fs.readFile(&#39;&#x2F;etc&#x2F;passwd&#39;, function (err, data) &#123;</span><br><span class="line">  if (err) throw err;</span><br><span class="line">  console.log(data);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>回调函数的缺陷：如果依次读取多个文件，就会出现多重嵌套。代码不是纵向发展，而是横向发展，很快就会乱成一团，无法管理。这种情况就称为<strong>回调函数噩梦</strong>(callback hell）。</p>
+<p>Promise应运而生，它不是新的语法功能，而是一种新的写法，允许将回调函数的横向加载。</p>
+<h4 id="Promise基础知识"><a href="#Promise基础知识" class="headerlink" title="Promise基础知识"></a>Promise基础知识</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//readFile 承诺在未来的某个时刻完成</span></span><br><span class="line"><span class="keyword">let</span> promise = readFile(<span class="string">&quot;example.txt&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p><code>readFile()</code>不会立即开始读取文件，而是返回一个表示异步读取操作的Promise对象，未来对这个对象的操作取决于Promise的生命周期。</p>
+<h5 id="Promise的生命周期"><a href="#Promise的生命周期" class="headerlink" title="Promise的生命周期"></a>Promise的生命周期</h5><ul>
+<li>进行中<code>pending</code></li>
+<li>成功完成<code>Fulfilled</code></li>
+<li>执行错误<code>Rejected</code></li>
+</ul>
+<p>Promise.then()接收两个参数：第一，状态变为<code>fulfilled</code>时的状态；第二，状态变为<code>rejected</code>时的状态。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;Promise包装的readFile实例</span><br><span class="line">let fs &#x3D; require(&#39;fs&#39;);</span><br><span class="line">function readFile(fileName)&#123;</span><br><span class="line">	return new Promise(function(resolve, reject) &#123;</span><br><span class="line">		fs.readFile(fileName, &#123;encoding: &quot;utf-8&quot;&#125;, function(err, contents) &#123;</span><br><span class="line">			if (err) &#123;</span><br><span class="line">				reject(err);</span><br><span class="line">				return;</span><br><span class="line">			&#125;</span><br><span class="line">			resolve(contents);</span><br><span class="line">		&#125;)</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;应用</span><br><span class="line">let promise &#x3D; readFile(&quot;example.txt&quot;);</span><br><span class="line">promise.then(function(contents) &#123;</span><br><span class="line">	console.log(contents);</span><br><span class="line">&#125;, function(err) &#123;</span><br><span class="line">	console.error(err.message);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="Generator函数"><a href="#Generator函数" class="headerlink" title="Generator函数"></a>Generator函数</h4><p>Generator 函数是协程在 ES6 的实现，最大特点就是可以交出函数的执行权（即暂停执行）。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">gen</span>(<span class="params">x</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> x = <span class="keyword">yield</span> x + <span class="number">2</span>;</span><br><span class="line">	<span class="keyword">return</span> y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> g = gen(<span class="number">1</span>); <span class="comment">//g时一个内部指针（即遍历器）</span></span><br><span class="line">g.next(); <span class="comment">//&#123; value: 3, done: false&#125;</span></span><br><span class="line">g.next(); <span class="comment">//&#123; value: undefined, done: true&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>next 方法返回值的 value 属性，是 Generator 函数向外输出数据；next 方法还可以接受参数，这是向 Generator 函数体内输入数据。</p>
+<h5 id="Thunk函数"><a href="#Thunk函数" class="headerlink" title="Thunk函数"></a>Thunk函数</h5><blockquote>
+<p>Thunk函数是编译器“传名调用”实现方案</p>
+</blockquote>
+<p><strong>在 JavaScript 语言中，Thunk 函数替换的不是表达式，而是多参数函数，将其替换成单参数的版本，且只接受回调函数作为参数。</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//简单的 Thunk 函数转换器</span></span><br><span class="line"><span class="keyword">var</span> Thunk = <span class="function"><span class="keyword">function</span>(<span class="params">fn</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> args = <span class="built_in">Array</span>.prototype.slice.call(arguements);</span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">callback</span>)</span>&#123;</span><br><span class="line">		args.push(callback);</span><br><span class="line">		<span class="keyword">return</span> fn.apply(<span class="built_in">this</span>, args);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//应用</span></span><br><span class="line"><span class="keyword">var</span> readFileThunk = Thunk(fs.readFile);</span><br><span class="line">readFileThunk(fileA)(callback);</span><br></pre></td></tr></table></figure>
+
+<h5 id="Generator-函数的自动流程管理"><a href="#Generator-函数的自动流程管理" class="headerlink" title="Generator 函数的自动流程管理"></a>Generator 函数的自动流程管理</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function run(fn)&#123;</span><br><span class="line">	var gen &#x3D; fn();</span><br><span class="line">	function next(err, data)&#123;</span><br><span class="line">		var result &#x3D; gen.next(data);</span><br><span class="line">		if(result.done) return;</span><br><span class="line">		result.value(next); &#x2F;&#x2F;递归函数</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	next();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="co函数库"><a href="#co函数库" class="headerlink" title="co函数库"></a>co函数库</h4><blockquote>
+<p>co函数库是TJ Holowaychuk发布的一个小工具，用于 Generator 函数的自动执行</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var gen &#x3D; function* ()&#123;</span><br><span class="line">	var f1 &#x3D; yield readFile(&#39;&#x2F;etc&#x2F;fstab&#39;);</span><br><span class="line">	var f2 &#x3D; yield readFile(&#39;&#x2F;etc&#x2F;shells&#39;);</span><br><span class="line">	console.log(f1.toString);</span><br><span class="line">	console.log(f2.toString);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">var co &#x3D; require(&#39;co&#39;);</span><br><span class="line">co(gen); &#x2F;&#x2F;将Generator函数传入co函数，会自动执行</span><br></pre></td></tr></table></figure>
+
+<p>co函数返回一个Promise对象，用then方法添加回调函数。</p>
+<h5 id="基于Promise对象的自动执行"><a href="#基于Promise对象的自动执行" class="headerlink" title="基于Promise对象的自动执行"></a>基于Promise对象的自动执行</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//将readFile包装成 Promise 对象</span></span><br><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> readFile = <span class="function"><span class="keyword">function</span>(<span class="params">fileName</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>)</span>&#123;</span><br><span class="line">		fs.readFile(fileName, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</span><br><span class="line">			<span class="keyword">if</span>(err) reject(data);</span><br><span class="line">			resolve(data);</span><br><span class="line">		&#125;)</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> gen = <span class="function"><span class="keyword">function</span>* (<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> f1 = <span class="keyword">yield</span> readFile(<span class="string">&#x27;/etc/fstab&#x27;</span>);</span><br><span class="line">	<span class="keyword">var</span> f2 = <span class="keyword">yield</span> readFile(<span class="string">&#x27;/etc/shells&#x27;</span>);</span><br><span class="line">	<span class="built_in">console</span>.log(f1.toString());</span><br><span class="line">	<span class="built_in">console</span>.loh(f2.toString);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//手动执行</span></span><br><span class="line"><span class="keyword">var</span> g = gen();</span><br><span class="line">g.next().value.then(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</span><br><span class="line">	g.next(data).value.then(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</span><br><span class="line">		g.next(data);</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">//自动执行</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">run</span>(<span class="params">gen</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> g = gen();</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">next</span>(<span class="params">data</span>)</span>&#123;</span><br><span class="line">		<span class="keyword">var</span> result = g.next(data);</span><br><span class="line">		<span class="keyword">if</span>(result.done) <span class="keyword">return</span>;</span><br><span class="line">		result.value.then(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</span><br><span class="line">			next(data);</span><br><span class="line">		&#125;)</span><br><span class="line">	&#125;</span><br><span class="line">	next();</span><br><span class="line">&#125;</span><br><span class="line">run(gen);</span><br></pre></td></tr></table></figure>
+
+<h5 id="co支持并发的异步操作"><a href="#co支持并发的异步操作" class="headerlink" title="co支持并发的异步操作"></a>co支持并发的异步操作</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//数组的写法</span></span><br><span class="line">co(<span class="function"><span class="keyword">function</span>* (<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> res = <span class="keyword">yield</span>[</span><br><span class="line">		<span class="built_in">Promise</span>.resolve(<span class="number">1</span>),</span><br><span class="line">		<span class="built_in">Promise</span>.resolve(<span class="number">2</span>)</span><br><span class="line">	];</span><br><span class="line">	<span class="built_in">console</span>.log(res);</span><br><span class="line">&#125;).catch(onerror);</span><br><span class="line"></span><br><span class="line"><span class="comment">//对象的写法</span></span><br><span class="line">co(<span class="function"><span class="keyword">function</span>* (<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> res = <span class="keyword">yield</span> &#123;</span><br><span class="line">		<span class="number">1</span>: <span class="built_in">Promise</span>.resolve(<span class="number">1</span>),</span><br><span class="line">		<span class="number">2</span>: <span class="built_in">Promise</span>.resolve(<span class="number">2</span>)</span><br><span class="line">	&#125;;</span><br><span class="line">	<span class="built_in">console</span>.log(res);</span><br><span class="line">&#125;).catch(onerror);</span><br></pre></td></tr></table></figure>
+
+<h4 id="async函数"><a href="#async函数" class="headerlink" title="async函数"></a>async函数</h4><p>async 函数对 Generator 函数的改进，体现在以下三点。</p>
+<ul>
+<li><strong>内置执行器</strong>。Generator 函数的执行必须靠执行器，所以才有了 co 函数库，而 async 函数自带执行器。也就是说，async 函数的执行，与普通函数一模一样，只要一行。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> result = asyncReadFile();</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>更好的语义</strong>。async 和 await，比起星号和 yield，语义更清楚了。async 表示函数里有异步操作，await 表示紧跟在后面的表达式需要等待结果</p>
+</li>
+<li><p><strong>更广的适用性</strong>。co 函数库约定，yield 命令后面只能是 Thunk 函数或 Promise 对象，而 async 函数的 await 命令后面，可以跟 Promise 对象和原始类型的值（数值、字符串和布尔值，但这时等同于同步操作）</p>
+</li>
+</ul>
+<h5 id="async函数的实现"><a href="#async函数的实现" class="headerlink" title="async函数的实现"></a>async函数的实现</h5><p>async 函数的实现，就是将 Generator 函数和自动执行器，包装在一个函数里。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">async function fn(args)&#123;</span><br><span class="line">  &#x2F;&#x2F; ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 等同于</span><br><span class="line"></span><br><span class="line">function fn(args)&#123; </span><br><span class="line">  return spawn(function*() &#123;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">  &#125;); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>所有的 async 函数都可以写成上面的第二种形式，其中的 spawn 函数就是自动执行器。</p>
+<h3 id="模块系统-CommonJS-vs-ES6"><a href="#模块系统-CommonJS-vs-ES6" class="headerlink" title="模块系统(CommonJS vs ES6)"></a>模块系统(CommonJS vs ES6)</h3><blockquote>
+<p>模块是Node.js 应用程序的基本组成部分，文件和模块是一一对应的。换言之，一个 Node.js 文件就是一个模块，这个文件可能是JavaScript 代码、JSON 或者编译过的C/C++ 扩展。</p>
+</blockquote>
+<p>在 ES6 之前，社区制定了一些模块加载方案，最主要的有 CommonJS 和 AMD 两种。前者用于服务器，后者用于浏览器。ES6 在语言标准的层面上，实现了模块功能，而且实现得相当简单，完全可以取代 CommonJS 和 AMD 规范，成为浏览器和服务器通用的模块解决方案。</p>
+<p>ES6 模块的设计思想是尽量的<span style="color:red">静态化</span>，使得<span style="color:red">编译时就能确定模块的依赖关系</span>，以及输入和输出的变量。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;CommonJS模块</span><br><span class="line">let &#123;stat, exist, readfile&#125; &#x3D; require(&#39;fs&#39;);</span><br><span class="line">&#x2F;&#x2F;等同于</span><br><span class="line">let _fs &#x3D; require(&#39;fs&#39;);</span><br><span class="line">let stat &#x3D; _fs.stat;</span><br><span class="line">let exist &#x3D; _fs.exists;</span><br><span class="line">let readfile &#x3D; _fs.readfile;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码的实质是整体加载<code>fs</code>模块（即加载<code>fs</code>的<strong>所有方法</strong>），生成一个对象（<code>_fs</code>），然后再从这个对象上面读取 3 个方法。这种加载称为“<strong>运行时加载</strong>”，因为只有运行时才能得到这个对象，导致完全没办法在编译时做“静态优化”。</p>
+<p>ES6 模块不是对象，而是通过<code>export</code>命令显式指定输出的代码，再通过<code>import</code>命令输入。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;ES6模块</span><br><span class="line">import &#123; stat, exists, readfile &#125; from &#39;fs&#39;;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码的实质是从<code>fs</code>模块加载 3 个方法，其他方法不加载。这种加载称为“编译时加载”或者静态加载，即 ES6 可以在编译时就完成模块加载，效率要比 CommonJS 模块的加载方式高。当然，这也导致了没法引用 ES6 模块本身，因为它不是对象。</p>
+<p><strong>总结</strong>：</p>
+<ul>
+<li>CommonJS：require语法，运行时加载，<strong>整体加载</strong></li>
+<li>ES6：import语法，静态加载，<strong>部分加载</strong></li>
+</ul>
+<p><strong>CommonJS模块特点</strong>：</p>
+<ul>
+<li>所有代码运行在当前模块作用域中，不会污染全局作用域</li>
+<li>模块同步加载，根据代码顺序加载</li>
+<li>模块可以多次加载，只会在第一次加载时运行一次，然后运行结果缓存，后续再加载，在缓存中读取结果，若需要模块再次运行，必须清除缓存</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//一个简单的例子,demo-exports.js</span></span><br><span class="line"><span class="keyword">let</span> name = <span class="string">&#x27;saucxs&#x27;</span>;</span><br><span class="line"><span class="keyword">let</span> getName = <span class="function"><span class="keyword">function</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(name)</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">	name,</span><br><span class="line">	getName</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//demo-require,js</span></span><br><span class="line"><span class="keyword">let</span> person = <span class="built_in">require</span>(<span class="string">&#x27;./demo-export&#x27;</span>);</span><br><span class="line"><span class="built_in">console</span>.log(person, <span class="string">&#x27;-----------&#x27;</span>); 		<span class="comment">//&#123;name: &#x27;saucxs&#x27;, getName: [Function: getName]&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(person.name, <span class="string">&#x27;===========&#x27;</span>);	<span class="comment">//saucxs</span></span><br><span class="line">person.getName(<span class="string">&#x27;kiro&#x27;</span>);						<span class="comment">//kiro</span></span><br><span class="line">person.name = <span class="string">&#x27;updateName&#x27;</span>;</span><br><span class="line"><span class="built_in">console</span>.log(person, <span class="string">&#x27;22222222&#x27;</span>);			<span class="comment">//&#123;name: &#x27;updateName&#x27;, getName: [Function: getName]&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="module对象"><a href="#module对象" class="headerlink" title="module对象"></a>module对象</h4><blockquote>
+<p>CommonJS规范，每个人文件就是一个模块，每个模块中都有一个module对象，这个对象指向当前模块。</p>
+</blockquote>
+<p>module对象的属性：</p>
+<ul>
+<li>id：当前模块id</li>
+<li>exports：表示当前模块暴露给外部的值</li>
+<li>parent：是一个对象，表示调用当前模块的模块</li>
+<li>children：是一个对象，表示当前模块调用的模块</li>
+<li>filename：模块的绝对路径</li>
+<li>paths：从当前模块开始查找<code>node_modules</code>目录，然后依次进入到父目录，查找父目录下的<code>node_modules</code>目录；依次迭代，直到根目录下的<code>node_modules</code>目录。</li>
+<li>loaded：一个布尔值，表示当前模块是否被完全加载</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//一个例子</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">	name: <span class="string">&#x27;saucxs&#x27;</span>,</span><br><span class="line">	getName: <span class="function"><span class="keyword">function</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">module</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//结果</span></span><br><span class="line">Module = &#123;</span><br><span class="line">    id: <span class="string">&#x27;.&#x27;</span>,</span><br><span class="line">    <span class="built_in">exports</span>: &#123;<span class="attr">name</span>: <span class="string">&#x27;saucxs&#x27;</span>, <span class="attr">getName</span>: [<span class="built_in">Function</span>: getName]&#125;,</span><br><span class="line">    parent: <span class="literal">null</span>,</span><br><span class="line">    filename: <span class="string">&#x27;&#x27;</span>, 	<span class="comment">//省略</span></span><br><span class="line">    loaded: <span class="literal">false</span>,</span><br><span class="line">    children: [],</span><br><span class="line">    paths: []		<span class="comment">//省略</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>module.exports</strong></p>
+<p>我们知道了module对象有一个exports属性，该属性用来对外暴露变量，方法或者整个模块。当其他文件需要require该模块的时候，实际上读取的是module对象中的exports属性。</p>
+<p><strong>exports对象</strong></p>
+<p>对比分析<code>module.exports</code>和<code>exports</code>：</p>
+<ul>
+<li>exports对象和module.exports都是引用类型变量，指向同一个内存地址，在node中，两者一开始都是指向一个空对象的。<code>exports = module.exports = &#123;&#125;</code></li>
+<li>exports对象是通过形参的方式传入，直接赋值给形参的引用，但是并不能改变作用域外的值。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="built_in">module</span> = &#123;</span><br><span class="line">	<span class="built_in">exports</span>: &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> <span class="built_in">exports</span> = <span class="built_in">module</span>.exports;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">change</span>(<span class="params"><span class="built_in">exports</span></span>) </span>&#123;</span><br><span class="line">	<span class="built_in">exports</span>.name = <span class="string">&#x27;kiro&#x27;</span>;	<span class="comment">//会同步到外部的module.exports对象</span></span><br><span class="line">	<span class="built_in">exports</span> = &#123;</span><br><span class="line">		age: <span class="number">18</span></span><br><span class="line">	&#125;;						<span class="comment">//只是修改引用，不会影响到module.exports</span></span><br><span class="line">	<span class="built_in">console</span>.log(<span class="built_in">exports</span>);	<span class="comment">//&#123;age: 18&#125;</span></span><br><span class="line">&#125;</span><br><span class="line">change(<span class="built_in">exports</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">module</span>.exports);<span class="comment">//&#123;name: &#x27;kiro&#x27;&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>module.exports就是为了解决上述exports直接赋值的问题，会导致抛出不成功的问题而产生的。</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//这些操作都是合法的</span></span><br><span class="line"><span class="built_in">exports</span>.name = <span class="string">&#x27;saucxs&#x27;</span>;</span><br><span class="line"><span class="built_in">exports</span>.getName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;saucxs&#x27;</span>)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//相当于下面的方式</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    name: <span class="string">&#x27;saucxs&#x27;</span>,</span><br><span class="line">    getName: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;saucxs&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//或者更常规的写法</span></span><br><span class="line"><span class="keyword">let</span> name = <span class="string">&#x27;saucxs&#x27;</span>;</span><br><span class="line"><span class="keyword">let</span> getName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;saucxs&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    name: name,</span><br><span class="line">    getName: getName</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="require方法"><a href="#require方法" class="headerlink" title="require方法"></a>require方法</h4><h5 id="node中引入模块的机制"><a href="#node中引入模块的机制" class="headerlink" title="node中引入模块的机制"></a>node中引入模块的机制</h5><p>引入模块的步骤：（1）路径分析；（2）文件定位；（3）编译执行</p>
+<p>模块分为两种：（1）node提供的模块，如http、fs等；（2）用户自己编写的模块，文件模块</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//requireA.js</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;requireA start loading...&#x27;</span>);</span><br><span class="line"><span class="built_in">exports</span> = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">&#x27;Hi&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;requireA end loading...&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//init.js</span></span><br><span class="line"><span class="keyword">var</span> mod1 = <span class="built_in">require</span>(<span class="string">&#x27;./requireA&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> mod2 = <span class="built_in">require</span>(<span class="string">&#x27;./requireB&#x27;</span>);</span><br><span class="line"><span class="built_in">console</span>.log(mod1 === mod2);</span><br><span class="line"></span><br><span class="line"><span class="comment">//result</span></span><br><span class="line">requireA start loading...</span><br><span class="line">requireB end loading...</span><br><span class="line"><span class="literal">true</span> 		<span class="comment">//虽然两次require，但模块中的代码只执行了一遍，且指向同一个exports</span></span><br></pre></td></tr></table></figure>
+
+<p>Node.js 的 require 方法中的文件查找策略如下：</p>
+<p>由于 Node.js 中存在 4 类模块（原生模块和3种文件模块），尽管 require 方法极其简单，但是内部的加载却是十分复杂的，其加载优先级也各自不同。如下图所示：</p>
+<p><img src="https://i.loli.net/2021/06/11/CPVZKr7Xkl5FQMn.png" alt="image.png"></p>
+<h3 id="常用库学习"><a href="#常用库学习" class="headerlink" title="常用库学习"></a>常用库学习</h3><h4 id="http"><a href="#http" class="headerlink" title="http"></a>http</h4><blockquote>
+<p>引入：require(‘http’)</p>
+</blockquote>
+<p>Node.js 中的 HTTP 接口旨在支持该协议的许多传统上难以使用的功能。 特别是大的，可能是块编码的消息。 接口从不缓冲整个请求或响应，因此用户能够流式传输数据。</p>
+<p>HTTP请求头如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	&#x27;content-length&#x27;: &#x27;123&#x27;,</span><br><span class="line">  	&#x27;content-type&#x27;: &#x27;text/plain&#x27;,</span><br><span class="line"> 	&#x27;connection&#x27;: &#x27;keep-alive&#x27;,</span><br><span class="line">  	&#x27;host&#x27;: &#x27;mysite.com&#x27;,</span><br><span class="line">  	&#x27;accept&#x27;: &#x27;*/*&#x27;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接收到的原始标头保留在 <code>rawHeaders</code> 属性中，其是 <code>[key, value, key2, value2, ...]</code> 数组。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Nodejs/" rel="tag"># Nodejs</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/07/Node-js%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/" rel="prev" title="Node.js异步编程">
+      <i class="fa fa-chevron-left"></i> Node.js异步编程
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/06/28/redis%E5%AD%A6%E4%B9%A0/" rel="next" title="redis学习">
+      redis学习 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#NodeJs"><span class="nav-number">1.</span> <span class="nav-text">NodeJs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">1.1.</span> <span class="nav-text">参考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NPM"><span class="nav-number">1.2.</span> <span class="nav-text">NPM</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8npm%E5%91%BD%E4%BB%A4%E5%AE%89%E8%A3%85%E6%A8%A1%E5%9D%97"><span class="nav-number">1.2.1.</span> <span class="nav-text">使用npm命令安装模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%AE%89%E8%A3%85%E4%BF%A1%E6%81%AF"><span class="nav-number">1.2.2.</span> <span class="nav-text">查看安装信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#package-json"><span class="nav-number">1.2.3.</span> <span class="nav-text">package.json</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%B8%E8%BD%BD%E6%A8%A1%E5%9D%97"><span class="nav-number">1.2.4.</span> <span class="nav-text">卸载模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0%E6%A8%A1%E5%9D%97"><span class="nav-number">1.2.5.</span> <span class="nav-text">更新模块</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Node-js%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.</span> <span class="nav-text">Node.js回调函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Node-js-%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF"><span class="nav-number">1.4.</span> <span class="nav-text">Node.js 事件循环</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AB%98%E5%B9%B6%E5%8F%91%E7%AD%96%E7%95%A5"><span class="nav-number">1.4.1.</span> <span class="nav-text">高并发策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF"><span class="nav-number">1.4.2.</span> <span class="nav-text">事件循环</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E7%AE%80%E6%98%93%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF"><span class="nav-number">1.4.3.</span> <span class="nav-text">实现简易的事件循环</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Node-js%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF"><span class="nav-number">1.5.</span> <span class="nav-text">深入理解Node.js事件循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B"><span class="nav-number">1.6.</span> <span class="nav-text">异步编程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%BC%82%E6%AD%A5-%E9%98%BB%E5%A1%9E%E4%B8%8E%E9%9D%9E%E9%98%BB%E5%A1%9E"><span class="nav-number">1.6.1.</span> <span class="nav-text">同步与异步 阻塞与非阻塞</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ES6%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.7.</span> <span class="nav-text">ES6异步编程的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0"><span class="nav-number">1.7.1.</span> <span class="nav-text">回调函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Promise%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-number">1.7.2.</span> <span class="nav-text">Promise基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Promise%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-number">1.7.2.1.</span> <span class="nav-text">Promise的生命周期</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Generator%E5%87%BD%E6%95%B0"><span class="nav-number">1.7.3.</span> <span class="nav-text">Generator函数</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Thunk%E5%87%BD%E6%95%B0"><span class="nav-number">1.7.3.1.</span> <span class="nav-text">Thunk函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Generator-%E5%87%BD%E6%95%B0%E7%9A%84%E8%87%AA%E5%8A%A8%E6%B5%81%E7%A8%8B%E7%AE%A1%E7%90%86"><span class="nav-number">1.7.3.2.</span> <span class="nav-text">Generator 函数的自动流程管理</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#co%E5%87%BD%E6%95%B0%E5%BA%93"><span class="nav-number">1.7.4.</span> <span class="nav-text">co函数库</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8EPromise%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%87%AA%E5%8A%A8%E6%89%A7%E8%A1%8C"><span class="nav-number">1.7.4.1.</span> <span class="nav-text">基于Promise对象的自动执行</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#co%E6%94%AF%E6%8C%81%E5%B9%B6%E5%8F%91%E7%9A%84%E5%BC%82%E6%AD%A5%E6%93%8D%E4%BD%9C"><span class="nav-number">1.7.4.2.</span> <span class="nav-text">co支持并发的异步操作</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#async%E5%87%BD%E6%95%B0"><span class="nav-number">1.7.5.</span> <span class="nav-text">async函数</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#async%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.7.5.1.</span> <span class="nav-text">async函数的实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E7%B3%BB%E7%BB%9F-CommonJS-vs-ES6"><span class="nav-number">1.8.</span> <span class="nav-text">模块系统(CommonJS vs ES6)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#module%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.8.1.</span> <span class="nav-text">module对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#require%E6%96%B9%E6%B3%95"><span class="nav-number">1.8.2.</span> <span class="nav-text">require方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#node%E4%B8%AD%E5%BC%95%E5%85%A5%E6%A8%A1%E5%9D%97%E7%9A%84%E6%9C%BA%E5%88%B6"><span class="nav-number">1.8.2.1.</span> <span class="nav-text">node中引入模块的机制</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%BA%93%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.9.</span> <span class="nav-text">常用库学习</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#http"><span class="nav-number">1.9.1.</span> <span class="nav-text">http</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="kiro-xu"
+      src="/images/avater.jpg">
+  <p class="site-author-name" itemprop="name">kiro-xu</p>
+  <div class="site-description" itemprop="description">Be who you want to be</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021-2 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kiro-xu</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

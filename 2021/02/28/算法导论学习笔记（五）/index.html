@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="二叉查找树二叉查找树中关键字的存储方式总是满足以下的二叉查找树性质：  设x为二叉查找树中的一个结点。如果y是x的左子树中的一个结点，则。如果y是x的右子树中的结点，则。  根据二叉树的性质，可以用一个递归算法按排列顺序输出树中的所有关键字，即中序遍历算法。 1234567public void inOrderTreeWalk(TreeNode x)&amp;#123;    if(x！&#x3D;nul">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法导论学习笔记（五）">
+<meta property="og:url" content="http://example.com/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89/index.html">
+<meta property="og:site_name" content="kiro的博客">
+<meta property="og:description" content="二叉查找树二叉查找树中关键字的存储方式总是满足以下的二叉查找树性质：  设x为二叉查找树中的一个结点。如果y是x的左子树中的一个结点，则。如果y是x的右子树中的结点，则。  根据二叉树的性质，可以用一个递归算法按排列顺序输出树中的所有关键字，即中序遍历算法。 1234567public void inOrderTreeWalk(TreeNode x)&amp;#123;    if(x！&#x3D;nul">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/0b68d2ce7eb0d3141ee4aa4bcc2270b7.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/5c14372f94ace8cd2d27a35597d66303.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607175972577-de09ec02-a0d2-410e-a2f1-62141f0803d1.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607178361377-faade872-4db3-4b0b-a925-376377132939.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/71ea6a1b4e5c283c27e3e1688fab7e72.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/5475dbf1000faf21127c46a2734b1fbb.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607179845880-0cf3fbb7-2ecd-49bb-b12e-e68921943f67.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607180036211-4ca11487-0a92-4ed1-a342-7fd9c30b758a.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607180316709-9a8490be-003f-4126-9577-3584a8dd3087.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607180326781-f9a4a4df-9930-42ac-9307-0759fd873cb2.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607180388203-0f9bc8c6-8492-4876-8dee-5883a177c84e.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607327491484-617b49bf-cd80-4ba2-8ad9-bad2f661a185.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607327990012-11baa4a2-5670-402e-8f69-69029764e4f3.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607328155405-cda58171-a018-4a0d-b12b-7da039806060.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607329725240-770943dd-5a03-45f2-955f-b7ce8e9627fc.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607329913708-467fd2f4-8e79-4fa7-9bc9-2e3da3176d14.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607330009760-b6920705-4e40-40ce-a980-a15b3a0fc014.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/4367610265a8d75d48ee1815aa026566.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/3a302c645f324058b030290ff28bf071.svg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607408159789-043b9fd7-732e-474f-922d-17767f22ac6f.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607408378995-5aa5404b-52dc-4638-a459-63aceefc5898.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607408488175-b4dacd99-b514-41e1-813c-ce85e1aa6323.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607408543768-2c76d858-f678-4653-a4be-d6a5a5373020.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607408606615-da5cf49b-6e5b-4c5c-949f-4fc29d535e97.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/03a539bfcefdaf30db1bf6a92c136a69.svg">
+<meta property="article:published_time" content="2021-02-28T09:01:39.000Z">
+<meta property="article:modified_time" content="2021-02-28T09:05:47.769Z">
+<meta property="article:author" content="kiro-xu">
+<meta property="article:tag" content="算法导论">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/__latex/0b68d2ce7eb0d3141ee4aa4bcc2270b7.svg">
+
+<link rel="canonical" href="http://example.com/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>算法导论学习笔记（五） | kiro的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">kiro的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">学习记录</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avater.jpg">
+      <meta itemprop="name" content="kiro-xu">
+      <meta itemprop="description" content="Be who you want to be">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kiro的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          算法导论学习笔记（五）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-28 17:01:39 / 修改时间：17:05:47" itemprop="dateCreated datePublished" datetime="2021-02-28T17:01:39+08:00">2021-02-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="二叉查找树"><a href="#二叉查找树" class="headerlink" title="二叉查找树"></a>二叉查找树</h1><p>二叉查找树中关键字的存储方式总是满足以下的二叉查找树性质：</p>
+<ul>
+<li>设x为二叉查找树中的一个结点。如果y是x的左子树中的一个结点，则<img src="https://cdn.nlark.com/yuque/__latex/0b68d2ce7eb0d3141ee4aa4bcc2270b7.svg" alt="img">。如果y是x的右子树中的结点，则<img src="https://cdn.nlark.com/yuque/__latex/5c14372f94ace8cd2d27a35597d66303.svg" alt="img">。</li>
+</ul>
+<p>根据二叉树的性质，可以用一个递归算法按排列顺序输出树中的所有关键字，即中序遍历算法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public void inOrderTreeWalk(TreeNode x)&#123;</span><br><span class="line">    if(x！&#x3D;null)&#123;</span><br><span class="line">        inOrderTreeWalk(x.left);</span><br><span class="line">        System.out.println(x);</span><br><span class="line">        inOrderTreeWalk(x.right);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>定理</strong> ：如果x是一棵包含n个结点的子树的根，则调用InOrderTreeWalk(x)过程的时间为Θ(n)。</p>
+<h2 id="查询二叉查找树"><a href="#查询二叉查找树" class="headerlink" title="查询二叉查找树"></a>查询二叉查找树</h2><p><strong>查找一个给定的关键字</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public TreeNode treeSearch(TreeNode x, int k)&#123;</span><br><span class="line">    if(x&#x3D;&#x3D;null || x.val&#x3D;&#x3D;k)&#123;</span><br><span class="line">        return x;</span><br><span class="line">    &#125;</span><br><span class="line">    if(k&lt;x.val)</span><br><span class="line">        return treeSearch(x.left,k);</span><br><span class="line">    else</span><br><span class="line">        return treeSearch(x.right.k);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>也可以用非递归算法（While循环）来实现，在大多数计算机上，非递归版本运行的要更快一些。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public iterativeTreeSearch(TreeNode x, int k)&#123;</span><br><span class="line">    while(x!&#x3D;null &amp;&amp; k!&#x3D;x.val)&#123;</span><br><span class="line">        if(k&lt;x.val)</span><br><span class="line">            x &#x3D; x.left;</span><br><span class="line">        else</span><br><span class="line">            x &#x3D; x.right;</span><br><span class="line">    &#125;</span><br><span class="line">    return x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>最大关键字元素和最小关键字元素</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public TreeNode treeMinimun(TreeNode x)&#123;</span><br><span class="line">    while(x.left!&#x3D;null)&#123;</span><br><span class="line">        x &#x3D; x.left;</span><br><span class="line">    &#125;</span><br><span class="line">    return x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最大关键字类似。对高度为h的树，这两个过程的运行时间都是O(h)。</p>
+<p><strong>前趋和后继</strong> </p>
+<p>给定一个二叉查找树中的结点，有时候要求找出在中序遍历顺序下它的后继，如果所有的关键字均不相同，则某一个结点x的后继即具有大于key[x]中的关键字中的最小值的那个结点。</p>
+<p>若s的右子树为空，则从x向上查找，直到遇到某个是其父节点的左儿子的结点为止。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">TREE-SUCCESSOR(x)</span><br><span class="line">if right[x]!&#x3D;null&#123;</span><br><span class="line">    then return treeMinimum(x.right);</span><br><span class="line">y &#x3D; p[x]</span><br><span class="line">whilr y!&#x3D;null and x &#x3D; right[y]</span><br><span class="line">    do x &#x3D; y</span><br><span class="line">     y &#x3D; p[y]</span><br><span class="line">return y</span><br></pre></td></tr></table></figure>
+
+<h2 id="删除和插入"><a href="#删除和插入" class="headerlink" title="删除和插入"></a>删除和插入</h2><p><strong>插入</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public void treeInsert(TreeNode x, int z)&#123;</span><br><span class="line">    TreeNode pre &#x3D; null;</span><br><span class="line">    TreeNode cur &#x3D; x;</span><br><span class="line">    while(cur!&#x3D;null)&#123;</span><br><span class="line">        pre &#x3D; cur;</span><br><span class="line">        if(z&lt;x.val)</span><br><span class="line">            cur &#x3D; cur.left;</span><br><span class="line">        else</span><br><span class="line">            cur &#x3D; cur.right;</span><br><span class="line">    &#125;</span><br><span class="line">    if(pre&#x3D;&#x3D;null)</span><br><span class="line">        x &#x3D; new TreeNode(z);</span><br><span class="line">    else if(z&lt;pre.val)</span><br><span class="line">        pre.left &#x3D; new TreeNode(z);</span><br><span class="line">    else</span><br><span class="line">        pre.right &#x3D; new TreeNode(x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>和其他查找树上的原始操作一样，过程TreeInsert的运行时间也为O(h).</p>
+<p><strong>删除</strong> </p>
+<p>给定结点z从二叉查找树中删除的过程以指向z的指针为参数，并考虑三种情况：1）如果z没有子女，则修改其父节点p[z]，使NIL为其子女；如果结点z只有一个子女，则通过在其子节点与父节点间建立一条链来删除z。最后，如果结点z有两个子女，先删除z的后继y（没有左儿子），再用y的内容来替代z的内容。 <strong>以下代码并不完善</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public void treeDelete(TreeNode z)&#123;</span><br><span class="line">    if(z.left&#x3D;&#x3D;null &amp;&amp; z.right&#x3D;&#x3D;null)&#123;</span><br><span class="line">        &#x2F;&#x2F;没有孩子</span><br><span class="line">        p[z].next &#x3D; null; &#x2F;&#x2F;其父节点连接null</span><br><span class="line">    &#125;else if(z.right!&#x3D;null &amp;&amp; z.left!&#x3D;null)&#123;</span><br><span class="line">        x &#x3D; treeMinimum(z.right);</span><br><span class="line">        z.val &#x3D; x.val;</span><br><span class="line">        treeDelete(x);</span><br><span class="line">    &#125;else if(z.right !&#x3D;null)&#123;</span><br><span class="line">        p[z].next &#x3D; z.right;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        p[z].next &#x3D; z.left;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>定理</strong> 对高度为h的二叉查找树，动态集合操作INSERT和DELETE的运行时间为O(h)。</p>
+<p><strong>The Relation to QuickSort:</strong><br>BST Sort &amp; QuickSort make same comparisons but in a different order.</p>
+<h2 id="随机构造的二叉树"><a href="#随机构造的二叉树" class="headerlink" title="随机构造的二叉树"></a>随机构造的二叉树</h2><p><strong>步骤</strong> ：</p>
+<ul>
+<li>Randomly permite A</li>
+<li>BST Sort(A)</li>
+</ul>
+<p>Time(BST) = Time(Randomized-QuickSort)</p>
+<p><strong>定理</strong> </p>
+<p><strong>一棵在n个关键字上随机构造的二叉查找树的期望高度为O(lgn)。</strong></p>
+<h1 id="Balanced-Search-Tree"><a href="#Balanced-Search-Tree" class="headerlink" title="Balanced Search Tree"></a>Balanced Search Tree</h1><p>search tree data structure maintaining dynamic set of n elements using a tree of height order <strong>lgn</strong> .</p>
+<p><strong>Examples</strong> </p>
+<ul>
+<li>AVL Tree</li>
+<li>2-3 Tree</li>
+<li>2-3-4 Tree</li>
+<li>B Tree</li>
+<li>Red-Black Trees</li>
+<li>Skip lists</li>
+<li>Treaps</li>
+</ul>
+<h2 id="Red-Black-Tree"><a href="#Red-Black-Tree" class="headerlink" title="Red-Black Tree"></a>Red-Black Tree</h2><p>BST data structure with <strong>extra color</strong> field for each node satisfying.</p>
+<p><strong>Red-Black properties</strong> </p>
+<ol>
+<li>Every Node is either red or black</li>
+<li>the root and the leaves(nil’s) are black</li>
+<li><strong>Every red node has black parent</strong> </li>
+<li>All simple paths from a node x to a descended leaf of x have <strong>same number of black nodes</strong> . which means have the <strong>same black-height(x)</strong> </li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607175972577-de09ec02-a0d2-410e-a2f1-62141f0803d1.png" alt="image.png"></p>
+<p><strong>定理</strong> ： <strong>Red-Black tree with n keys has height h &lt;= 2lg(n+1)</strong> </p>
+<p>证明：《算法导论》上有归纳法的详细证明</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607178361377-faade872-4db3-4b0b-a925-376377132939.png" alt="image.png"></p>
+<ul>
+<li>Merge red nodes into their black parents.</li>
+<li>This process produce a tree in which each node  has 2,3 or 4 children</li>
+<li>the 2-3-4 tree has uniform depth h’ of leaves</li>
+<li>We have <img src="https://cdn.nlark.com/yuque/__latex/71ea6a1b4e5c283c27e3e1688fab7e72.svg" alt="img">, since at most half the leaves on any path are red</li>
+<li>The number of leaves in each tree is n+1<img src="https://cdn.nlark.com/yuque/__latex/5475dbf1000faf21127c46a2734b1fbb.svg" alt="img"></li>
+</ul>
+<p><strong>Corollary</strong> . The queries <em>Search, Min, Max, Successor, and Predecessor</em> all run in <strong>O(lgn)</strong> time on a red-black tree with <strong>n</strong> nodes.</p>
+<p><strong>Modifying operations</strong> </p>
+<p>The operations Insert and Delete cause modifications to the red-black tree:</p>
+<ul>
+<li>the operation itself,</li>
+<li>color changes,</li>
+<li>restucturing the links of the tree via <strong>rotations</strong> </li>
+</ul>
+<h3 id="Rotations"><a href="#Rotations" class="headerlink" title="Rotations"></a>Rotations</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607179845880-0cf3fbb7-2ecd-49bb-b12e-e68921943f67.png" alt="image.png"></p>
+<p>A rotation can be performed in <strong>O(1)</strong> time.</p>
+<h3 id="Insertion-into-a-red-black-tree"><a href="#Insertion-into-a-red-black-tree" class="headerlink" title="Insertion into a red-black tree"></a>Insertion into a red-black tree</h3><p><strong>IDEA</strong> : Insert x in tree. Color x red. Only red-black property 3 might be violated. Move the violation up the tree by recoloring until it can be fixed with rotations and recolored.</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607180036211-4ca11487-0a92-4ed1-a342-7fd9c30b758a.png" alt="image.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">RB-INSERT(T,x)</span><br><span class="line">    Tree-INSERT(T,x)</span><br><span class="line">  color[x]&#x3D;red</span><br><span class="line">  while x!&#x3D;root[T] and color[p[x]]&#x3D;RED</span><br><span class="line">    do if p[x]&#x3D;left[p[p[x]]]</span><br><span class="line">        then y&#x3D;right[p[p[x]]]</span><br><span class="line">        if color[y]&#x3D;RED</span><br><span class="line">        then &lt;Case 1&gt;</span><br><span class="line">        else if x&#x3D;right[p[x]]</span><br><span class="line">            then &lt;case 2&gt;</span><br><span class="line">        &lt;Case 3&gt;</span><br><span class="line">      else&lt;&quot;Then&quot; clause with &quot;left&quot; and &quot;right&quot; swapped&gt;</span><br><span class="line">  color[root[T]]&#x3D;black</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607180316709-9a8490be-003f-4126-9577-3584a8dd3087.png" alt="image.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607180326781-f9a4a4df-9930-42ac-9307-0759fd873cb2.png" alt="image.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607180388203-0f9bc8c6-8492-4876-8dee-5883a177c84e.png" alt="image.png"></p>
+<p><strong>Analysis</strong> </p>
+<ul>
+<li>Go up the tree performing Case 1, with only recolors node.</li>
+<li>If Case 2 or Case 3 occurs, perform 1 or 2 rotations, and terminate.</li>
+</ul>
+<p><strong>Running Time</strong> </p>
+<p><strong>O(lgn)</strong> with <strong>O(1)</strong> rotations.</p>
+<p>RB-Delete: same asymptotic running time and number of rotations as RB-Insert(See textbook).</p>
+<h1 id="扩充的数据结构、动态有序统计和区间树"><a href="#扩充的数据结构、动态有序统计和区间树" class="headerlink" title="扩充的数据结构、动态有序统计和区间树"></a>扩充的数据结构、动态有序统计和区间树</h1><p>augmentation data structures 数据结构的扩充</p>
+<h2 id="Dynamic-order-statistics"><a href="#Dynamic-order-statistics" class="headerlink" title="Dynamic order statistics"></a>Dynamic order statistics</h2><p>新增的两个操作：</p>
+<ul>
+<li>OS-Select(i): returns i-th smallest item in dynamic set</li>
+<li>OS-Rank(i): returns rank of x in sorted order.</li>
+</ul>
+<p><strong>IDEA</strong> : <strong>Keep subtree size in node of r-b trees</strong></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607327491484-617b49bf-cd80-4ba2-8ad9-bad2f661a185.png" alt="image.png"></p>
+<p><strong>size[x] = size[left[x]]+size[right[x]]+1</strong> </p>
+<h3 id="OS-Select-i"><a href="#OS-Select-i" class="headerlink" title="OS-Select(i)"></a>OS-Select(i)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">OS-Select(x,i) &#x2F;&#x2F;i-th smallest in subtree rooted at x</span><br><span class="line">    r &#x3D; x.left.size + 1; &#x2F;&#x2F;rank of x</span><br><span class="line">  if i&#x3D;&#x3D;r</span><br><span class="line">    return x</span><br><span class="line">  else if i&lt;r</span><br><span class="line">    return OS-Select(x.left,i)</span><br><span class="line">  else</span><br><span class="line">    return OS-Select(x.right,i-r)</span><br></pre></td></tr></table></figure>
+
+<h3 id="OS-Rank-i"><a href="#OS-Rank-i" class="headerlink" title="OS-Rank(i)"></a>OS-Rank(i)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">OS-RANK(T,x)</span><br><span class="line">    r &#x3D; x.left.size + 1</span><br><span class="line">  y &#x3D; x</span><br><span class="line">  while y!&#x3D;T.root</span><br><span class="line">    if y&#x3D;&#x3D;y.p.right</span><br><span class="line">        r &#x3D; r + y.p.left.size + 1</span><br><span class="line">    y &#x3D; y.p</span><br><span class="line">    return r</span><br></pre></td></tr></table></figure>
+
+<p><strong>Analysis</strong> T(n)=<strong>O(lgn)</strong></p>
+<p>Q: Why not keep the ranks in nodes instead of subtree sizes?</p>
+<p>A: It’s hard to maintain when t-b tree is motified.</p>
+<p><strong>Mutifying operations: Insert and Delete</strong> </p>
+<p><strong>Stratege</strong> : Update subtree sizes when inserting or deleting.</p>
+<p>EX:</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607327990012-11baa4a2-5670-402e-8f69-69029764e4f3.png" alt="image.png"></p>
+<p><strong>but also need to handle rebalancing</strong> </p>
+<ul>
+<li>r-b color changes: no effect to size</li>
+<li>rotation: look at children and fix up in O(1) time</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607328155405-cda58171-a018-4a0d-b12b-7da039806060.png" alt="image.png"></p>
+<p>So,  <strong>RB-Insert and RB-Delete still run in O(lgn) time</strong> </p>
+<h3 id="Data-structrue-augmentation"><a href="#Data-structrue-augmentation" class="headerlink" title="Data-structrue augmentation"></a>Data-structrue augmentation</h3><p><strong>Methodology</strong> : (e.g. order-statistics trees)</p>
+<ol>
+<li>Choose an underlying data structrue.(red-black trees)</li>
+<li>Determine additional information to be stored in the data structure.(subtree size)</li>
+<li>Verify that this information can be maintained for modifying operations.(RBINSERT, RB-DELETE — don’t forget rotations)</li>
+<li>Develop new dynamic-set operations that use the informations.(OS-Select and OS-Rank)</li>
+</ol>
+<p><strong>These steps are guidelines, not rigid rules</strong> </p>
+<h2 id="Example-Interval-trees-区间树"><a href="#Example-Interval-trees-区间树" class="headerlink" title="Example: Interval trees 区间树"></a>Example: Interval trees 区间树</h2><p><strong>IDEA</strong> ：maintain a set of intervals. e.g. time intervals</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607329725240-770943dd-5a03-45f2-955f-b7ce8e9627fc.png" alt="image.png"></p>
+<p><strong>Query</strong> : For a given query interval i, find an interval in the set that overlaps i.</p>
+<h3 id="Methodology"><a href="#Methodology" class="headerlink" title="Methodology"></a><strong>Methodology</strong></h3><ol>
+<li>Choose an underlying data structure.</li>
+</ol>
+<p>(Red-Black Tree key on <strong>low(left) endpoint</strong> )</p>
+<ol>
+<li>Determine additional information to be stored in the data structure.</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607329913708-467fd2f4-8e79-4fa7-9bc9-2e3da3176d14.png" alt="image.png"></p>
+<ol>
+<li>Modifying operations:<br><strong>Insert: fix m’s on way down</strong> .</li>
+</ol>
+<p>​    Rotations——Fixup = <strong>O(1)</strong>  time per rotation:</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607330009760-b6920705-4e40-40ce-a980-a15b3a0fc014.png" alt="image.png"></p>
+<p>So, <strong>Total Insert Time = O(lgn)</strong>  Delete similar</p>
+<ol>
+<li>Develop new dynamic-set operations that use the information.</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">INTERVAL-SEARCH(T,i)</span><br><span class="line">    x &#x3D; T.root</span><br><span class="line">  while x!&#x3D;nil and (low[i]&gt;high[int[x]] or high[i]&lt;low[int[x]]) &#x2F;&#x2F; i does not overlaps x</span><br><span class="line">    if x.left!&#x3D;nil and x.left.m &gt;&#x3D; low[i]</span><br><span class="line">        x&#x3D;x.left</span><br><span class="line">    else x &#x3D; x.right</span><br><span class="line">  return x</span><br></pre></td></tr></table></figure>
+
+<p><strong>List all overlaps: O(klgn)</strong> <strong>Output sensitive</strong> </p>
+<p><strong>Correctness</strong> </p>
+<p>Theorem. Let L be the set of intervals in the left subtree of node x, and let R be the set of intervals in x’s right subtree.</p>
+<p><strong>If the search goes right, then</strong> </p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/4367610265a8d75d48ee1815aa026566.svg" alt="img"></p>
+<p><strong>If the search goes left, then</strong> </p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/3a302c645f324058b030290ff28bf071.svg" alt="img"></p>
+<p><strong>证明略</strong> </p>
+<h2 id="补充1：2-3数"><a href="#补充1：2-3数" class="headerlink" title="补充1：2-3数"></a>补充1：2-3数</h2><p><strong>2–3树</strong>是一种<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%A0%91_(%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84)">树型数据结构</a>，内部节点（存在子节点的节点）要么有2个孩子和1个数据元素，要么有3个孩子和2个数据元素，叶子节点没有孩子，并且有1个或2个数据元素。</p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>如果一个内部节点拥有一个数据元素、两个子节点，则此节点为<strong>2节点</strong>。</p>
+<p>如果一个内部节点拥有两个数据元素、三个子节点，则此节点为<strong>3节点</strong>。</p>
+<p>当且仅当以下叙述中有一条成立时，<em>T</em>为2–3树：</p>
+<ul>
+<li><em>T</em>为空。即<em>T</em>不包含任何节点。</li>
+<li>为拥有数据元素<em>a</em>的2节点。若<em>T</em>的左孩子为<em>L</em>、右孩子为<em>R</em>，则：<em>L</em>和<em>R</em>是等高的非空2–3树；<em>a</em>大于<em>L</em>中的所有数据元素；且<em>a</em>小于等于<em>R</em>中的所有数据元素。</li>
+<li><em>T</em>为拥有数据元素<em>a</em>和<em>b</em>的3节点，其中<em>a</em> &lt; <em>b</em>。若<em>T</em>的左孩子为<em>L</em>、中孩子为<em>M</em>、右孩子为<em>R</em>，则：<em>L</em>、<em>M</em>、和<em>R</em>是等高的非空2–3树；<em>a</em>大于<em>L</em>中的所有数据元素，并且小于等于<em>M</em>中的所有数据元素；<em>b</em>大于<em>M</em>中的所有数据元素，并且小于等于<em>R</em>中的所有数据元素。</li>
+</ul>
+<h3 id="2-3树的查找"><a href="#2-3树的查找" class="headerlink" title="2-3树的查找"></a>2-3树的查找</h3><p>与普通二叉搜索树相似。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607408159789-043b9fd7-732e-474f-922d-17767f22ac6f.png" alt="image.png"></p>
+<h3 id="2-3树的插入"><a href="#2-3树的插入" class="headerlink" title="2-3树的插入"></a>2-3树的插入</h3><p>前面我们知道，2-3查找树分为<strong>2结点</strong>和<strong>3结点</strong>，so，插入就分为了2结点插入和3结点插入。</p>
+<p><strong>2-结点插入:</strong> 向2-结点插入一个新的结点和向而插入插入一个结点很类似，但是我们并不是将结点“吊”在结点的末尾，因为这样就没办法保持树的平衡。我们可以将2-结点替换成3-结点即可，将其中的键插入这个3-结点即可。（相当于缓存了这个结点）</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607408378995-5aa5404b-52dc-4638-a459-63aceefc5898.png" alt="image.png"></p>
+<p><strong>3-结点插入：</strong> 3结点插入比较麻烦，它分为3种情况：</p>
+<ol>
+<li>向一棵只含有3-结点的树插入新键。</li>
+</ol>
+<p>​    假如2-3树只有一个3-结点，那么当我们插入一个新的结点的时候，我们先假设结点变成了4-结点，然后使得中间的结点为根结点，左边的结点为其左结点，右边的结点为其右结点，然后构成一棵2-3树，<strong>树的高度加1</strong>。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607408488175-b4dacd99-b514-41e1-813c-ce85e1aa6323.png" alt="image"></p>
+<ol>
+<li>向父结点为2-结点的3-结点中插入新键。</li>
+</ol>
+<p>和上面的情况类似，我们将新的节点插入3-结点使之成为4-结点，然后将结点中的中间结点”升“到其父节点（2-结点）中的合适的位置，使其父节点成为一个3-节点，然后将左右节点分别挂在这个3-结点的恰当位置，<strong>树的高度不发生改变。</strong></p>
+<p>**<br>**<img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607408543768-2c76d858-f678-4653-a4be-d6a5a5373020.png" alt="image"></p>
+<ol>
+<li>向父节点为3-结点的3-结点中插入新键。</li>
+</ol>
+<p>​    这种情况有点类似递归：当我们的结点为3-结点的时候，我们插入新的结点会将中间的元素”升“父节点，然后父节点为4-结点，右将中间的结点”升“到其父结点的父结点，……如此进行递归操作，直到遇到的结点不再是3-结点。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/2997786/1607408606615-da5cf49b-6e5b-4c5c-949f-4fc29d535e97.png" alt="image"></p>
+<p><strong>树的高度</strong> ：<img src="https://cdn.nlark.com/yuque/__latex/03a539bfcefdaf30db1bf6a92c136a69.svg" alt="img"></p>
+<h2 id="补充2-B树"><a href="#补充2-B树" class="headerlink" title="补充2-B树"></a>补充2-B树</h2><p>B树是为磁盘或其他直接存取辅助存储设备而设计的一种平衡查找树。与红黑树类似，但在降低磁盘I/O操作次数方面要更好一些。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA/" rel="tag"># 算法导论</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%9B%9B%EF%BC%89/" rel="prev" title="算法导论学习笔记（四）">
+      <i class="fa fa-chevron-left"></i> 算法导论学习笔记（四）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89/" rel="next" title="算法导论学习笔记（六）">
+      算法导论学习笔记（六） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91"><span class="nav-number">1.</span> <span class="nav-text">二叉查找树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91"><span class="nav-number">1.1.</span> <span class="nav-text">查询二叉查找树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E5%92%8C%E6%8F%92%E5%85%A5"><span class="nav-number">1.2.</span> <span class="nav-text">删除和插入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E6%9E%84%E9%80%A0%E7%9A%84%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">1.3.</span> <span class="nav-text">随机构造的二叉树</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Balanced-Search-Tree"><span class="nav-number">2.</span> <span class="nav-text">Balanced Search Tree</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Red-Black-Tree"><span class="nav-number">2.1.</span> <span class="nav-text">Red-Black Tree</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Rotations"><span class="nav-number">2.1.1.</span> <span class="nav-text">Rotations</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Insertion-into-a-red-black-tree"><span class="nav-number">2.1.2.</span> <span class="nav-text">Insertion into a red-black tree</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%A9%E5%85%85%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%81%E5%8A%A8%E6%80%81%E6%9C%89%E5%BA%8F%E7%BB%9F%E8%AE%A1%E5%92%8C%E5%8C%BA%E9%97%B4%E6%A0%91"><span class="nav-number">3.</span> <span class="nav-text">扩充的数据结构、动态有序统计和区间树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dynamic-order-statistics"><span class="nav-number">3.1.</span> <span class="nav-text">Dynamic order statistics</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#OS-Select-i"><span class="nav-number">3.1.1.</span> <span class="nav-text">OS-Select(i)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OS-Rank-i"><span class="nav-number">3.1.2.</span> <span class="nav-text">OS-Rank(i)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Data-structrue-augmentation"><span class="nav-number">3.1.3.</span> <span class="nav-text">Data-structrue augmentation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-Interval-trees-%E5%8C%BA%E9%97%B4%E6%A0%91"><span class="nav-number">3.2.</span> <span class="nav-text">Example: Interval trees 区间树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Methodology"><span class="nav-number">3.2.1.</span> <span class="nav-text">Methodology</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A5%E5%85%851%EF%BC%9A2-3%E6%95%B0"><span class="nav-number">3.3.</span> <span class="nav-text">补充1：2-3数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">3.3.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3%E6%A0%91%E7%9A%84%E6%9F%A5%E6%89%BE"><span class="nav-number">3.3.2.</span> <span class="nav-text">2-3树的查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3%E6%A0%91%E7%9A%84%E6%8F%92%E5%85%A5"><span class="nav-number">3.3.3.</span> <span class="nav-text">2-3树的插入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A5%E5%85%852-B%E6%A0%91"><span class="nav-number">3.4.</span> <span class="nav-text">补充2-B树</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="kiro-xu"
+      src="/images/avater.jpg">
+  <p class="site-author-name" itemprop="name">kiro-xu</p>
+  <div class="site-description" itemprop="description">Be who you want to be</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021-2 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kiro-xu</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
