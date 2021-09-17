@@ -163,6 +163,409 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/15/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avater.jpg">
+      <meta itemprop="name" content="kiro-xu">
+      <meta itemprop="description" content="Be who you want to be">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kiro的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/15/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/" class="post-title-link" itemprop="url">Java并发编程（一）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-03-15 16:08:28 / 修改时间：18:47:51" itemprop="dateCreated datePublished" datetime="2021-03-15T16:08:28+08:00">2021-03-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><p><strong>进程与线程</strong></p>
+<p><em>进程</em>：视为程序的一个实例，进程是资源分配的最小单元，一个进程对应一块独立的内存、资源。</p>
+<p><em>线程</em>：一个进程中可以有多个线程，最小调度单元。</p>
+<p><em>对比</em>：</p>
+<ul>
+<li>进程相互独立，线程存在于进程中，是进程的一个子集；</li>
+<li>进程是资源分配的最小单元，同一个进程内的线程资源共享；</li>
+<li>进程间通信复杂（IPC、HTTP），线程通信相对简单，因为内存共享；</li>
+<li>线程更轻量，其上下文切换成本一般比进程低。</li>
+</ul>
+<p><strong>并行与并发</strong></p>
+<p><em>并发</em>：同一时间应对多件事件的能力，单核CPU在任务调度器的管理下使线程轮流使用CPU，实现“微观串行，宏观并行”的效果。</p>
+<p><em>并行</em>：同一时间动手做多件事情的能力，多核CPU同时调度运行线程。</p>
+<p><strong>线程的优势</strong></p>
+<ul>
+<li>发挥多核处理器的强大能力；</li>
+<li>建模简单，每个线程只执行一种任务，不需要考虑不同任务的管理与切换；</li>
+<li>异步事件的简化处理</li>
+<li>友好的用户体验</li>
+</ul>
+<p><strong>线程的风险</strong></p>
+<ul>
+<li>安全问题：由于多线程共享存储空间，并发运行时，某线程可能会访问或修改其他线程正在使用的变量；</li>
+<li>活跃性问题：死锁、饥饿等</li>
+<li>性能问题</li>
+</ul>
+<h1 id="Java线程"><a href="#Java线程" class="headerlink" title="Java线程"></a>Java线程</h1><h2 id="线程的创建和运行"><a href="#线程的创建和运行" class="headerlink" title="线程的创建和运行"></a>线程的创建和运行</h2><p><strong>方法一：继承Thread</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Thread t1 = <span class="keyword">new</span> Thread(<span class="string">&quot;t1&quot;</span>)&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        log.debug(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">t1.start();</span><br></pre></td></tr></table></figure>
+
+<p><strong>方法二：实现Runnable接口</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Runnable runnable = <span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        log.debug(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//精简版： Runnable runnable = ()-&gt;log.debug(&quot;hello&quot;);</span></span><br><span class="line">Thread t2 = <span class="keyword">new</span> Thread(runnable,<span class="string">&quot;t2&quot;</span>);</span><br><span class="line">t2.start();</span><br></pre></td></tr></table></figure>
+
+<p><strong>方法三：FutureTask配合Thread</strong></p>
+<p>FutureTask 能够接收 Callable 类型的参数，用来处理有<strong>返回值</strong>的情况</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">FutureTask&lt;Integer&gt; task3 = <span class="keyword">new</span> FutureTask&lt;&gt;(()-&gt;&#123;</span><br><span class="line">    log.debug(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">100</span>;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">new</span> Thread(task3,<span class="string">&quot;t3&quot;</span>).start();</span><br><span class="line">Integer result = task.get();</span><br><span class="line">log.debug(<span class="string">&quot;结果是：&#123;&#125;&quot;</span>,result);</span><br></pre></td></tr></table></figure>
+
+<h2 id="线程运行的原理"><a href="#线程运行的原理" class="headerlink" title="线程运行的原理"></a>线程运行的原理</h2>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avater.jpg">
+      <meta itemprop="name" content="kiro-xu">
+      <meta itemprop="description" content="Be who you want to be">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kiro的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="post-title-link" itemprop="url">计算机网络基本知识整理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-07 18:53:00" itemprop="dateCreated datePublished" datetime="2021-03-07T18:53:00+08:00">2021-03-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-03-11 20:39:46" itemprop="dateModified" datetime="2021-03-11T20:39:46+08:00">2021-03-11</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="https://github.com/Snailclimb/JavaGuide/blob/master/docs/network/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C.md" target="_blank">参考1</a></p>
+<p><a href="https://www.bilibili.com/video/BV1c4411d7jb" target="_blank">参考2</a></p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><ul>
+<li><strong>网络</strong>是由若干<strong>结点</strong>（电脑、交换机）和连接这些结点的<strong>链路</strong>组成的；</li>
+<li>多个网络可以通过路由器来互联，就构成了一个更大的网络——互联网</li>
+<li>因特网是世界上最大的互连网络。</li>
+</ul>
+<h3 id="电路交换和分组交换"><a href="#电路交换和分组交换" class="headerlink" title="电路交换和分组交换"></a>电路交换和分组交换</h3><ol>
+<li><p>电路交换</p>
+<p>电路交换用于电话通信系统。两个用户要通信之前需要建立一条专用的物理链路，并且在整个通信过程中始终占用该链路。由于通信的过程中不可能一直在使用传输线路，因此电路交换对线路的利用率很低，往往不到 10%。</p>
+</li>
+<li><p>分组交换</p>
+<p>每个分组都有<strong>首部和尾部</strong>，包含了源地址和目的地址等控制信息，在同一个传输线路上同时传输多个分组互相不会影响，因此在同一条传输线路上允许同时传输多个分组，也就是说分组交换不需要占用传输线路。</p>
+</li>
+</ol>
+<h2 id="OSI与TCP-IP各层的结构、功能、协议？"><a href="#OSI与TCP-IP各层的结构、功能、协议？" class="headerlink" title="OSI与TCP/IP各层的结构、功能、协议？"></a>OSI与TCP/IP各层的结构、功能、协议？</h2><p><img src="https://i.loli.net/2021/03/07/5npwPXiqv68ojy4.png" alt="image.png"></p>
+<p>OSI理论模型：应用层、表示层、会话层、运输层、网络层、数据链路层、物理层；</p>
+<p>TCP/IP协议体系：应用层、运输层、网络层、网络接口层；</p>
+<p>常用五层体系：应用层、运输层、网络层、数据链路层、物理层。</p>
+<h3 id="分层的必要性"><a href="#分层的必要性" class="headerlink" title="分层的必要性"></a>分层的必要性</h3><p>计算机网络是一个非常复杂的系统，分层可以将庞大的问题转化为若干较小的问题。</p>
+<p><strong>物理层</strong>：解决使用何种信号来传输比特的问题</p>
+<p><strong>链路层</strong>：解决分组在一个网络（或一段链路）上的传输问题（主机标识Mac地址、比特信号分解——地址和数据、交换机）</p>
+<p><strong>网络层</strong>：解决分组在多个网络上传输（路由）的问题（网络及网络中的各主机标识IP、路由器转发分组及路由选择）</p>
+<p><strong>运输层</strong>：进程之间基于网络通讯的问题（进程之间进行基于网络的通信问题、传输错误的处理）</p>
+<p><strong>应用层</strong>：通过应用进程间的交互来完成特定网络应用的问题（交互的格式）</p>
+<p><img src="https://i.loli.net/2021/03/09/ZzKbNy7T9lkMvqn.png" alt="IOS.jpg"></p>
+<hr>
+<h3 id="物理层"><a href="#物理层" class="headerlink" title="物理层"></a>物理层</h3><p>重点：</p>
+<p><strong>考虑如何在连接各计算机的传输媒体上传输数据比特流</strong></p>
+<p><strong>物理层为数据链路层屏蔽了各种传输媒体的差异</strong>，使数据链路层只需要考虑如何完成本层的协议和服务，而忽略具体的传输媒体是什么。</p>
+<p>传输媒介：光纤、电力线、微波、红外等</p>
+<p>传输方式：串行传输和并行传输、同步传输和异步传输、单向通讯、双向交替通讯和双向同时通信。</p>
+<p><strong>主要设备</strong>：集线器HUB、中继器</p>
+<hr>
+<h3 id="链路层"><a href="#链路层" class="headerlink" title="链路层"></a>链路层</h3><h4 id="封装成帧"><a href="#封装成帧" class="headerlink" title="封装成帧"></a>封装成帧</h4><p>主要作用：帧头帧尾包含重要的控制信息（目的地址、源地址），帧定界。</p>
+<h4 id="透明传输"><a href="#透明传输" class="headerlink" title="透明传输"></a>透明传输</h4><p>指数据链路层对上层交付的传输数据没有任何限制，好像链路层不存在一样。（由于链路层需要将上层交付的数据封装成帧，如何准确判断帧头帧尾就是实现透明传输的关键问题）<strong>转义字符</strong></p>
+<h4 id="差错检测"><a href="#差错检测" class="headerlink" title="差错检测"></a>差错检测</h4><ul>
+<li>奇偶校验：在待发送数据后添加1位奇偶校验码。此时若奇数个位发生错误可以检查出误码；</li>
+<li>循环冗余校验CRC：约定好一个多项式，基于数据与多项式计算出差错检测码，将其添加到带传输数据末尾；<strong>广泛应用</strong></li>
+</ul>
+<h4 id="可靠传输的实现机制"><a href="#可靠传输的实现机制" class="headerlink" title="可靠传输的实现机制"></a>可靠传输的实现机制</h4><p><strong>停止-等待协议</strong></p>
+<p>确认ACK与否认NAK、超时重发、分组序号</p>
+<p><img src="https://i.loli.net/2021/03/08/OQXBRAfLDcWTV4x.png" alt="image.png"></p>
+<p>停止等待协议的通道利用率低。</p>
+<p><strong>回退帧协议</strong>（一种ARQ连续协议）</p>
+<table>
+<thead>
+<tr>
+<th>发送方</th>
+<th>接收方</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>发送窗口尺寸范围：1~2^n-1，n位构成分组序号的比特数量</td>
+<td>接收窗口尺寸为1，只能<strong>按序</strong>接收数据分组</td>
+</tr>
+<tr>
+<td>发送方可以在未收到确认信号的情况下，将在发送窗口的多个分组全部发送</td>
+<td>只接受序号落在接收窗口内且无误码的数据分组</td>
+</tr>
+<tr>
+<td>只有在收到确认信号后，窗口才能滑动</td>
+<td>可以在连续收到好几个按序到达且无误码的数据分组后，才对最后一个数据分组发送确认分组，即累积确认</td>
+</tr>
+<tr>
+<td>收到多个重复确认时，可在计时器超时前提前重传</td>
+<td>或者在自己有数据分组要发送时才进行捎带确认</td>
+</tr>
+<tr>
+<td>发送窗口内某个已发送数据分组超时重发时，其后续在发送窗口内且已发送的分组也必须重传</td>
+<td>收到未按序到达的数据分组，除丢弃外，还要对最近按序接收的数据进行确认</td>
+</tr>
+</tbody></table>
+<p><strong>当通信线路质量不好时，其通道利用率并不比停止-等待协议高</strong></p>
+<p><strong>选择重传</strong></p>
+<p>与回退N帧协议的区别：</p>
+<ul>
+<li>发送窗口尺寸范围为1~2^(n-1)，接收窗口尺寸与发送窗口相同；</li>
+<li>不能进行累积确认，必须逐一确认</li>
+<li>只有按序收到已发送分组的确认时窗口才能滑动，否则是对未按序到达的分组进行记录，防止超时重发。</li>
+</ul>
+<p><strong>PPP协议</strong></p>
+<p>互联网用户通常需要连接到某个 ISP 之后才能接入到互联网，PPP 协议是用户计算机和 ISP 进行通信时所使用的数据链路层协议。</p>
+<p>PPP 的帧格式：</p>
+<ul>
+<li>F 字段为帧的定界符</li>
+<li>A 和 C 字段暂时没有意义</li>
+<li>FCS 字段是使用 CRC 的检验序列</li>
+<li>信息部分的长度不超过 1500</li>
+</ul>
+<p><strong>CSMA/CD协议</strong></p>
+<p>CSMA/CD 表示载波监听多点接入 / 碰撞检测。</p>
+<ul>
+<li><strong>多点接入</strong> ：说明这是总线型网络，许多主机以多点的方式连接到总线上。</li>
+<li><strong>载波监听</strong> ：每个主机都必须不停地监听信道。在发送前，如果监听到信道正在使用，就必须等待。</li>
+<li><strong>碰撞检测</strong> ：在发送中，如果监听到信道已有其它主机正在发送数据，就表示发生了碰撞。虽然每个主机在发送数据之前都已经监听到信道为空闲，但是由于电磁波的传播时延的存在，还是有可能会发生碰撞。</li>
+</ul>
+<p><strong>MAC地址</strong></p>
+<p>MAC 地址是链路层地址，长度为 6 字节（48 位），用于唯一标识网络适配器（网卡）。</p>
+<h4 id="集线器与交换机的区别"><a href="#集线器与交换机的区别" class="headerlink" title="集线器与交换机的区别"></a>集线器与交换机的区别</h4><table>
+<thead>
+<tr>
+<th>集线器HUB</th>
+<th>交换机SWITCH</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>早期的以太网的互联设备</td>
+<td>目前以太网使用最广泛的互联设备</td>
+</tr>
+<tr>
+<td>工作在物理层，没有容错检测等功能</td>
+<td>工作在数据链路层</td>
+</tr>
+<tr>
+<td>对接收到的信号进行放大、转发</td>
+<td>根据MAC地址对帧进行转发，且可以根据MAC地址过滤帧，即隔离碰撞</td>
+</tr>
+<tr>
+<td>使用集线器作为互连设备仍属于共享总线式以太网，所有主机属于同一个碰撞域和广播域</td>
+<td>交换机的每个接口是一个独立的碰撞域</td>
+</tr>
+</tbody></table>
+<h4 id="局域网、以太网、虚拟局域网"><a href="#局域网、以太网、虚拟局域网" class="headerlink" title="局域网、以太网、虚拟局域网"></a>局域网、以太网、虚拟局域网</h4><p><strong>局域网</strong></p>
+<p>局域网是一种典型的广播信道，主要特点是网络为一个单位所拥有，且地理范围和站点数目均有限。<strong>一个广播域</strong></p>
+<p><strong>以太网</strong></p>
+<p>以太网是一种星型拓扑结构局域网。早期用集线器连接，现广泛使用<strong>用交换机连接</strong>。</p>
+<p><strong>虚拟局域网VLAN</strong></p>
+<p>巨大的广播域会导致许多弊端：广播风暴、难以管理和维护、潜在的安全问题 ==&gt; 利用802.1Q帧格式建立虚拟局域网：将局域网内的设备划分成与物理位置无关的逻辑组的技术。</p>
+<hr>
+<h3 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h3><p>主要任务：实现网络互联，进而实现数据包在各网络之间的传输。</p>
+<p>主要解决以下问题：</p>
+<ul>
+<li>网络层向运输层提供什么服务？可靠传输还是不可靠传输</li>
+<li>网络层寻址问题</li>
+<li>网络层路由选择问题</li>
+</ul>
+<h4 id="地址解析ARP"><a href="#地址解析ARP" class="headerlink" title="地址解析ARP"></a>地址解析ARP</h4><p>网络层实现主机之间的通信，而链路层实现具体每段链路之间的通信。因此在通信过程中，IP 数据报的源地址和目的地址始终不变，而 MAC 地址随着链路的改变而改变。</p>
+<p>ARP工作原理：</p>
+<ul>
+<li>每个主机都有一个 ARP <strong>高速缓存</strong>，里面有<strong>本局域网</strong>上的各主机和路由器的 IP 地址到 MAC 地址的<strong>映射表</strong>。</li>
+<li>如果主机 A 知道主机 B 的 IP 地址，但是 ARP 高速缓存中没有该 IP 地址到 MAC 地址的映射，此时主机 A 通过<strong>广播</strong>的方式发送 ARP 请求分组，主机 B 收到该请求后会发送 ARP 响应分组给主机 A 告知其 MAC 地址，随后主机 A 向其高速缓存中写入主机 B 的 IP 地址到 MAC 地址的映射。</li>
+</ul>
+<h4 id="IP数据报的发送和转发过程"><a href="#IP数据报的发送和转发过程" class="headerlink" title="IP数据报的发送和转发过程"></a>IP数据报的发送和转发过程</h4><p><strong>主机发送IP数据报</strong></p>
+<p>判断目的主机是否与自己在同一个网络（目的地址与子网掩码相与）：</p>
+<ul>
+<li>若在同一个网络，直接交付，通过交换机；</li>
+<li>若不在同一个网络，间接交付，传输给主机所在的默认网关，由默认网关帮忙转发</li>
+</ul>
+<p><strong>路由器转发IP数据报</strong></p>
+<ul>
+<li>检查IP数据报首部是否出错，出错则丢弃并通告源主机，否则转发</li>
+<li>检查IP数据报的目的地址，在路由器中查找匹配的条目</li>
+</ul>
+<h4 id="路由器分组转发流程"><a href="#路由器分组转发流程" class="headerlink" title="路由器分组转发流程"></a>路由器分组转发流程</h4><ul>
+<li>从数据报的首部提取目的主机的 IP 地址 D，得到目的网络地址 N。</li>
+<li>若 N 就是与此路由器直接相连的某个网络地址，则进行直接交付；</li>
+<li>若路由表中有目的地址为 D 的特定主机路由，则把数据报传送给表中所指明的下一跳路由器；</li>
+<li>若路由表中有到达网络 N 的路由，则把数据报传送给路由表中所指明的下一跳路由器；</li>
+<li>若路由表中有一个默认路由，则把数据报传送给路由表中所指明的默认路由器；</li>
+<li>报告转发分组出错。</li>
+</ul>
+<hr>
+<h3 id="运输层"><a href="#运输层" class="headerlink" title="运输层"></a>运输层</h3><p><strong>运输层(transport layer)的主要任务就是负责向两台主机进程之间的通信提供通用的数据传输服务</strong>。</p>
+<p>运输层的主要协议：</p>
+<ul>
+<li>传输控制协议TCP（Transmission Control Protocol）–<strong>面向连接、可靠的数据传输</strong></li>
+<li>用户数据协议UDP（User Datagram Protocol）–<strong>提供无连接的，尽最大努力的数据传输服务，不保证数据传输的可靠性</strong> </li>
+</ul>
+<h4 id="TCP三次握手和四次挥手"><a href="#TCP三次握手和四次挥手" class="headerlink" title="TCP三次握手和四次挥手"></a>TCP三次握手和四次挥手</h4><p>三次握手：</p>
+<img src="https://i.loli.net/2021/03/07/TlzeNp6kCQK59At.png" alt="image.png" style="zoom:67%;" />
+
+<p>第一次握手：服务器确定对方发送正常、自己接受正常；</p>
+<p>第二次握手：客户端确定自己发送、接收正常，对方发送接收正常；服务器确定对方发送正常、自己接收正常；</p>
+<p>第三次握手：客户端确定自己发送、接收正常，对方发送、接收正常；服务器确定自己发送、接收正常，对方发送、接收正常。</p>
+<p><strong>第2次握手传回了ACK，为什么还要传回SYN？</strong></p>
+<p>ACK标识只表明服务端接收到了请求信号，通信是正常的，并不能完全保证数据传输可以实现完整可靠传输，传回第一次握手的SYN可以由客户端确认数据传输可靠。</p>
+<h4 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h4><img src="https://i.loli.net/2021/03/07/eVmJrkl56F3Txi9.png" alt="image.png" style="zoom: 67%;" />
+
+<p>任何一方都可以在数据传送结束后发出连接释放的通知，待对方确认后进入半关闭状态。当另一方也没有数据再发送的时候，则发出连接释放通知，对方确认后就完全关闭了TCP连接。</p>
+<p><strong>四次可以确保数据传输完成、完整</strong></p>
+<h4 id="TCP和UDP协议的区别"><a href="#TCP和UDP协议的区别" class="headerlink" title="TCP和UDP协议的区别"></a>TCP和UDP协议的区别</h4><p><img src="https://i.loli.net/2021/03/07/g8aeL9yrc1l5phz.png" alt="image.png"></p>
+<h4 id="TCP如何保证传输的可靠性？"><a href="#TCP如何保证传输的可靠性？" class="headerlink" title="TCP如何保证传输的可靠性？"></a>TCP如何保证传输的可靠性？</h4><ol>
+<li>应用数据会被分割成TCP认为最合适发送的数据块；</li>
+<li>TCP会给发送的每一个包进行编号，接收方对数据包进行排序，把有序数据传给应用层。</li>
+<li><strong>校验和</strong>：</li>
+</ol>
+<hr>
+<h3 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h3><p>应用层(application-layer）的任务是通过应用进程间的交互来完成特定网络应用。应用层协议定义的是<strong>应用进程</strong>（进程：主机中正在运行的程序）间的通信和交互的规则。</p>
+<h4 id="域名系统DNS"><a href="#域名系统DNS" class="headerlink" title="域名系统DNS"></a>域名系统DNS</h4><p>它作为可以将域名和IP地址相互映射的一个分布式数据库，能够使人更方便的访问互联网，而不用去记住能够被机器直接读取的IP数串。</p>
+<h4 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h4><p><strong>请求报文结构</strong></p>
+<ul>
+<li>请求行，包含请求方法、URL、协议版本；</li>
+<li>请求头，每个首部都有一个首部名称，以及对应的值；</li>
+<li>空行</li>
+<li>数据包，请求内容的主体</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">GET http:&#x2F;&#x2F;www.example.com&#x2F; HTTP&#x2F;1.1</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;webp,image&#x2F;apng,*&#x2F;*;q&#x3D;0.8,application&#x2F;signed-exchange;v&#x3D;b3;q&#x3D;0.9</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.9,en;q&#x3D;0.8</span><br><span class="line">Cache-Control: max-age&#x3D;0</span><br><span class="line">Host: www.example.com</span><br><span class="line">If-Modified-Since: Thu, 17 Oct 2019 07:18:26 GMT</span><br><span class="line">If-None-Match: &quot;3147526947+gzip&quot;</span><br><span class="line">Proxy-Connection: keep-alive</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 xxx</span><br></pre></td></tr></table></figure>
+
+<p><strong>响应报文结构</strong></p>
+<ul>
+<li>协议版本、状态码及描述；</li>
+<li>首部内容；</li>
+<li>空行；</li>
+<li>数据包，响应内容主体。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">HTTP&#x2F;1.1 200 OK</span><br><span class="line">Age: 529651</span><br><span class="line">Cache-Control: max-age&#x3D;604800</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Content-Encoding: gzip</span><br><span class="line">Content-Length: 648</span><br><span class="line">Content-Type: text&#x2F;html; charset&#x3D;UTF-8</span><br><span class="line">Date: Mon, 02 Nov 2020 17:53:39 GMT</span><br><span class="line">Etag: &quot;3147526947+ident+gzip&quot;</span><br><span class="line">Expires: Mon, 09 Nov 2020 17:53:39 GMT</span><br><span class="line">Keep-Alive: timeout&#x3D;4</span><br><span class="line">Last-Modified: Thu, 17 Oct 2019 07:18:26 GMT</span><br><span class="line">Proxy-Connection: keep-alive</span><br><span class="line">Server: ECS (sjc&#x2F;16DF)</span><br><span class="line">Vary: Accept-Encoding</span><br><span class="line">X-Cache: HIT</span><br><span class="line"></span><br><span class="line">&lt;!doctype html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;Example Domain&lt;&#x2F;title&gt;</span><br><span class="line">	&#x2F;&#x2F; 省略... </span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>HTTP方法</strong></p>
+<p>GET、HEAD（和 GET 方法类似，但是不返回报文实体主体部分）、POST、PUT（上传文件）、PATCH（对资源进行部分修改）、DELETE（删除文件）、OPTIONS（查询指定URL支持的方法）、CONNECT（要求在与代理服务器通信时建立隧道）、TRACE。</p>
+<p><strong>HTTP状态码</strong></p>
+<table>
+<thead>
+<tr>
+<th>状态码</th>
+<th>类别</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1XX</td>
+<td>信息性状态码</td>
+<td>接受的请求正在处理</td>
+</tr>
+<tr>
+<td>2XX</td>
+<td>成功状态码</td>
+<td>请求正常处理完毕</td>
+</tr>
+<tr>
+<td>3XX</td>
+<td>重定向状态码</td>
+<td>需要进行附加操作以完成请求</td>
+</tr>
+<tr>
+<td>4XX</td>
+<td>客户端错误状态码</td>
+<td>服务器无法处理请求</td>
+</tr>
+<tr>
+<td>5XX</td>
+<td>服务器错误状态码</td>
+<td>服务器处理请求出错</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/28/JVM%E9%87%8D%E7%82%B9%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1241,251 +1644,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avater.jpg">
-      <meta itemprop="name" content="kiro-xu">
-      <meta itemprop="description" content="Be who you want to be">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="kiro的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/28/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/" class="post-title-link" itemprop="url">算法导论学习笔记（一）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-28 16:50:50" itemprop="dateCreated datePublished" datetime="2021-02-28T16:50:50+08:00">2021-02-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-16 14:42:31" itemprop="dateModified" datetime="2021-09-16T14:42:31+08:00">2021-09-16</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本块内容为自学麻省理工《算法导论》公开课的学习记录笔记，罗列学习过程中的重点。</p>
-<h1 id="算法入门"><a href="#算法入门" class="headerlink" title="算法入门"></a>算法入门</h1><p>problem sorting:</p>
-<p>Input: n个数&lt;a 1 ,a 2 ,…a n &gt;</p>
-<p>Output: 输入序列的一个排序，为非递减序列</p>
-<h2 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public void InsertionSort(int[] A, int n)&#123;</span><br><span class="line">    for(int j&#x3D;2; j&lt;n; j++)&#123;</span><br><span class="line">    int key &#x3D; A[j];</span><br><span class="line">    int i &#x3D; j-1;</span><br><span class="line">    while(i&gt;&#x3D;0 &amp;&amp; A[i]&gt;key)&#123;</span><br><span class="line">        A[i+1] &#x3D; A[i];</span><br><span class="line">      i &#x3D; i-1;</span><br><span class="line">    &#125;</span><br><span class="line">    A[i+1] &#x3D; key;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Running Time</strong> ：</p>
-<ul>
-<li>Depends on input(e.g. already sorted)</li>
-<li>Depends on input size(6 elements vs 6000000 elements)</li>
-</ul>
-<p><strong>Kind of analysis</strong> :<br>Worst-Case( usually ): T(n) = max time on any input of size n;</p>
-<p>Average-Case( sometimes ): T(n) = expected time over all inputs of size n; <strong>需要概率分析假设</strong></p>
-<p>Best-Case</p>
-<p><strong>What is insertionSort’s use time?</strong> </p>
-<p>Depends on Computer！</p>
-<ul>
-<li>relative speed(on same computer)</li>
-<li>absolute speed(on different computer)</li>
-</ul>
-<p><strong>BIG IDEA!</strong> </p>
-<ul>
-<li>Ignore machine-dependent <strong>constant</strong></li>
-<li>Look at <strong>growth</strong> of the running time as n to 无穷</li>
-</ul>
-<h2 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h2><p><strong>Idea:</strong></p>
-<ul>
-<li>if n=1, DONE</li>
-<li>Recursively sort A[1,…,n/2] and A[n/2+1,…,n]</li>
-<li>merge 2 sorted list</li>
-</ul>
-<h2 id="渐进记号"><a href="#渐进记号" class="headerlink" title="渐进记号"></a>渐进记号</h2><h3 id="Θ（BIG-Theta）"><a href="#Θ（BIG-Theta）" class="headerlink" title="Θ（BIG Theta）"></a>Θ（BIG Theta）</h3><p><code>Θ(g(n)) = f(n)</code>：存在正常数c1，c2，使得n充分大时，<code>f(n)</code> 能被夹在<code>c1g(n)</code> 和<code>c2g(n)</code>之间。</p>
-<p><img src="https://pic.imgdb.cn/item/6142b6cd2ab3f51d91bd2dfa.png" alt="image.png"></p>
-<h3 id="O（BIG-O）"><a href="#O（BIG-O）" class="headerlink" title="O（BIG O）"></a>O（BIG O）</h3><p><code>O(g(n)) = f(n)</code>：存在正常数c和n0，使得所有的<code>n &gt;= n0</code>，有<code>0 &lt;= f(n) &lt;= cg(n)</code></p>
-<p><img src="https://pic.imgdb.cn/item/6142b6f02ab3f51d91bd59e5.png" alt="image.png"></p>
-<h3 id="Ω-BIG-Ω"><a href="#Ω-BIG-Ω" class="headerlink" title="Ω(BIG Ω)"></a>Ω(BIG Ω)</h3><p><code>Ω(g(n)) = f(n)</code>：存在正常数c和n0，使对所有的<code>n &gt;= n0</code>，有<code>0 &lt;= cg(n) &lt;= f(n)</code></p>
-<p><img src="https://pic.imgdb.cn/item/6142b7122ab3f51d91bd8629.png" alt="image.png"></p>
-<h3 id="o-小-oh-and-ω-小-omege"><a href="#o-小-oh-and-ω-小-omege" class="headerlink" title="o(小-oh) and ω(小-omege)"></a>o(小-oh) and ω(小-omege)</h3><h2 id="递归式"><a href="#递归式" class="headerlink" title="递归式"></a>递归式</h2><p>代换法、递归树法、主定理法</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/27/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avater.jpg">
-      <meta itemprop="name" content="kiro-xu">
-      <meta itemprop="description" content="Be who you want to be">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="kiro的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/27/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95/" class="post-title-link" itemprop="url">个人博客搭建记录</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-27 21:09:02" itemprop="dateCreated datePublished" datetime="2021-02-27T21:09:02+08:00">2021-02-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-02-28 14:03:18" itemprop="dateModified" datetime="2021-02-28T14:03:18+08:00">2021-02-28</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a href="https://zhuanlan.zhihu.com/p/102592286" target="_blank">参考</a></p>
-<h2 id="Git安装"><a href="#Git安装" class="headerlink" title="Git安装"></a>Git安装</h2><p>官网链接：<a herf="https://git-scm.com/" target="_blank">Git官网</a></p>
-<p>需要注意的是，官网下载Git非常慢！推荐去镜像网址选择自己想要的版本下载：<a href="https://npm.taobao.org/mirrors/git-for-windows/" target="_blank">Git镜像下载地址</a></p>
-<p>安装过程中，选择一半保持默认（安装路径自定），一路next即可。</p>
-<p>完成后，任意位置右键打开Git bash，输入git –version命令，出现如下即可：</p>
-<p><img src="https://i.loli.net/2021/02/27/Od3k9J2IYwiaNmD.png" alt="image.png"></p>
-<h2 id="Git与Github的绑定"><a href="#Git与Github的绑定" class="headerlink" title="Git与Github的绑定"></a>Git与Github的绑定</h2><h3 id="SSH-key"><a href="#SSH-key" class="headerlink" title="SSH key"></a>SSH key</h3><blockquote>
-<p>SSH（安全外壳协议，Secure Shell 的缩写）是建立在应用层基础上的安全协议。SSH 是目前较可靠，专为远程登录会话和其他网络服务提供安全性的协议，利用 SSH 协议可以有效防止远程管理过程中的信息泄露问题。</p>
-</blockquote>
-<p>任意位置Git bash，输入ssh命令，查看是否安装SSH。一般安装了 Git Bash，其自带了 SSH。</p>
-<p>输入<code>ssh-keygen -t sra</code>命令，表示我们指定 RSA 算法生成密钥，然后敲四次回车键，之后就就会生成两个文件，分别为秘钥 id_rsa 和公钥 id_rsa.pub.文件位置在C:/Users/你的用户名/.ssh</p>
-<p>接下来我们要做的事情就是把公钥 id_rsa.pub 的内容添加到 GitHub。</p>
-<p>进入github主页右上角-setting进入设置页面-SSH and GPG keys-new SSH key-将复制的公钥 id_rsa.pub 的内容粘贴到 key 内，再点击Add SSH key即可。</p>
-<p><strong>验证是否成功</strong></p>
-<p>Git Bash 中输入<code>ssh -T git@github.com </code>进行检验。出现如下即可。</p>
-<p><img src="https://i.loli.net/2021/02/27/pV61RkGKqPgodyc.png" alt="image.png"></p>
-<h3 id="提交文件"><a href="#提交文件" class="headerlink" title="提交文件"></a>提交文件</h3><p>先设置全局github用户名与邮箱。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name<span class="string">&quot;fangminXu&quot;</span></span><br><span class="line">$ git config --global user.email<span class="string">&quot;***@***.com&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="方法一：本地没有git库"><a href="#方法一：本地没有git库" class="headerlink" title="方法一：本地没有git库"></a>方法一：本地没有git库</h4><ol>
-<li>直接将远程仓库clone到本地；</li>
-<li>将文件添加并commit到本地仓库；</li>
-<li>将本地仓库的内容push到远程仓库。</li>
-</ol>
-<p><strong>过程：</strong></p>
-<p>github主页点击待clone项目-点击clone or download，再复制地址，然后进入我们准备存储 Git 仓库的目录：</p>
-<p>输入<code>git clone https://github.com/...</code>地址即为github项目生成的url。</p>
-<p>提交步骤：</p>
-<p>新建文件-<code>git add</code> 命令将文件添加到了「临时缓冲区」，再用 <code>git commit -m</code> “提交信息” 将其提交到本地仓库，<code>git push origin master</code>将本地仓库提交到远程仓库，origin是远程主机的名字。</p>
-<p>其他命令：git log 查看仓库提交日志； git status 查看仓库状态；</p>
-<h4 id="方法二：本地有-Git-仓库，并且我们已经进行了多次-commit-操作"><a href="#方法二：本地有-Git-仓库，并且我们已经进行了多次-commit-操作" class="headerlink" title="方法二：本地有 Git 仓库，并且我们已经进行了多次 commit 操作"></a>方法二：本地有 Git 仓库，并且我们已经进行了多次 commit 操作</h4><ol>
-<li>建立一个本地仓库进入，init 初始化；</li>
-<li>关联远程仓库；</li>
-<li>同步远程仓库和本地仓库；</li>
-<li>将文件添加提交到本地仓库；</li>
-<li>将本地仓库的内容 push 到远程仓库。</li>
-</ol>
-<p>过程：</p>
-<p>我们建立一个本地仓库 demo，使用 <code>git init</code> 命令初始化这个仓库，输入 <code>git remote add origin 网址</code>命令，关联远程仓库，接着输入 <code>git pull origin master</code> 命令，同步远程仓库和本地仓库，接下来的步骤就与第一种方法一样（可以参考上面，已经写得很详细了），先输入<code>git add</code>和 <code>git commit </code>命令，将要提交的文件添加并提交到 demo 仓库；然后再输入     git push origin master     命令，将本地仓库修改（或者添加）的内容提交到远程仓库就完成啦！！！</p>
-<h2 id="安装node-js和Hexo"><a href="#安装node-js和Hexo" class="headerlink" title="安装node.js和Hexo"></a>安装node.js和Hexo</h2><h3 id="安装nodejs"><a href="#安装nodejs" class="headerlink" title="安装nodejs"></a>安装nodejs</h3><p><a href="https://link.zhihu.com/?target=https%3A//nodejs.org/en/" target="_blank">nodejs下载官网</a></p>
-<p>安装完成后，用cmd检验是否安装完成。用 <code>node -v</code> 和 <code>npm -v</code> 命令检查版本。</p>
-<p><strong>设置npm在安装全局模块时的路径和环境变量</strong></p>
-<ol>
-<li>在 nodejs 文件夹中新建两个空文件夹 node_cache、node_global</li>
-<li>打开cmd，输入如下两个命令：</li>
-</ol>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm config set prefix &quot;D:\nodejs\node_global&quot;</span><br><span class="line">npm config set cache &quot;D:\nodejs\node_cache&quot;</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li><p>设置环境变量：<strong>win10系统 –&gt; 打开控制面板 –&gt; 系统 –&gt;高级系统设置 –&gt; 环境变量 ，</strong>然后在系统变量中新建一个变量名为“NODE_PATH”，连到新建的node_global\node_modules</p>
-</li>
-<li><p>然后编辑用户变量里的Path，将相应npm的路径改为：新建的node_global</p>
-</li>
-<li><p>在 cmd 命令下执行 <code>npm install webpack -g </code> webpack 这个模块已经在我们设置默认的文件夹中即成功</p>
-</li>
-</ol>
-<h3 id="安装hexo"><a href="#安装hexo" class="headerlink" title="安装hexo"></a>安装hexo</h3><p>Hexo就是我们的个人博客网站的框架，在安装之前，我们要先在GitHub上创立一个仓库：<strong>仓库名为：用户名.github.io</strong>，一定要是用户名！！！</p>
-<p>建立一个文件夹 Blog，点开 Blog 文件夹，鼠标右键打开 Git Bush Here，输入npm命令安装Hexo:<code>npm install -g hexo-cli</code></p>
-<p>安装完成后，输入 <code>hexo init</code> 命令初始化博客：</p>
-<p>然后输入 <code>hexo g</code> 静态部署</p>
-<p>这时网页已经部署完成，输入<code>hexo s</code>命令可以查看，此时输入浏览器输入 <a href="https://link.zhihu.com/?target=http://baixin.io/2015/08/HEXO%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/%E5%B0%B1%E5%8F%AF%E4%BB%A5%E7%9C%8B%E5%88%B0%E6%9C%80%E5%8E%9F%E5%A7%8B%E7%9A%84%E6%95%88%E6%9E%9C%E4%BA%86">http://localhost:4000</a> 就可以打开新部署的网页，ctrl +c 停止运行服务器。</p>
-<h3 id="将Hexo部署到GitHub"><a href="#将Hexo部署到GitHub" class="headerlink" title="将Hexo部署到GitHub"></a>将Hexo部署到GitHub</h3><p>现在回到我们的 Blog 文件夹，用笔记本打开 _config.yml 文件，修改：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repository: fangminXuhttps://github.com/fangminXu/fangminXu.github.io.git  #你的仓库地址</span><br><span class="line">  branch: main</span><br></pre></td></tr></table></figure>
-
-<p>然后回到 Blog 文件夹中，打开 Git Bash，安装Git部署插件，输入命令：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
-
-<p>然后分别输入以下三条命令：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean   #清除缓存文件 db.json 和已生成的静态文件 public</span><br><span class="line">hexo g       #生成网站静态文件到默认设置的 public 文件夹(hexo generate 的缩写)</span><br><span class="line">hexo d       #自动生成网站静态文件，并部署到设定的仓库(hexo deploy 的缩写)</span><br></pre></td></tr></table></figure>
-
-<p>完成以后，打开浏览器，输入 <a href="https://link.zhihu.com/?target=https://fengye97.github.io/">https://xxx.github.io</a> 就可以打开你的网页了</p>
-<h2 id="域名购买与解析"><a href="#域名购买与解析" class="headerlink" title="域名购买与解析"></a>域名购买与解析</h2><p>主要点：</p>
-<p>IPV4地址可以通过ping得到，具体方法是：打开cmd输入下面命令：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping fengye97.github.io    #ping + 你的GitHub的网址</span><br></pre></td></tr></table></figure>
-
-<p>打开 Blog 文件夹里的 source 文件夹，添加CNAME文件，可以先创建一个CNAME.txt文件，打开后写上你的域名，不要加www否则每次访问都必须加www，但如果不带有www，以后访问的时候带不带www都可以访问，保存后记得要重命名，将.txt删除。</p>
-<p>打开GitHub，看看CNAME文件是否已经在你的项目中，点击 settings ，查看你的网址是否已保存。（Custom domain）</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1557,14 +1715,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
